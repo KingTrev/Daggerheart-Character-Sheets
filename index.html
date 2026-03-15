@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daggerheart — Character Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0d0e0f; --bg2:#131416; --bg3:#1c1e21; --bg4:#222426;
+  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.16);
+  --text:#e8e4dc; --muted:#686460; --faint:#222018;
+  --gold:#c9a84c; --gold-dim:#7a6530; --gold-faint:#1e1a0c;
+  --red:#b84848; --red-dim:#6a2828; --red-faint:#1a0e0e;
+  --teal:#3a7a72; --teal-faint:#0c1a18;
+  --in:#161819;
+}
+
+/* ── LIGHT MODE ── */
+html[data-theme="light"] {
+  --bg:#f5f2ec; --bg2:#ffffff; --bg3:#eee9e0; --bg4:#e4ddd2;
+  --border:rgba(0,0,0,0.1); --border2:rgba(0,0,0,0.18);
+  --text:#1a1814; --muted:#4a4438; --faint:#d4cfc6;
+  --gold:#8a6010; --gold-dim:#a07828; --gold-faint:#fdf3dc;
+  --red:#8a2828; --red-dim:#a04040; --red-faint:#fdf0f0;
+  --teal:#1a6058; --teal-faint:#e0f5f2;
+  --in:#ffffff;
+}
+html[data-theme="light"] body { background:var(--bg); color:var(--text); }
+html[data-theme="light"] .class-select option { background:#fff; }
+html[data-theme="light"] .shield-pip .shield-shape { fill:#eee9e0; stroke:rgba(0,0,0,0.2); }
+html[data-theme="light"] .shield-pip.filled .shield-shape { fill:var(--teal-faint); stroke:var(--teal); }
+html[data-theme="light"] .hope-pip { background:#eee9e0; border-color:rgba(0,0,0,0.18); }
+html[data-theme="light"] .hope-pip.filled { background:var(--gold-faint); border-color:var(--gold); color:var(--gold); }
+html[data-theme="light"] .hpbox, html[data-theme="light"] .stressbox { background:#eee9e0; border-color:rgba(0,0,0,0.18); }
+html[data-theme="light"] .hpbox.filled { background:var(--red-faint); border-color:var(--red); color:var(--red); }
+html[data-theme="light"] .stressbox.filled { background:var(--red-faint); border-color:var(--red-dim); color:var(--red-dim); }
+html[data-theme="light"] .prof-dot { background:#eee9e0; border-color:rgba(0,0,0,0.2); }
+html[data-theme="light"] .prof-dot.filled { background:var(--gold); border-color:var(--gold-dim); }
+html[data-theme="light"] .dotted-box { border-color:#c4bfb8; }
+html[data-theme="light"] .tier-box { background:#f5f2ec; }
+html[data-theme="light"] .weapon-section { background:#f0ece4; }
+html[data-theme="light"] .trait-block { background:#f0ece4; }
+html[data-theme="light"] .gold-box { background:#f0ece4; }
+html[data-theme="light"] textarea { background:#f8f6f2; border-color:rgba(0,0,0,0.14); }
+html[data-theme="light"] input[type=text],
+html[data-theme="light"] input[type=number] { background:#fff; border-bottom-color:rgba(0,0,0,0.2); color:var(--text); }
+html[data-theme="light"] .section-block-header { background:#eee9e0; }
+html[data-theme="light"] .custom-bgq-row { background:#f0ece4 !important; border-color:rgba(0,0,0,0.12) !important; }
+html[data-theme="light"] .custom-bgq-row textarea { background:#f8f6f2; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font-size:15.5px;min-height:100vh;}
+
+/* ── TOOLBAR ── */
+.toolbar{background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 1rem;display:flex;align-items:center;gap:10px;height:48px;position:sticky;top:0;z-index:100;}
+.ttitle{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:0.2em;color:var(--gold);margin-right:auto;}
+.tbtn{font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:0.1em;background:none;border:1px solid var(--border2);color:var(--muted);padding:5px 13px;border-radius:4px;cursor:pointer;}
+.tbtn:hover{color:var(--text);}
+.tbtn.gold{background:var(--gold-faint);border-color:var(--gold-dim);color:var(--gold);}
+.class-select{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.06em;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:5px 10px;border-radius:4px;cursor:pointer;outline:none;}
+.class-select option{background:var(--bg3);}
+
+/* ── PAGE LAYOUT ── */
+.pages{max-width:1100px;margin:0 auto;padding:1rem;}
+.page{background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:1.5rem;overflow:hidden;}
+.page-inner{padding:1.25rem;}
+
+/* ── CLASS HEADER ── */
+.class-header{background:var(--bg3);border-bottom:1px solid var(--border2);padding:0.75rem 1rem;display:flex;align-items:stretch;gap:0;}
+.class-name-block{min-width:140px;max-width:180px;display:flex;flex-direction:column;justify-content:center;padding-right:1rem;border-right:1px solid var(--border2);margin-right:1rem;}
+.class-name-big{font-family:'Cinzel',serif;font-size:24px;font-weight:700;color:var(--text);letter-spacing:0.04em;line-height:1.1;}
+.class-domains{font-family:'Cinzel',serif;font-size:12px;font-weight:600;letter-spacing:0.12em;color:var(--gold);margin-top:4px;}
+.class-tagline{font-style:italic;font-size:13px;color:var(--muted);flex:1;line-height:1.5;}
+.char-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center;}
+.char-fields-row1{display:grid;grid-template-columns:1fr auto;gap:6px;}
+.char-fields-row2{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;}
+.char-level-field{width:70px;}
+.char-level-field input{width:100%;}
+.char-fields-row1 .ey,
+.char-fields-row2 .ey { margin-bottom: 3px; }
+
+/* ── MOBILE SIDEBAR DRAWER ── */
+.mob-char-bar{display:none;background:var(--bg2);border-bottom:1px solid var(--border2);overflow-x:auto;padding:0;}
+.mob-char-bar-inner{display:flex;align-items:stretch;min-height:44px;}
+.mob-char-btn{font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:0.06em;color:var(--muted);padding:0 14px;background:none;border:none;border-right:1px solid var(--border);white-space:nowrap;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:2px;}
+.mob-char-btn.active{color:var(--gold);border-bottom:2px solid var(--gold);}
+.mob-char-btn:hover{color:var(--text);background:var(--bg3);}
+.mob-char-btn .mob-cls{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);}
+.mob-new-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;color:var(--muted);padding:0 14px;background:none;border:none;border-right:1px solid var(--border);white-space:nowrap;cursor:pointer;display:flex;align-items:center;}
+.mob-new-btn:hover{color:var(--text);background:var(--bg3);}
+
+@media(max-width:680px){
+  /* show mobile char bar, hide sidebar */
+  .sidebar{display:none!important;}
+  .mob-char-bar{display:block;}
+  .main-area{width:100%;}
+
+  /* toolbar */
+  .toolbar{flex-wrap:wrap;height:auto;padding:0.4rem 0.6rem;gap:5px;}
+  .ttitle{font-size:9px;letter-spacing:0.1em;order:0;margin-right:auto;}
+  .class-select{order:1;font-size:9px;padding:4px 6px;flex:1;}
+  .tbtn{font-size:8px;padding:4px 8px;}
+  #theme-btn{display:none;}
+
+  /* sheet tabs */
+  .sheet-tabs{top:0;position:relative;padding:0 0.5rem;}
+  .sheet-tab{font-size:9px;padding:0 0.75rem;height:38px;}
+
+  /* pages */
+  .pages{padding:0.5rem;}
+  .page-inner{padding:0.6rem;}
+
+  /* class header — stack on mobile */
+  .class-header{flex-direction:column;gap:0.5rem;padding:0.6rem;}
+  .class-name-block{min-width:unset;max-width:unset;}
+  .class-name-big{font-size:20px;}
+  .char-fields{width:100%;}
+  .char-fields-row1{grid-template-columns:1fr 1fr;}
+  .char-fields-row2{grid-template-columns:1fr 1fr;}
+  .char-level-field{width:auto;grid-column:span 2;}
+
+  /* traits */
+  .traits-row{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* sheet grid */
+  .p1-grid{grid-template-columns:1fr!important;}
+  .p1-right{grid-column:span 1;}
+  .p1-mid{grid-column:span 1;}
+
+  /* weapons */
+  .weapon-fields{grid-template-columns:1fr!important;gap:4px;}
+
+  /* grids */
+  .g2,.g3,.g4,.g6{grid-template-columns:1fr!important;}
+  .cols-2{grid-template-columns:1fr!important;}
+  .thresh-row{grid-template-columns:1fr 1fr 1fr;}
+  .gold-row{grid-template-columns:1fr 1fr 1fr;}
+
+  /* p2 */
+  .p2-grid{grid-template-columns:1fr!important;}
+  .p2-left,.p2-mid,.p2-right{grid-column:span 1!important;}
+
+  /* section headers */
+  .section-block-header{padding:0.6rem 0.75rem;gap:0.4rem;flex-wrap:wrap;}
+  .section-block-title{font-size:12px;}
+  .hdr-btn{font-size:8px;padding:3px 8px;}
+
+  /* pips */
+  .hope-pip{width:22px;height:22px;font-size:9px;}
+  .shield-pip{width:18px;height:22px;}
+  .hpbox,.stressbox{width:19px;height:16px;font-size:9px;}
+}
+
+@media(max-width:900px) and (min-width:681px){
+  .p1-grid{grid-template-columns:1fr 1fr!important;}
+  .p1-right{grid-column:span 2;}
+  .traits-row{grid-template-columns:repeat(3,1fr)!important;}
+  .p2-grid{grid-template-columns:1fr!important;}
+  .p2-mid{grid-column:span 1!important;}
+}
+
+/* ── INPUTS ── */
+input[type=text],input[type=number],textarea,select{background:var(--in);border:none;border-bottom:1px solid var(--border2);color:var(--text);font-family:'Crimson Pro',serif;font-size:15.5px;padding:4px 6px;outline:none;width:100%;transition:border-color 0.15s;}
+input:focus,textarea:focus{border-bottom-color:var(--gold-dim);}
+input[type=number]{-moz-appearance:textfield;}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+textarea{resize:vertical;line-height:1.6;background:var(--in);border:1px solid var(--border);border-radius:3px;padding:6px 8px;}
+::placeholder{color:var(--muted);}
+
+/* ── LABELS ── */
+.ey{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;display:block;margin-bottom:3px;}
+.sh{font-family:'Cinzel',serif;font-size:11.5px;font-weight:700;letter-spacing:0.14em;color:var(--gold);text-align:center;padding:4px 0;background:var(--bg3);border:1px solid var(--border2);border-radius:3px;margin-bottom:8px;}
+
+/* ── SECTION DIVIDERS ── */
+.divider-label{font-family:'Cinzel',serif;font-size:10.5px;font-weight:700;letter-spacing:0.2em;color:var(--gold);text-align:center;padding:3px 0 5px;border-bottom:1px solid var(--border2);margin-bottom:8px;}
+
+/* ── PAGE 1 GRID ── */
+.p1-grid{display:grid;grid-template-columns:220px 1fr 280px;gap:1rem;}
+.p1-left{display:flex;flex-direction:column;gap:0.75rem;}
+.p1-mid{display:flex;flex-direction:column;gap:0.75rem;}
+.p1-right{display:flex;flex-direction:column;gap:0.75rem;}
+
+/* ── TRAIT BLOCKS ── */
+.traits-row{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+.trait-block{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 4px;text-align:center;}
+.trait-name{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--gold);margin-bottom:4px;}
+.trait-score{width:100%;text-align:center;font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--text);background:transparent;border:none;border-bottom:1px solid var(--border2);outline:none;padding:2px 0;}
+.trait-score:focus{border-bottom-color:var(--gold-dim);}
+.trait-actions{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;margin-top:4px;}
+
+/* ── EVASION / ARMOR BLOCK ── */
+.ev-armor-row{display:flex;gap:8px;align-items:flex-end;}
+.ev-box,.armor-box{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:6px 8px;text-align:center;flex:1;}
+.ev-num{font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);}
+.ev-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);margin-top:2px;}
+.ev-input{width:60px;text-align:center;font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);}
+
+/* ── SHIELD PIPS ── */
+.shields-wrap{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:4px;}
+.shield-pip{width:22px;height:26px;cursor:pointer;transition:all 0.1s;}
+.shield-pip svg{width:100%;height:100%;}
+.shield-pip .shield-shape{fill:var(--bg4);stroke:var(--border2);stroke-width:1.5;transition:all 0.1s;}
+.shield-pip.filled .shield-shape{fill:var(--teal-faint);stroke:var(--teal);}
+
+/* ── HP / STRESS BOXES ── */
+.hp-stress-area{display:flex;flex-direction:column;gap:6px;}
+.checkbox-row{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.hpbox,.stressbox{width:22px;height:18px;border:1px solid var(--border2);border-radius:2px;background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;transition:all 0.1s;flex-shrink:0;}
+.hpbox.filled{background:var(--red-faint);border-color:var(--red);color:var(--red);}
+.stressbox.filled{background:var(--red-faint);border-color:var(--red-dim);color:var(--red-dim);}
+.dotted-box{border:1px dashed var(--border);width:22px;height:18px;border-radius:2px;}
+
+/* ── HOPE PIPS ── */
+.hope-pips{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:6px 0;}
+.hope-pip{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.1s;background:var(--bg3);}
+.hope-pip.filled{background:var(--gold-faint);border-color:var(--gold);color:var(--gold);}
+
+/* ── PROFICIENCY DOTS ── */
+.prof-row{display:flex;gap:5px;align-items:center;justify-content:center;margin:4px 0;}
+.prof-dot{width:14px;height:14px;border-radius:50%;border:1px solid var(--border2);background:var(--bg3);cursor:pointer;transition:all 0.1s;}
+.prof-dot.filled{background:var(--gold);border-color:var(--gold);}
+
+/* ── THRESHOLD ── */
+.thresh-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:6px;}
+.thresh-box{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 4px;text-align:center;}
+.thresh-arrow{font-size:10px;color:var(--muted);margin:2px 0;}
+.thresh-label{font-family:'Cinzel',serif;font-size:9.5px;font-weight:700;letter-spacing:0.08em;color:var(--gold);margin-bottom:3px;}
+.thresh-mark{font-family:'Cinzel',serif;font-size:9.5px;color:var(--muted);margin-top:2px;}
+.thresh-num{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:var(--text);width:100%;text-align:center;background:transparent;border:none;border-bottom:1px solid var(--border2);outline:none;padding:1px 0;}
+
+/* ── WEAPON BLOCKS ── */
+.weapon-section{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:0.6rem 0.75rem;margin-bottom:6px;}
+.weapon-label{font-family:'Cinzel',serif;font-size:10.5px;font-weight:700;letter-spacing:0.12em;color:var(--gold);margin-bottom:6px;}
+.weapon-fields{display:grid;grid-template-columns:2fr 1.2fr 1.2fr;gap:5px;margin-bottom:4px;}
+.wfield label,.wfield .ey{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);display:block;margin-bottom:2px;letter-spacing:0.04em;}
+
+/* ── EXPERIENCE ── */
+.exp-row{display:grid;grid-template-columns:1fr 44px 20px;gap:4px;align-items:center;margin-bottom:4px;}
+.exp-bonus{text-align:center;font-family:'Cinzel',serif;font-size:13px;}
+
+/* ── GOLD ── */
+.gold-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.gold-box{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px;text-align:center;}
+
+/* ── INVENTORY ── */
+.inv-line{display:flex;gap:5px;align-items:center;margin-bottom:4px;}
+.inv-line input{flex:1;}
+.rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;padding:0;flex-shrink:0;}
+.rm:hover{color:var(--red);}
+.add-row-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px dashed var(--border2);color:var(--muted);padding:3px 8px;border-radius:3px;cursor:pointer;width:100%;margin-top:3px;}
+.add-row-btn:hover{color:var(--text);}
+
+/* ── CLASS FEATURE ── */
+.cf-name{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.cf-body{font-size:15.5px;line-height:1.65;color:var(--text);}
+.cf-hope{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;padding-top:6px;border-top:1px solid var(--border);}
+.cf-hope strong{font-style:normal;color:var(--text);}
+
+/* ── PAGE 2 LAYOUT ── */
+.p2-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;}
+.p2-left{display:flex;flex-direction:column;gap:0.75rem;}
+.p2-mid{display:flex;flex-direction:column;gap:0.75rem;}
+.p2-right{display:flex;flex-direction:column;gap:0.75rem;}
+
+.bg-q{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.4;}
+.conn-q{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.4;}
+.answer-area{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:6px 8px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;resize:none;outline:none;min-height:52px;line-height:1.5;}
+.answer-area:focus{border-color:var(--gold-dim);}
+
+.desc-list{font-size:12px;color:var(--muted);line-height:1.75;}
+.desc-cat{font-weight:600;color:var(--text);}
+
+/* ── TIER BOXES ── */
+.tier-box{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:0.75rem;margin-bottom:6px;}
+.tier-header{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--gold);margin-bottom:3px;}
+.tier-intro{font-size:11px;color:var(--muted);font-style:italic;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);line-height:1.5;}
+.tier-option{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;font-size:12px;line-height:1.4;}
+.tier-option input[type=checkbox]{margin-top:2px;flex-shrink:0;accent-color:var(--gold);}
+
+/* ── PRINT ── */
+/* ── SECTION BLOCKS (history / bgq / guide) ── */
+.section-block { background: var(--bg2); }
+.section-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  gap: 1rem;
+}
+.section-block-title {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+.hdr-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.hdr-btn:hover { color: var(--text); }
+.hdr-btn.gold-btn { background: var(--gold-faint); border-color: var(--gold-dim); color: var(--gold); }
+.hdr-btn.gold-btn:hover { background: var(--bg4); }
+
+/* per-question add to history button */
+.q-block { margin-bottom: 1rem; }
+.add-hist-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  background: none;
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  padding: 3px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+.add-hist-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+/* ── HISTORY ── */
+#history-list .history-entry { transition: opacity 0.15s; }
+.custom-bgq-row input:focus,.custom-bgq-row textarea:focus { border-color: var(--gold-dim) !important; outline:none; }
+
+/* ── SHEET TABS ── */
+.sheet-tabs {
+  display: flex;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  padding: 0 1rem;
+  position: sticky;
+  top: 48px;
+  z-index: 90;
+}
+.sheet-tab {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  padding: 0 1.25rem;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+.sheet-tab:hover { color: var(--text); }
+.sheet-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+html[data-theme="light"] .sheet-tabs { background: var(--bg2); }
+html[data-theme="light"] .sheet-tab.active { color: var(--gold); }
+
+
+.app-layout { display: flex; min-height: calc(100vh - 48px); }
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border2);
+  position: sticky;
+  top: 48px;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-title {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  padding: 0.85rem 1rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+.char-list { flex: 1; padding: 0.5rem 0; }
+.char-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  cursor: pointer;
+  padding: 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.12s;
+}
+.char-item:hover { background: var(--bg3); }
+.char-item.active { background: var(--bg3); border-left: 3px solid var(--gold); }
+.char-item-body {
+  flex: 1;
+  padding: 0.65rem 0.85rem;
+  min-width: 0;
+}
+.char-item.active .char-item-body { padding-left: calc(0.85rem - 3px); }
+.char-name {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.char-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.char-del {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0.65rem 0.6rem;
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.12s, color 0.12s;
+  flex-shrink: 0;
+}
+.char-item:hover .char-del { opacity: 1; }
+.char-del:hover { color: var(--red); }
+
+.sidebar-new {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: color 0.12s, background 0.12s;
+}
+.sidebar-new:hover { color: var(--text); background: var(--bg3); }
+
+.main-area { flex: 1; min-width: 0; overflow-y: auto; }
+.pages { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+
+.sidebar-empty {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  padding: 1rem;
+  line-height: 1.6;
+}
+
+html[data-theme="light"] { --muted: #2a2420; }
+html[data-theme="light"] p { color: #2a2420; font-weight: 500; }
+html[data-theme="light"] .ey { font-size: 9.5px; font-weight: 700; letter-spacing: 0.18em; color: #2a2420; }
+html[data-theme="light"] .trait-actions { font-size: 9.5px; font-weight: 600; color: #2a2420; }
+html[data-theme="light"] .tier-intro { font-size: 13px; font-weight: 500; color: #2a2420; }
+html[data-theme="light"] .class-tagline { font-size: 14px; font-weight: 500; color: #2a2420; }
+html[data-theme="light"] .desc-list { font-size: 13px; font-weight: 500; color: #2a2420; }
+html[data-theme="light"] .cf-body { font-size: 14px; font-weight: 500; }
+html[data-theme="light"] .cf-hope { font-size: 14px; font-weight: 500; }
+html[data-theme="light"] .sidebar-empty { font-size: 13px; font-weight: 500; color: #2a2420; }
+html[data-theme="light"] .char-meta { font-weight: 600; color: #2a2420; }
+html[data-theme="light"] .bg-q,
+html[data-theme="light"] .conn-q { color: var(--text); font-weight: 600; }
+html[data-theme="light"] .answer-area { font-weight: 400; }
+html[data-theme="light"] .thresh-mark { font-weight: 600; color: #2a2420; }
+html[data-theme="light"] .thresh-label { font-weight: 700; }
+
+@media print {
+  .sidebar { display: none; }
+  .mob-char-bar { display: none; }
+  .main-area { width: 100%; }
+  .toolbar{display:none;}
+  body{background:#fff;color:#111;}
+  :root{--bg:#fff;--bg2:#fff;--bg3:#f4f2ee;--bg4:#e8e5e0;--border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);--text:#111;--muted:#666;--faint:#ddd;--gold:#7a5810;--gold-dim:#7a5810;--gold-faint:#fdf8ee;--red:#8a2020;--red-dim:#8a2020;--red-faint:#fdf0f0;--teal:#1a5850;--teal-faint:#eef8f6;--in:#fff;}
+  .page{border:1px solid #ccc;margin-bottom:0;page-break-after:always;}
+  .page:last-child{page-break-after:avoid;}
+  input,textarea{border-bottom-color:#ccc !important;}
+  .shield-pip .shield-shape{stroke:#aaa;}
+  .shield-pip.filled .shield-shape{fill:#eef8f6;stroke:#1a5850;}
+  .hope-pip{border-color:#ccc;}
+  .hope-pip.filled{background:#fdf8ee;border-color:#7a5810;color:#7a5810;}
+  .hpbox,.stressbox{border-color:#ccc;}
+  .hpbox.filled,.stressbox.filled{background:#fdf0f0;border-color:#8a2020;color:#8a2020;}
+  .prof-dot{border-color:#ccc;}
+  .prof-dot.filled{background:#7a5810;border-color:#7a5810;}
+}
+
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="ttitle">DAGGERHEART — CHARACTER SHEET</div>
+  <select class="class-select" id="class-picker" onchange="switchClass(this.value)">
+    <option value="">— Choose Class —</option>
+    <option value="Bard">Bard</option>
+    <option value="Druid">Druid</option>
+    <option value="Guardian">Guardian</option>
+    <option value="Ranger">Ranger</option>
+    <option value="Rogue">Rogue</option>
+    <option value="Seraph">Seraph</option>
+    <option value="Sorcerer">Sorcerer</option>
+    <option value="Warrior">Warrior</option>
+    <option value="Wizard">Wizard</option>
+  </select>
+  <button class="tbtn" id="theme-btn" onclick="toggleTheme()">☀ Light Mode</button>
+  <button class="tbtn" onclick="window.print()">Print / PDF</button>
+  <button class="tbtn gold" onclick="saveSheet()">Save</button>
+</div>
+
+<!-- MOBILE CHARACTER BAR (shown only on small screens) -->
+<div class="mob-char-bar" id="mob-char-bar">
+  <div class="mob-char-bar-inner" id="mob-char-inner">
+    <button class="mob-new-btn" onclick="newCharacter()">+ New</button>
+  </div>
+</div>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR: character list (desktop) -->
+  <div class="sidebar">
+    <div class="sidebar-title">Characters</div>
+    <div class="char-list" id="char-list">
+      <div class="sidebar-empty" id="sidebar-empty">No saved characters yet.<br>Fill out a sheet and hit Save.</div>
+    </div>
+    <button class="sidebar-new" onclick="newCharacter()">+ New Character</button>
+  </div>
+
+  <!-- MAIN SHEET AREA -->
+  <div class="main-area">
+
+    <!-- TAB BAR -->
+    <div class="sheet-tabs" id="sheet-tabs">
+      <button class="sheet-tab active" id="tab-sheet-btn" onclick="showSheetTab('sheet')">Character Sheet</button>
+      <button class="sheet-tab" id="tab-notes-btn" onclick="showSheetTab('notes')">Session Notes</button>
+    </div>
+
+    <!-- SHEET TAB -->
+    <div id="tab-sheet">
+      <div class="pages" id="pages">
+        <div style="text-align:center;padding:3rem;color:var(--muted);">
+          <p style="font-family:'Cinzel',serif;font-size:14px;letter-spacing:0.1em;">Select a class above to begin.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES TAB -->
+    <div id="tab-notes" style="display:none;">
+      <div class="pages">
+
+        <!-- CURRENT SESSION NOTES -->
+        <div class="page">
+          <div class="section-block-header">
+            <div class="section-block-title">Current Session</div>
+          </div>
+          <div class="page-inner">
+            <p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:0.75rem;">Write notes for this session, then submit to archive them. The field clears after submitting so you start fresh each session.</p>
+            <div style="margin-bottom:8px;">
+              <span class="ey">Session Title</span>
+              <input type="text" id="session-title" placeholder="e.g. Session 3 — The Road to Millhaven" oninput="save()">
+            </div>
+            <textarea id="session-notes" rows="12" placeholder="What happened this session? Stress taken, Hope spent, key choices, moments worth remembering..." oninput="save()"></textarea>
+            <button onclick="submitSessionNote()" class="hdr-btn gold-btn" style="width:100%;margin-top:8px;padding:8px;">Submit to Log ↓</button>
+          </div>
+        </div>
+
+        <!-- SESSION LOG -->
+        <div class="page">
+          <div class="section-block-header">
+            <div class="section-block-title">Session Log</div>
+          </div>
+          <div class="page-inner">
+            <div id="session-log-empty" style="font-size:13px;color:var(--muted);font-style:italic;text-align:center;padding:1.5rem 0;">No sessions logged yet. Write notes above and hit Submit to Log.</div>
+            <div id="session-log"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CLASS DATA
+// ─────────────────────────────────────────────
+const CLASSES = {
+  Bard: {
+    domains:'Grace & Codex',
+    tagline:"As a bard, you know how to get people to talk, bring attention to yourself, and use words or music to influence the world around you.",
+    evasionStart:10,
+    traits:{agility:0,strength:-1,finesse:1,instinct:0,presence:2,knowledge:1},
+    featureName:'Rally',
+    featureBody:'Once per session, describe how you rally the party and give yourself and each of your allies a Rally Die. At level 1, your Rally Die is a <strong>d6</strong>. A PC can spend their Rally Die to roll it, adding the result to their action roll, reaction roll, damage roll, or to clear a number of Stress equal to the result. At the end of each session, clear all unspent Rally Dice.\n\nAt level 5, your Rally Die increases to a <strong>d8</strong>.',
+    featureHope:'<strong>Make a Scene:</strong> Spend 3 Hope to temporarily <em>Distract</em> a target within Close range, giving them a −2 penalty to their Difficulty.',
+    suggestedTraits:'0 Agility, −1 Strength, +1 Finesse,\n0 Instinct, +2 Presence, +1 Knowledge',
+    suggestedPrimary:'Rapier — Presence Melee — d8 phy — One-Handed\n<em>Quick:</em> When you make an attack, you can mark a Stress to target another creature within range.',
+    suggestedSecondary:'Small Dagger — Finesse Melee — d8 phy — One-Handed\n<em>Paired:</em> +2 to primary weapon damage to targets within Melee range',
+    suggestedArmor:'Gambeson Armor — Thresholds 5/11 — Score 3\n<em>Flexible:</em> +1 to Evasion',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a romance novel OR a letter never opened\nTHEN DECIDE: What do you carry your spells in? (songbook, journal, etc.)',
+    bgQuestions:["Who from your community taught you to have such confidence in yourself?","You were in love once. Who did you adore, and how did they hurt you?","You've always looked up to another bard. Who are they, and why do you idolize them?"],
+    connQuestions:["What made you realize we were going to be such good friends?","What do I do that annoys you?","Why do you grab my hand at night?"],
+    descOptions:{clothes:'extravagant, fancy, loud, oversized, ragged, sleek, wild',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'a barkeep, a magician, a ringmaster, a rock star, a swashbuckler'},
+  },
+  Druid: {
+    domains:'Sage & Arcana',
+    tagline:"As a druid, you are a force of nature, preserving the balance of life and death by channeling the wilds themselves through you.",
+    evasionStart:10,
+    traits:{agility:1,strength:0,finesse:1,instinct:2,presence:-1,knowledge:0},
+    featureName:'Beastform',
+    featureBody:'Mark a Stress to magically transform into a creature of your tier or lower from the Beastform list. You can drop out of this form at any time. While transformed, you can\'t use weapons or cast spells from domain cards, but you can still use other features and abilities. You can talk normally. You gain the Beastform\'s features, add their Evasion bonus to yours, and use their specified trait for attacks.\n\n<strong>Wildtouch:</strong> You can perform harmless, subtle effects that involve nature—such as causing a flower to grow, summoning a slight gust of wind, or starting a campfire—at will.',
+    featureHope:'<strong>Evolution:</strong> Spend 3 Hope to transform into Beastform without marking a Stress. Choose one trait to raise by +1 until you drop out of that Beastform.',
+    suggestedTraits:'+1 Agility, 0 Strength, +1 Finesse,\n+2 Instinct, −1 Presence, 0 Knowledge',
+    suggestedPrimary:'Shortstaff — Instinct Close — d8+1 mag — One-Handed',
+    suggestedSecondary:'Round Shield — Strength Melee — d4 phy — One-Handed\n<em>Protective:</em> +1 to Armor Score',
+    suggestedArmor:'Leather Armor — Thresholds 6/13 — Score 3',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a small bag of rocks and bones OR a strange pendant found in the dirt',
+    bgQuestions:["Why was the community you grew up in so reliant on nature and its creatures?","Who was the first wild animal you bonded with? Why did your bond end?","Who has been trying to hunt you down? What do they want from you?"],
+    connQuestions:["What did you confide in me that makes me leap into danger for you every time?","What animal do I say you remind me of?","What affectionate nickname have you given me?"],
+    descOptions:{clothes:'camouflaged, grown, loose, natural, patchwork, regal, scraps',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'a firecracker, a fox, a guide, a hippie, a witch'},
+  },
+  Guardian: {
+    domains:'Valor & Blade',
+    tagline:"As a guardian, you run into danger to protect your party, keeping watch over those who might not survive without you there.",
+    evasionStart:9,
+    traits:{agility:1,strength:2,finesse:-1,instinct:0,presence:1,knowledge:0},
+    featureName:'Unstoppable',
+    featureBody:'Once per long rest, you can become Unstoppable. You gain an Unstoppable Die. At level 1, your Unstoppable Die is a <strong>d4</strong>. Place it on this sheet starting with the 1 value facing up. After you make a damage roll that deals 1 or more Hit Points to a target, increase the Unstoppable Die value by one. When the die\'s value would exceed its maximum or when the scene ends, remove the die and drop out of Unstoppable.\n\nAt level 5, your Unstoppable Die increases to a <strong>d6</strong>.\n\nWhile Unstoppable:\n• You reduce the severity of physical damage by one threshold.\n• You add the current value of the Unstoppable Die to your damage roll.\n• You can\'t be Restrained or Vulnerable.',
+    featureHope:'<strong>Frontline Tank:</strong> Spend 3 Hope to clear 2 Armor Slots.',
+    suggestedTraits:'+1 Agility, +2 Strength, −1 Finesse,\n0 Instinct, +1 Presence, 0 Knowledge',
+    suggestedPrimary:'Battleaxe — Strength Melee — d10+3 phy — Two-Handed',
+    suggestedSecondary:'',
+    suggestedArmor:'Chainmail Armor — Thresholds 7/15 — Score 4\n<em>Heavy:</em> −1 to Evasion',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a totem from your mentor OR a secret key',
+    bgQuestions:["Who from your community did you fail to protect, and why do you still think of them?","You've been tasked with protecting something important and delivering it somewhere dangerous. What is it, and where does it need to go?","You consider an aspect of yourself to be a weakness. What is it, and how has it affected you?"],
+    connQuestions:["How did I save your life the first time we met?","What small gift did you give me that you notice I always carry with me?","What lie have you told me about yourself that I absolutely believe?"],
+    descOptions:{clothes:'casual, intricate, loose, padded, royal, tactical, weathered',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'a captain, a caretaker, an elephant, a general, a wrestler'},
+  },
+  Ranger: {
+    domains:'Bone & Sage',
+    tagline:"As a ranger, your keen eyes and graceful haste make you indispensable when tracking down enemies and navigating the wilds.",
+    evasionStart:12,
+    traits:{agility:2,strength:0,finesse:1,instinct:1,presence:-1,knowledge:0},
+    featureName:"Ranger's Focus",
+    featureBody:"Spend a Hope and make an attack against a target. On a success, deal your attack's normal damage and temporarily make the attack's target your Focus. Until this feature ends or you make a different creature your Focus, you gain the following benefits against your Focus:\n• You know precisely what direction they are in.\n• When you deal damage to them, they must mark a Stress.\n• When you fail an attack against them, you can end your Ranger's Focus feature to reroll your Duality Dice.",
+    featureHope:"<strong>Hold Them Off:</strong> Spend 3 Hope when you succeed on an attack with a weapon to use that same roll against two additional adversaries within range of the attack.",
+    suggestedTraits:'+2 Agility, 0 Strength, +1 Finesse,\n+1 Instinct, −1 Presence, 0 Knowledge',
+    suggestedPrimary:'Shortbow — Agility Far — d6+3 phy — Two-Handed',
+    suggestedSecondary:'',
+    suggestedArmor:'Leather Armor — Thresholds 6/13 — Score 3',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a trophy from your first kill OR a seemingly broken compass',
+    bgQuestions:["A terrible creature hurt your community, and you've vowed to hunt them down. What are they, and what unique trail or sign do they leave behind?","Your first kill almost killed you, too. What was it, and what part of you was never the same after that event?","You've traveled many dangerous lands, but what is the one place you refuse to go?"],
+    connQuestions:["What friendly competition do we have?","Why do you act differently when we're alone than when others are around?","What threat have you asked me to watch for, and why are you worried about it?"],
+    descOptions:{clothes:'flowing, muted, natural, stained, tactical, tight, woven',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'a child, a ghost, a survivalist, a teacher, a watchdog'},
+  },
+  Rogue: {
+    domains:'Midnight & Grace',
+    tagline:"As a rogue, you have experience fighting with your blade as well as your wit, preferring to move quickly and fight quietly.",
+    evasionStart:12,
+    traits:{agility:1,strength:-1,finesse:2,instinct:0,presence:1,knowledge:0},
+    featureName:'Cloaked & Sneak Attack',
+    featureBody:'<strong>Cloaked:</strong> Any time you would be Hidden, you are instead Cloaked. In addition to the benefits of the Hidden condition, while Cloaked you remain unseen if you are stationary when an adversary moves to where they would normally see you. After you make an attack or end a move within line of sight of an adversary, you are no longer Cloaked.\n\n<strong>Sneak Attack:</strong> When you succeed on an attack while Cloaked or while an ally is within Melee range of your target, add a number of d6s equal to your tier to your damage roll.\n\nLevel 1 = Tier 1 · Levels 2–4 = Tier 2 · Levels 5–7 = Tier 3 · Levels 8–10 = Tier 4',
+    featureHope:"<strong>Rogue's Dodge:</strong> Spend 3 Hope to gain a +2 bonus to your Evasion until the next time an attack succeeds against you. Otherwise, this bonus lasts until your next rest.",
+    suggestedTraits:'+1 Agility, −1 Strength, +2 Finesse,\n0 Instinct, +1 Presence, 0 Knowledge',
+    suggestedPrimary:'Dagger — Finesse Melee — d8+1 phy — One-Handed',
+    suggestedSecondary:'Small Dagger — Finesse Melee — d8 phy — One-Handed\n<em>Paired:</em> +2 to primary weapon damage to targets within Melee range',
+    suggestedArmor:'Gambeson Armor — Thresholds 5/11 — Score 3\n<em>Flexible:</em> +1 to Evasion',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a set of forgery tools OR a grappling hook',
+    bgQuestions:["What did you get caught doing that got you exiled from your home community?","You used to have a different life, but you've tried to leave it behind. Who from your past is still chasing you?","Who from your past were you most sad to say goodbye to?"],
+    connQuestions:["What did I recently convince you to do that got us both in trouble?","What have I discovered about your past that I hold secret from the others?","Who do you know from my past, and how have they influenced your feelings about me?"],
+    descOptions:{clothes:'clean, dark, inconspicuous, leather, scary, tactical, tight',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'a bandit, a con artist, a gambler, a mob boss, a pirate'},
+  },
+  Seraph: {
+    domains:'Splendor & Valor',
+    tagline:"As a seraph, you've taken a vow to a god who helps you channel sacred arcane power to keep your party on their feet.",
+    evasionStart:9,
+    traits:{agility:0,strength:2,finesse:0,instinct:1,presence:1,knowledge:-1},
+    featureName:'Prayer Dice',
+    featureBody:"At the beginning of each session, roll a number of d4s equal to your subclass's Spellcast trait and place them on this sheet in the space provided. These are your Prayer Dice. You can spend any number of Prayer Dice to aid yourself or an ally within Far range. You can use a spent die's value to:\n• Reduce incoming damage\n• Add to a roll's result after the roll is made\n• Gain Hope equal to the result\n\nAt the end of each session, clear all unspent Prayer Dice.",
+    featureHope:'<strong>Life Support:</strong> Spend 3 Hope to clear a Hit Point on an ally within Close range.',
+    suggestedTraits:'0 Agility, +2 Strength, 0 Finesse,\n+1 Instinct, +1 Presence, −1 Knowledge',
+    suggestedPrimary:'Hallowed Axe — Strength Melee — d8+1 mag — One-Handed',
+    suggestedSecondary:'Round Shield — Strength Melee — d4 phy — One-Handed\n<em>Protective:</em> +1 to Armor Score',
+    suggestedArmor:'Chainmail Armor — Thresholds 7/15 — Score 4\n<em>Heavy:</em> −1 to Evasion',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a bundle of offerings OR a sigil of your god',
+    bgQuestions:["Which god did you devote yourself to? What incredible feat did they perform for you in a moment of desperation?","How did your appearance change after taking your oath?","In what strange or unique way do you communicate with your god?"],
+    connQuestions:["What promise did you make me agree to, should you die on the battlefield?","Why do you ask me so many questions about my god?","You've told me to protect one member of our party above all others, even yourself. Who are they and why?"],
+    descOptions:{clothes:'glowing, rippling, ornate, tight, modest, strange, natural',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'an angel, a doctor, an evangelist, a monk, a priest'},
+  },
+  Sorcerer: {
+    domains:'Arcana & Midnight',
+    tagline:"As a sorcerer, you were born with innate magical power, and you've learned how to wield that power to get what you want.",
+    evasionStart:10,
+    traits:{agility:0,strength:-1,finesse:1,instinct:2,presence:1,knowledge:0},
+    featureName:'Channel Raw Power',
+    featureBody:'<strong>Arcane Sense:</strong> You can sense the presence of magical people and objects within Close range.\n\n<strong>Minor Illusion:</strong> Make a Spellcast Roll (10). On a success, you create a minor visual illusion no larger than yourself within Close range. This illusion is convincing to anyone at Close range or farther.\n\n<strong>Channel Raw Power:</strong> Once per long rest, you can place a domain card from your loadout into your vault and choose to either:\n• Gain Hope equal to the level of the card.\n• Enhance a spell that deals damage, gaining a bonus to your damage roll equal to twice the level of the card.',
+    featureHope:'<strong>Volatile Magic:</strong> Spend 3 Hope to reroll any number of your damage dice on an attack that deals magic damage.',
+    suggestedTraits:'0 Agility, −1 Strength, +1 Finesse,\n+2 Instinct, +1 Presence, 0 Knowledge',
+    suggestedPrimary:'Dualstaff — Instinct Far — d6+3 mag — Two-Handed',
+    suggestedSecondary:'',
+    suggestedArmor:'Gambeson Armor — Thresholds 5/11 — Score 3\n<em>Flexible:</em> +1 to Evasion',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a whispering orb OR a family heirloom',
+    bgQuestions:["What did you do that made the people in your community wary of you?","What mentor taught you to control your untamed magic, and why are they no longer able to guide you?","You have a deep fear you hide from everyone. What is it, and why does it scare you?"],
+    connQuestions:["Why do you trust me so deeply?","What did I do that makes you cautious around me?","You have a deep fear you hide from everyone. Why do we keep our shared past a secret?"],
+    descOptions:{clothes:'always moving, flamboyant, inconspicuous, layered, ornate, tight',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'a celebrity, a commander, a politician, a prankster, a wolf in sheep\'s clothing'},
+  },
+  Warrior: {
+    domains:'Blade & Bone',
+    tagline:"As a warrior, you run into battle without hesitation or caution, knowing you can strike down whatever enemy stands in your path.",
+    evasionStart:11,
+    traits:{agility:2,strength:1,finesse:0,instinct:1,presence:-1,knowledge:0},
+    featureName:'Combat Training',
+    featureBody:'You ignore burden when equipping weapons. When you deal physical damage, you gain a bonus to your damage roll equal to your level.\n\n<strong>Attack of Opportunity:</strong> When an adversary within Melee range attempts to leave that range, make a reaction roll using a trait of your choice against their Difficulty. Choose one effect on a success, or two if you critically succeed:\n• They can\'t move from where they are.\n• You deal damage to them equal to your primary weapon\'s damage.\n• You move with them.',
+    featureHope:'<strong>No Mercy:</strong> Spend 3 Hope to gain a +1 bonus to your attack rolls until your next rest.',
+    suggestedTraits:'+2 Agility, +1 Strength, 0 Finesse,\n+1 Instinct, −1 Presence, 0 Knowledge',
+    suggestedPrimary:'Longsword — Agility Melee — d8+3 phy — Two-Handed',
+    suggestedSecondary:'',
+    suggestedArmor:'Chainmail Armor — Thresholds 7/15 — Score 4\n<em>Heavy:</em> −1 to Evasion',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: the drawing of a lover OR a sharpening stone',
+    bgQuestions:["Who taught you to fight, and why did they stay behind when you left home?","Somebody defeated you in battle years ago and left you to die. Who was it, and how did they betray you?","What legendary place have you always wanted to visit, and why is it so special?"],
+    connQuestions:["We knew each other long before this party came together. How?","What mundane task do you usually help me with off the battlefield?","What fear am I helping you overcome?"],
+    descOptions:{clothes:'bold, patched, reinforced, royal, sleek, sparing, weathered',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'a bull, a dedicated soldier, a gladiator, a hero, a hired hand'},
+  },
+  Wizard: {
+    domains:'Codex & Splendor',
+    tagline:"As a wizard, you've become familiar with the arcane through the relentless study of grimoires and other tools of magic.",
+    evasionStart:11,
+    traits:{agility:-1,strength:0,finesse:0,instinct:1,presence:1,knowledge:2},
+    featureName:'Strange Patterns',
+    featureBody:'<strong>Prestidigitation:</strong> You can perform harmless, subtle magical effects at will — change an object\'s color, create a smell, light a candle, cause a tiny object to float, illuminate a room, or repair a small object.\n\n<strong>Strange Patterns:</strong> Choose a number between 1 and 12. When you roll that number on a Duality Die, gain a Hope or clear a Stress. You can change this number when you take a long rest.',
+    featureHope:'<strong>Not This Time:</strong> Spend 3 Hope to force an adversary within Far range to reroll an attack or damage roll.',
+    suggestedTraits:'−1 Agility, 0 Strength, 0 Finesse,\n+1 Instinct, +1 Presence, +2 Knowledge',
+    suggestedPrimary:'Greatstaff — Knowledge Very Far — d6 mag — Two-Handed\n<em>Powerful:</em> On a successful attack, roll an additional damage die and discard the lowest result.',
+    suggestedSecondary:'',
+    suggestedArmor:'Leather Armor — Thresholds 6/13 — Score 3',
+    startingInventory:'a torch, 50 feet of rope, basic supplies, and a handful of gold\nTHEN CHOOSE: a Minor Health Potion OR a Minor Stamina Potion\nAND EITHER: a book you\'re trying to translate OR a tiny, harmless elemental pet\nTHEN DECIDE: What do you carry your spells in? (large tomes, tarot cards, etc.)',
+    bgQuestions:["What responsibilities did your community once count on you for? How did you let them down?","You've spent your life searching for a book or object of great significance. What is it, and why is it so important to you?","You have a powerful rival. Who are they, and why are you so determined to defeat them?"],
+    connQuestions:["What favor have I asked of you that you're not sure you can fulfill?","What weird hobby or strange fascination do we both share?","What secret about yourself have you entrusted only to me?"],
+    descOptions:{clothes:'beautiful, clean, common, flowing, layered, patchwork, tight',eyes:'carnations, earth, endless ocean, fire, ivy, lilacs, night, seafoam, winter',body:"broad, carved, curvy, lanky, rotund, short, stocky, tall, thin, tiny, toned",skin:'ashes, clover, falling snow, fine sand, obsidian, rose, sapphire, wisteria',attitude:'an eccentric, a librarian, a lit fuse, a philosopher, a professor'},
+  },
+};
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let currentClass = '';
+
+// ─────────────────────────────────────────────
+// SHIELD SVG PIP
+// ─────────────────────────────────────────────
+function shieldSVG() {
+  return `<svg viewBox="0 0 22 26" xmlns="http://www.w3.org/2000/svg"><path class="shield-shape" d="M11 1 L21 5 L21 13 Q21 21 11 25 Q1 21 1 13 L1 5 Z"/></svg>`;
+}
+
+// ─────────────────────────────────────────────
+// RENDER PIPS
+// ─────────────────────────────────────────────
+function renderHopePips(container, count, filled) {
+  container.innerHTML = '';
+  for (let i=0;i<count;i++) {
+    const p = document.createElement('div');
+    p.className = 'hope-pip' + (i<filled?' filled':'');
+    p.addEventListener('click', () => {
+      const newVal = getPipCount(container,'hope-pip') > i ? i : i+1;
+      renderHopePips(container, count, newVal);
+      save();
+    });
+    container.appendChild(p);
+  }
+}
+
+function getPipCount(container, cls) {
+  return container.querySelectorAll('.'+cls+'.filled').length;
+}
+
+function makeShieldPips(container, count, filled) {
+  container.innerHTML = '';
+  for (let i=0;i<count;i++) {
+    const p = document.createElement('div');
+    p.className = 'shield-pip' + (i<filled?' filled':'');
+    p.innerHTML = shieldSVG();
+    p.addEventListener('click', () => {
+      const cur = container.querySelectorAll('.shield-pip.filled').length;
+      const newVal = cur > i ? i : i+1;
+      makeShieldPips(container, count, newVal);
+      save();
+    });
+    container.appendChild(p);
+  }
+}
+
+function makeBoxPips(container, count, filled, cls) {
+  container.innerHTML = '';
+  for (let i=0;i<count;i++) {
+    const b = document.createElement('div');
+    b.className = cls + (i<filled?' filled':'');
+    b.addEventListener('click', () => {
+      const cur = container.querySelectorAll('.'+cls+'.filled').length;
+      const newVal = cur > i ? i : i+1;
+      makeBoxPips(container, count, newVal, cls);
+      save();
+    });
+    container.appendChild(b);
+  }
+  // add dotted extras for expansion
+  for (let i=0;i<3;i++) {
+    const d = document.createElement('div');
+    d.className = 'dotted-box';
+    container.appendChild(d);
+  }
+}
+
+function makeProfDots(container, filled) {
+  container.innerHTML = '';
+  for (let i=0;i<6;i++) {
+    const d = document.createElement('div');
+    d.className = 'prof-dot' + (i<filled?' filled':'');
+    d.addEventListener('click', () => {
+      const cur = container.querySelectorAll('.prof-dot.filled').length;
+      const newVal = cur > i ? i : i+1;
+      makeProfDots(container, newVal);
+      save();
+    });
+    container.appendChild(d);
+  }
+}
+
+// ─────────────────────────────────────────────
+// DYNAMIC LISTS
+// ─────────────────────────────────────────────
+function addExpRow(container, name='', bonus='') {
+  const row = document.createElement('div');
+  row.className = 'exp-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Experience name..." value="${name}" oninput="save()">
+    <input type="number" class="exp-bonus" placeholder="+2" value="${bonus}" oninput="save()">
+    <button class="rm" onclick="this.parentElement.remove();save()">×</button>`;
+  container.appendChild(row);
+}
+
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function addInvRow(container, val='', qty='') {
+  const row = document.createElement('div');
+  row.className = 'inv-line';
+  row.innerHTML = `<input type="text" placeholder="Item..." value="${escHtml(val)}" oninput="save()" style="flex:1;"><input type="number" placeholder="qty" value="${escHtml(qty)}" oninput="save()" style="width:46px;text-align:center;"><button class="rm" onclick="this.parentElement.remove();save()" title="Remove">×</button>`;
+  container.appendChild(row);
+}
+
+function addInvArmor(container, n='', thresh='', score='', feature='') {
+  const wrap = document.createElement('div');
+  wrap.className = 'inv-armor-wrap';
+  wrap.style.marginBottom = '8px';
+  wrap.innerHTML = `
+    <div class="weapon-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div class="weapon-label">Inventory Armor</div>
+        <button class="rm" onclick="this.closest('.inv-armor-wrap').remove();save()" title="Remove armor">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:5px;margin-bottom:4px;">
+        <div class="wfield"><span class="ey">Name</span><input type="text" placeholder="Chainmail Armor..." value="${escHtml(n)}" oninput="save()"></div>
+        <div class="wfield"><span class="ey">Thresholds</span><input type="text" placeholder="7/15" value="${escHtml(thresh)}" oninput="save()"></div>
+        <div class="wfield"><span class="ey">Score</span><input type="text" placeholder="4" value="${escHtml(score)}" oninput="save()"></div>
+      </div>
+      <div class="wfield"><span class="ey">Feature</span><input type="text" placeholder="Heavy: −1 Evasion, Flexible: +1 Evasion..." value="${escHtml(feature)}" oninput="save()"></div>
+    </div>`;
+  container.appendChild(wrap);
+}
+
+function addInvWeapon(container, n='',t='',d='',f='') {
+  const wrap = document.createElement('div');
+  wrap.className = 'inv-weapon-wrap';
+  wrap.style.marginBottom='8px';
+  wrap.innerHTML = `
+    <div class="weapon-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <div class="weapon-label">Inventory Weapon</div>
+        <div style="display:flex;gap:10px;font-size:11px;align-items:center;">
+          <label><input type="checkbox" style="width:auto;" oninput="save()"> Primary</label>
+          <label><input type="checkbox" style="width:auto;" oninput="save()"> Secondary</label>
+          <button class="rm" onclick="this.closest('.inv-weapon-wrap').remove();save()" title="Remove weapon">×</button>
+        </div>
+      </div>
+      <div class="weapon-fields">
+        <div class="wfield"><span class="ey">Name</span><input type="text" placeholder="Weapon name..." value="${escHtml(n)}" oninput="save()"></div>
+        <div class="wfield"><span class="ey">Trait & Range</span><input type="text" placeholder="Agility Melee" value="${escHtml(t)}" oninput="save()"></div>
+        <div class="wfield"><span class="ey">Damage & Type</span><input type="text" placeholder="d8+1 phy" value="${escHtml(d)}" oninput="save()"></div>
+      </div>
+      <div class="wfield"><span class="ey">Feature</span><input type="text" placeholder="One-Handed, Paired..." value="${escHtml(f)}" oninput="save()"></div>
+    </div>`;
+  container.appendChild(wrap);
+}
+
+function buildPages(cls) {
+  const c = CLASSES[cls];
+  const pages = document.getElementById('pages');
+  pages.innerHTML = '';
+
+  // ── PAGE 1: STAT SHEET ──
+  const p1 = document.createElement('div');
+  p1.className = 'page';
+  p1.innerHTML = `
+    <div class="class-header">
+      <div class="class-name-block">
+        <div class="class-name-big">${cls.toUpperCase()}</div>
+        <div class="class-domains">${c.domains}</div>
+      </div>
+      <div class="char-fields">
+        <div class="char-fields-row1">
+          <div><span class="ey">Name</span><input type="text" id="f-name" placeholder="Character name..." oninput="save()"></div>
+          <div><span class="ey">Pronouns</span><input type="text" id="f-pronouns" placeholder="they/them..." oninput="save()"></div>
+        </div>
+        <div class="char-fields-row2">
+          <div><span class="ey">Heritage</span><input type="text" id="f-heritage" placeholder="Ribbet, Human, Faun..." oninput="save()"></div>
+          <div><span class="ey">Subclass</span><input type="text" id="f-subclass" placeholder="Subclass..." oninput="save()"></div>
+          <div class="char-level-field"><span class="ey">Level</span><input type="number" id="f-level" min="1" max="10" placeholder="1" oninput="save()"></div>
+        </div>
+      </div>
+    </div>
+    <div class="page-inner">
+
+      <!-- TRAITS ROW -->
+      <div class="traits-row" style="margin-bottom:1rem;">
+        ${['agility','strength','finesse','instinct','presence','knowledge'].map(t=>`
+        <div class="trait-block">
+          <div class="trait-name">${t.toUpperCase()}</div>
+          <input type="number" class="trait-score" id="t-${t}" value="${c.traits[t]>=0?'+'+c.traits[t]:c.traits[t]}" oninput="save()">
+          <div class="trait-actions">${{agility:'Sprint\nLeap\nManeuver',strength:'Lift\nSmash\nGrapple',finesse:'Control\nHide\nTinker',instinct:'Perceive\nSense\nNavigate',presence:'Charm\nPerform\nDeceive',knowledge:'Recall\nAnalyze\nComprehend'}[t].split('\n').join('<br>')}</div>
+        </div>`).join('')}
+      </div>
+
+      <div class="p1-grid">
+
+        <!-- LEFT COLUMN -->
+        <div class="p1-left">
+
+          <!-- EVASION + ARMOR -->
+          <div>
+            <div style="display:flex;gap:8px;margin-bottom:0.75rem;">
+              <div style="flex:1;">
+                <div class="sh">Evasion</div>
+                <div style="text-align:center;">
+                  <input type="number" id="f-evasion" value="${c.evasionStart}" oninput="save()" style="width:60px;text-align:center;font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);background:transparent;border:none;border-bottom:1px solid var(--border2);outline:none;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;">Start at ${c.evasionStart}</div>
+                </div>
+              </div>
+              <div style="flex:2;">
+                <div class="sh">Armor Slots</div>
+                <div class="shields-wrap" id="armor-pips"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DAMAGE & HEALTH -->
+          <div>
+            <div class="sh">Damage & Health</div>
+            <p style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);text-align:center;margin-bottom:6px;">Add your current level to your damage thresholds.</p>
+            <div class="thresh-row">
+              <div class="thresh-box">
+                <div class="thresh-label">Minor Damage</div>
+                <input type="number" class="thresh-num" id="thresh-minor" placeholder="—" oninput="save()">
+                <div class="thresh-mark">Mark 1 HP</div>
+              </div>
+              <div class="thresh-box">
+                <div class="thresh-label">Major Damage</div>
+                <input type="number" class="thresh-num" id="thresh-major" placeholder="—" oninput="save()">
+                <div class="thresh-mark">Mark 2 HP</div>
+              </div>
+              <div class="thresh-box">
+                <div class="thresh-label">Severe Damage</div>
+                <input type="number" class="thresh-num" id="thresh-severe" placeholder="—" oninput="save()">
+                <div class="thresh-mark">Mark 3 HP</div>
+              </div>
+            </div>
+            <div class="hp-stress-area">
+              <div>
+                <span class="ey">HP</span>
+                <div class="checkbox-row" id="hp-boxes"></div>
+              </div>
+              <div>
+                <span class="ey">Stress</span>
+                <div class="checkbox-row" id="stress-boxes"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HOPE -->
+          <div>
+            <div class="sh">Hope</div>
+            <p style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:4px;font-style:italic;">Spend a Hope to use an experience or help an ally.</p>
+            <div class="hope-pips" id="hope-pips"></div>
+            <div style="padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;margin-top:6px;font-size:12px;line-height:1.5;">
+              <strong style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);">${c.featureName.split(' ')[0]}:</strong> ${c.featureHope}
+            </div>
+          </div>
+
+          <!-- EXPERIENCE -->
+          <div>
+            <div class="sh">Experience</div>
+            <p style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:6px;">Spend a Hope to add an applicable Experience to a roll.</p>
+            <div id="exp-list"></div>
+            <button class="add-row-btn" onclick="addExpRow(document.getElementById('exp-list'));save()">+ Add Experience</button>
+          </div>
+
+          <!-- GOLD -->
+          <div>
+            <div class="sh">Gold</div>
+            <div class="gold-row">
+              <div class="gold-box"><span class="ey">Handfuls</span><input type="number" id="gold-h" min="0" placeholder="0" oninput="save()"></div>
+              <div class="gold-box"><span class="ey">Bags</span><input type="number" id="gold-b" min="0" placeholder="0" oninput="save()"></div>
+              <div class="gold-box"><span class="ey">Chest</span><input type="number" id="gold-c" min="0" placeholder="0" oninput="save()"></div>
+            </div>
+          </div>
+
+          <!-- CLASS FEATURE -->
+          <div>
+            <div class="sh">Class Feature</div>
+            <div class="cf-name">${c.featureName}</div>
+            <div class="cf-body" id="cf-body">${c.featureBody.replace(/\n/g,'<br>')}</div>
+          </div>
+
+        </div>
+
+        <!-- MIDDLE COLUMN: ACTIVE WEAPONS -->
+        <div class="p1-mid">
+          <div>
+            <div class="sh">Active Weapons</div>
+            <div style="text-align:center;margin-bottom:8px;">
+              <span class="ey" style="display:inline;">Proficiency</span>
+              <div class="prof-row" id="prof-dots"></div>
+            </div>
+
+            <div class="weapon-section" style="margin-bottom:8px;">
+              <div class="weapon-label">Primary</div>
+              <div class="weapon-fields">
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="w1-name" placeholder="${c.suggestedPrimary.split('—')[0].trim()}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w1-trait" placeholder="${(c.suggestedPrimary.split('—')[1]||'').trim()}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w1-damage" placeholder="${(c.suggestedPrimary.split('—')[2]||'').trim()}" oninput="save()"></div>
+              </div>
+              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w1-feature" placeholder="${(c.suggestedPrimary.split('—')[3]||'').trim()}" oninput="save()"></div>
+            </div>
+
+            <div class="weapon-section" style="margin-bottom:8px;">
+              <div class="weapon-label">Secondary</div>
+              <div class="weapon-fields">
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="w2-name" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[0]||'').trim():''}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w2-trait" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[1]||'').trim():''}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w2-damage" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[2]||'').trim():''}" oninput="save()"></div>
+              </div>
+              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w2-feature" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[3]||'').trim():''}" oninput="save()"></div>
+            </div>
+
+            <!-- ACTIVE ARMOR -->
+            <div class="sh" style="margin-top:8px;">Active Armor</div>
+            <div class="weapon-section">
+              <div class="weapon-fields" style="grid-template-columns:2fr 1fr 1fr;">
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="armor-name" placeholder="${c.suggestedArmor.split('—')[0].trim()}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Base Thresholds</span><input type="text" id="armor-thresh" placeholder="${(c.suggestedArmor.split('—')[1]||'').trim()}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Base Score</span><input type="text" id="armor-score" placeholder="${(c.suggestedArmor.split('—')[2]||'').trim()}" oninput="save()"></div>
+              </div>
+              <div class="wfield" style="margin-top:4px;"><span class="ey">Feature</span><input type="text" id="armor-feature" placeholder="${c.suggestedArmor.includes('\n')?c.suggestedArmor.split('\n')[1].trim():''}" oninput="save()"></div>
+            </div>
+
+            <!-- INVENTORY -->
+            <div class="sh" style="margin-top:8px;">Inventory</div>
+            <div id="inv-list" style="margin-bottom:4px;"></div>
+            <button class="add-row-btn" onclick="addInvRow(document.getElementById('inv-list'));save()">+ Add Item</button>
+
+            <!-- INVENTORY ARMOR -->
+            <div style="margin-top:8px;" id="inv-armor-wrap"></div>
+            <button class="add-row-btn" onclick="addInvArmor(document.getElementById('inv-armor-wrap'));save()" style="margin-top:4px;">+ Add Inventory Armor</button>
+
+            <!-- INVENTORY WEAPONS -->
+            <div style="margin-top:8px;" id="inv-weapons-wrap"></div>
+            <button class="add-row-btn" onclick="addInvWeapon(document.getElementById('inv-weapons-wrap'));save()" style="margin-top:4px;">+ Add Inventory Weapon</button>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN: QUICK NOTES -->
+        <div class="p1-right">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0.85rem 1rem;text-align:center;">
+            <div class="sh" style="margin-bottom:6px;">Session Notes</div>
+            <p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:8px;">Session notes & log live in the Session Notes tab.</p>
+            <button onclick="showSheetTab('notes')" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:6px 16px;border-radius:4px;cursor:pointer;">Go to Session Notes →</button>
+          </div>
+          <div>
+            <div class="sh">Domain Cards / Loadout</div>
+            <textarea id="domain-notes" rows="6" placeholder="Active domain cards..." oninput="save()"></textarea>
+          </div>
+          <div>
+            <div class="sh">Miscellaneous</div>
+            <textarea id="misc-notes" rows="9" placeholder="Scars, conditions, special notes..." oninput="save()"></textarea>
+          </div>
+        </div>
+
+      </div>
+    </div>`;
+  pages.appendChild(p1);
+
+  // ── PAGE 2: HISTORY → BACKGROUND QUESTIONS → GUIDE (collapsible) ──
+  const p2 = document.createElement('div');
+  p2.className = 'page';
+
+  // Build bgq and connq question blocks with individual "Add to History" buttons
+  const bgqBlocks = c.bgQuestions.map((q,i)=>`
+    <div class="q-block">
+      <div class="bg-q">${q}</div>
+      <textarea class="answer-area" id="bgq${i}" rows="3" oninput="save()" placeholder="Your answer..."></textarea>
+      <button class="add-hist-btn" onclick="submitSingleQ('bgq${i}', ${JSON.stringify(q)})">Add to History ↓</button>
+    </div>`).join('');
+
+  const connqBlocks = c.connQuestions.map((q,i)=>`
+    <div class="q-block">
+      <div class="conn-q">${q}</div>
+      <textarea class="answer-area" id="connq${i}" rows="3" oninput="save()" placeholder="Your answer..."></textarea>
+      <button class="add-hist-btn" onclick="submitSingleQ('connq${i}', ${JSON.stringify(q)})">Add to History ↓</button>
+    </div>`).join('');
+
+  p2.innerHTML = `
+
+    <!-- ① HISTORY — OWN FULL SECTION AT TOP -->
+    <div class="section-block">
+      <div class="section-block-header">
+        <div class="section-block-title">Character History</div>
+        <button onclick="addManualHistory()" class="hdr-btn">+ Add Entry</button>
+      </div>
+      <div class="page-inner" style="padding-top:0.75rem;">
+        <div id="history-empty" style="font-size:13px;color:var(--muted);font-style:italic;text-align:center;padding:1.5rem 0;">No history yet — submit answers from the questions below or add entries manually.</div>
+        <div id="history-list"></div>
+      </div>
+    </div>
+
+    <!-- ② BACKGROUND QUESTIONS — COLLAPSIBLE -->
+    <div class="section-block" style="border-top:1px solid var(--border2);">
+      <div class="section-block-header" style="cursor:pointer;user-select:none;" onclick="toggleBgq()">
+        <div class="section-block-title">Background Questions</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button onclick="event.stopPropagation();submitAllBgq()" class="hdr-btn gold-btn">Submit All Answered ↑</button>
+          <div id="bgq-toggle-btn" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--muted);white-space:nowrap;">▼ EXPAND</div>
+        </div>
+      </div>
+      <div id="bgq-body" style="display:none;">
+        <div class="page-inner" style="padding-top:0.75rem;">
+          <p style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:1rem;">Answer any of the following. Use <em>Add to History</em> on each one individually, or <em>Submit All</em> to log everything at once. You can also add your own below.</p>
+          <div class="cols cols-2" style="gap:1.5rem;">
+            <div>
+              <div class="sh" style="margin-bottom:0.75rem;">Background</div>
+              ${bgqBlocks}
+            </div>
+            <div>
+              <div class="sh" style="margin-bottom:0.75rem;">Connections</div>
+              ${connqBlocks}
+              <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:1rem;">Then work with the GM to generate two starting Experiences for your character.</p>
+            </div>
+          </div>
+          <div class="sh" style="margin-top:1.25rem;margin-bottom:0.5rem;">Custom Questions</div>
+          <p style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:0.5rem;">Write your own questions and answers.</p>
+          <div id="custom-bgq-list"></div>
+          <button class="add-row-btn" onclick="addCustomBgq();save()">+ Add Question</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ CHARACTER GUIDE — COLLAPSIBLE, BELOW -->
+    <div class="section-block" style="border-top:1px solid var(--border2);">
+      <div class="section-block-header" style="cursor:pointer;user-select:none;" onclick="toggleGuide()">
+        <div>
+          <div class="section-block-title">${cls} — Character Guide</div>
+          <div style="font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;">${c.tagline}</div>
+        </div>
+        <div id="guide-toggle-btn" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--muted);white-space:nowrap;">▼ EXPAND</div>
+      </div>
+      <div id="guide-body" style="display:none;">
+        <div class="page-inner" style="padding-top:0.75rem;">
+          <div class="p2-grid">
+            <div class="p2-left">
+              <div><div class="sh">Suggested Traits</div><p style="font-size:13px;line-height:1.7;">${c.suggestedTraits.replace(/\n/g,'<br>')}</p></div>
+              <div><div class="sh">Suggested Primary Weapon</div><p style="font-size:13px;line-height:1.7;">${c.suggestedPrimary.replace(/\n/g,'<br>')}</p></div>
+              ${c.suggestedSecondary?`<div><div class="sh">Suggested Secondary Weapon</div><p style="font-size:13px;line-height:1.7;">${c.suggestedSecondary.replace(/\n/g,'<br>')}</p></div>`:''}
+              <div><div class="sh">Suggested Armor</div><p style="font-size:13px;line-height:1.7;">${c.suggestedArmor.replace(/\n/g,'<br>')}</p></div>
+              <div><div class="sh">Starting Inventory</div><p style="font-size:12px;line-height:1.8;">${c.startingInventory.replace(/\n/g,'<br>')}</p></div>
+              <div>
+                <div class="sh">Character Description</div>
+                <div class="desc-list">
+                  <div><span class="desc-cat">Clothes that are:</span> ${c.descOptions.clothes}</div>
+                  <div><span class="desc-cat">Eyes like:</span> ${c.descOptions.eyes}</div>
+                  <div><span class="desc-cat">Body that's:</span> ${c.descOptions.body}</div>
+                  <div><span class="desc-cat">Skin the color of:</span> ${c.descOptions.skin}</div>
+                  <div><span class="desc-cat">Attitude like:</span> ${c.descOptions.attitude}</div>
+                </div>
+                <textarea id="appearance" rows="3" placeholder="Write your character's description..." oninput="save()" style="margin-top:8px;"></textarea>
+              </div>
+            </div>
+            <div class="p2-mid" style="grid-column:span 2;">
+              <div class="tier-box"><div class="tier-header">Tier 2: Levels 2–4</div><div class="tier-intro">At level 2, gain an additional Experience at +2 and gain a +1 bonus to your Proficiency.</div><p style="font-size:10px;font-family:'Cinzel',serif;color:var(--muted);margin-bottom:6px;">Choose two options and mark them.</p>${tierOptions(2)}</div>
+              <div class="tier-box"><div class="tier-header">Tier 3: Levels 5–7</div><div class="tier-intro">At level 5, gain an additional Experience at +2 and clear all marks on character traits. Then gain a +1 bonus to your Proficiency.</div><p style="font-size:10px;font-family:'Cinzel',serif;color:var(--muted);margin-bottom:6px;">Choose two options from the list below or any from the previous tier and mark them.</p>${tierOptions(3)}</div>
+              <div class="tier-box"><div class="tier-header">Tier 4: Levels 8–10</div><div class="tier-intro">At level 8, gain an additional Experience at +2 and clear all marks on character traits. Then gain a +1 bonus to your Proficiency.</div><p style="font-size:10px;font-family:'Cinzel',serif;color:var(--muted);margin-bottom:6px;">Choose two options from the list below or any from the previous tier and mark them.</p>${tierOptions(4)}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  pages.appendChild(p2);
+
+  // Now wire up dynamic elements
+  makeBoxPips(document.getElementById('hp-boxes'), 5, 0, 'hpbox');
+  makeBoxPips(document.getElementById('stress-boxes'), 6, 0, 'stressbox');
+  makeShieldPips(document.getElementById('armor-pips'), 12, 0);
+  renderHopePips(document.getElementById('hope-pips'), 6, 0);
+  makeProfDots(document.getElementById('prof-dots'), 1);
+  addExpRow(document.getElementById('exp-list'));
+  addExpRow(document.getElementById('exp-list'));
+  addInvRow(document.getElementById('inv-list'));
+}
+
+function showSheetTab(tab) {
+  document.getElementById('tab-sheet').style.display = tab === 'sheet' ? '' : 'none';
+  document.getElementById('tab-notes').style.display = tab === 'notes' ? '' : 'none';
+  document.getElementById('tab-sheet-btn').classList.toggle('active', tab === 'sheet');
+  document.getElementById('tab-notes-btn').classList.toggle('active', tab === 'notes');
+  localStorage.setItem('dh2-active-tab', tab);
+}
+
+function addManualSessionEntry() {
+  const text = prompt('Add a session log entry:');
+  if (!text || !text.trim()) return;
+  const ts = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  appendSessionEntry(text.trim(), ts);
+  save();
+}
+
+function submitSingleQ(id, question) {
+  const el = document.getElementById(id);
+  const answer = el ? el.value.trim() : '';
+  if (!answer) { el && el.focus(); return; }
+  const ts = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  appendHistoryEntry(`${question}\n${answer}`, ts);
+  save();
+}
+
+function toggleBgq() {
+  const body = document.getElementById('bgq-body');
+  const btn = document.getElementById('bgq-toggle-btn');
+  if (!body) return;
+  const collapsed = body.style.display === 'none';
+  body.style.display = collapsed ? '' : 'none';
+  btn.textContent = collapsed ? '▲ COLLAPSE' : '▼ EXPAND';
+}
+
+function submitSessionNote() {
+  const el = document.getElementById('session-notes');
+  const text = el ? el.value.trim() : '';
+  if (!text) { if (el) el.focus(); return; }
+  const ts = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  appendSessionEntry(text, ts);
+  // clear the textarea after submitting
+  if (el) { el.value = ''; save(); }
+}
+
+function submitSessionNote() {
+  const titleEl = document.getElementById('session-title');
+  const notesEl = document.getElementById('session-notes');
+  const text = notesEl ? notesEl.value.trim() : '';
+  if (!text) { if (notesEl) notesEl.focus(); return; }
+  const title = titleEl && titleEl.value.trim() ? titleEl.value.trim() : '';
+  const ts = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  appendSessionEntry(text, ts, title);
+  if (notesEl) { notesEl.value = ''; }
+  if (titleEl) { titleEl.value = ''; }
+  save();
+}
+
+function appendSessionEntry(text, ts, title) {
+  const log = document.getElementById('session-log');
+  const empty = document.getElementById('session-log-empty');
+  if (!log) return;
+  if (empty) empty.style.display = 'none';
+  const id = 'se-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+  const entry = document.createElement('div');
+  entry.className = 'session-entry';
+  entry.dataset.text = text;
+  entry.dataset.ts = ts || '';
+  entry.dataset.title = title || '';
+  entry.id = id;
+  entry.style.cssText = 'background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 5px 5px 0;padding:0;margin-bottom:10px;overflow:hidden;';
+  entry.innerHTML = buildSessionEntryHTML(id, title, ts, text, false);
+  log.insertBefore(entry, log.firstChild);
+}
+
+function buildSessionEntryHTML(id, title, ts, text, editing) {
+  if (editing) {
+    return `
+      <div style="padding:10px 12px;border-bottom:1px solid var(--border);">
+        <input type="text" value="${escHtml(title)}" placeholder="Session title..." id="edit-title-${id}"
+          style="width:100%;font-family:'Cinzel',serif;font-size:12px;font-weight:600;background:var(--in);border:none;border-bottom:1px solid var(--border2);color:var(--text);padding:3px 0;outline:none;margin-bottom:6px;">
+        <textarea id="edit-text-${id}" rows="6"
+          style="width:100%;background:var(--in);border:1px solid var(--border2);border-radius:3px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;padding:6px 8px;resize:vertical;outline:none;line-height:1.6;">${escHtml(text)}</textarea>
+        <div style="display:flex;gap:8px;margin-top:6px;">
+          <button onclick="saveSessionEdit('${id}')" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:5px 14px;border-radius:3px;cursor:pointer;">Save</button>
+          <button onclick="cancelSessionEdit('${id}')" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:5px 14px;border-radius:3px;cursor:pointer;">Cancel</button>
+        </div>
+      </div>`;
+  }
+  return `
+    <div style="padding:10px 12px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:8px;">
+        <div>
+          ${title ? `<div style="font-family:'Cinzel',serif;font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;">${escHtml(title)}</div>` : ''}
+          <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--teal);">Session — ${escHtml(ts||'')}</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button onclick="editSessionEntry('${id}')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 9px;border-radius:3px;cursor:pointer;">Edit</button>
+          <button class="rm" onclick="removeSessionEntry('${id}')" title="Delete" style="font-size:14px;">×</button>
+        </div>
+      </div>
+      <div style="font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--text);">${escHtml(text)}</div>
+    </div>`;
+}
+
+function editSessionEntry(id) {
+  const entry = document.getElementById(id);
+  if (!entry) return;
+  entry.innerHTML = buildSessionEntryHTML(id, entry.dataset.title||'', entry.dataset.ts||'', entry.dataset.text||'', true);
+  // focus the title
+  const t = document.getElementById('edit-title-'+id);
+  if (t) t.focus();
+}
+
+function saveSessionEdit(id) {
+  const entry = document.getElementById(id);
+  if (!entry) return;
+  const newTitle = (document.getElementById('edit-title-'+id)||{}).value||'';
+  const newText = (document.getElementById('edit-text-'+id)||{}).value||'';
+  entry.dataset.title = newTitle;
+  entry.dataset.text = newText;
+  entry.innerHTML = buildSessionEntryHTML(id, newTitle, entry.dataset.ts||'', newText, false);
+  save();
+}
+
+function cancelSessionEdit(id) {
+  const entry = document.getElementById(id);
+  if (!entry) return;
+  entry.innerHTML = buildSessionEntryHTML(id, entry.dataset.title||'', entry.dataset.ts||'', entry.dataset.text||'', false);
+}
+
+function removeSessionEntry(id) {
+  const entry = document.getElementById(id);
+  if (entry) entry.remove();
+  const log = document.getElementById('session-log');
+  const empty = document.getElementById('session-log-empty');
+  if (log && empty && !log.children.length) empty.style.display = '';
+  save();
+}
+
+function toggleGuide() {
+  const body = document.getElementById('guide-body');
+  const btn = document.getElementById('guide-toggle-btn');
+  if (!body) return;
+  const collapsed = body.style.display === 'none';
+  body.style.display = collapsed ? '' : 'none';
+  btn.textContent = collapsed ? '▲ COLLAPSE' : '▼ EXPAND';
+}
+
+function addCustomBgq(q='', a='') {
+  const container = document.getElementById('custom-bgq-list');
+  if (!container) return;
+  const row = document.createElement('div');
+  row.className = 'custom-bgq-row';
+  row.style.cssText = 'margin-bottom:10px;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:8px 10px;';
+  row.innerHTML = `
+    <div style="display:flex;gap:6px;margin-bottom:5px;align-items:center;">
+      <input type="text" placeholder="Question..." value="${escHtml(q)}" oninput="save()" style="flex:1;font-style:italic;">
+      <button class="rm" onclick="this.closest('.custom-bgq-row').remove();save()" title="Remove">×</button>
+    </div>
+    <textarea placeholder="Your answer..." oninput="save()" rows="3" style="width:100%;background:var(--in);border:1px solid var(--border);border-radius:3px;padding:5px 7px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;resize:vertical;outline:none;line-height:1.6;">${escHtml(a)}</textarea>`;
+  container.appendChild(row);
+}
+
+function submitAllBgq() {
+  // Collect from the guide's built-in bgqs
+  const cls = CLASSES[currentClass];
+  const entries = [];
+  if (cls) {
+    cls.bgQuestions.forEach((q, i) => {
+      const el = document.getElementById('bgq'+i);
+      if (el && el.value.trim()) entries.push({ q, a: el.value.trim() });
+    });
+    cls.connQuestions.forEach((q, i) => {
+      const el = document.getElementById('connq'+i);
+      if (el && el.value.trim()) entries.push({ q, a: el.value.trim() });
+    });
+  }
+  // Collect custom bgqs
+  document.querySelectorAll('.custom-bgq-row').forEach(row => {
+    const ins = row.querySelectorAll('input, textarea');
+    const q = ins[0]?.value?.trim();
+    const a = ins[1]?.value?.trim();
+    if (q || a) entries.push({ q: q || '(Custom question)', a: a || '' });
+  });
+  if (!entries.length) { alert('No answered questions to submit yet.'); return; }
+  const ts = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const text = entries.map(e => `${e.q}\n${e.a}`).join('\n\n');
+  appendHistoryEntry(text, ts);
+  save();
+}
+
+function appendHistoryEntry(text, ts) {
+  const list = document.getElementById('history-list');
+  const empty = document.getElementById('history-empty');
+  if (!list) return;
+  if (empty) empty.style.display = 'none';
+  const entry = document.createElement('div');
+  entry.className = 'history-entry';
+  entry.dataset.text = text;
+  entry.dataset.ts = ts || '';
+  entry.style.cssText = 'background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--gold-dim);border-radius:0 5px 5px 0;padding:10px 12px;margin-bottom:8px;position:relative;';
+  entry.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;">
+      <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--gold);">${escHtml(ts||'')}</span>
+      <button class="rm" onclick="removeHistoryEntry(this)" title="Delete entry" style="font-size:14px;">×</button>
+    </div>
+    <div style="font-size:13px;line-height:1.7;white-space:pre-wrap;color:var(--text);">${escHtml(text)}</div>`;
+  list.appendChild(entry);
+}
+
+function removeHistoryEntry(btn) {
+  const entry = btn.closest('.history-entry');
+  if (entry) { entry.remove(); }
+  const list = document.getElementById('history-list');
+  const empty = document.getElementById('history-empty');
+  if (list && empty && !list.children.length) empty.style.display = '';
+  save();
+}
+
+function addManualHistory() {
+  const text = prompt('Add a history entry — a key moment, a decision, anything worth remembering:');
+  if (!text || !text.trim()) return;
+  const ts = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  appendHistoryEntry(text.trim(), ts);
+  save();
+}
+
+function tierOptions(tier) {
+  const opts = [
+    'Gain a +1 bonus to two unmarked character traits and mark them.',
+    'Permanently gain one Hit Point slot.',
+    'Permanently gain one Stress slot.',
+    'Permanently gain a +1 bonus to two Experiences.',
+    `Choose an additional domain card of your level or lower from a domain you have access to${tier===2?' (up to level 4)':tier===3?' (up to level 7)':''}.`,
+    'Permanently gain a +1 bonus to your Evasion.',
+    'Take an upgraded subclass card. Then cross out the multiclass option for this tier.',
+    'Increase your Proficiency by +1.',
+    'Multiclass: Choose an additional class for your character, then cross out an unused "Take an upgraded subclass card" and the other multiclass option on this sheet.',
+  ];
+  return opts.map((o,i)=>`<div class="tier-option"><input type="checkbox" id="t${tier}o${i}" onchange="save()"><label for="t${tier}o${i}" style="font-size:12px;cursor:pointer;">${o}</label></div>`).join('');
+}
+
+// ─────────────────────────────────────────────
+// SAVE / LOAD
+// ─────────────────────────────────────────────
+
+// Save key is per class so switching never corrupts another class's data
+function saveKey(cls) { return 'dh2-sheet-' + (cls||'').toLowerCase(); }
+
+function save() {
+  if (!currentClass) return;
+  const d = { class: currentClass };
+  ['f-name','f-pronouns','f-heritage','f-subclass','f-level','f-evasion','t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge','thresh-minor','thresh-major','thresh-severe','w1-name','w1-trait','w1-damage','w1-feature','w2-name','w2-trait','w2-damage','w2-feature','armor-name','armor-thresh','armor-score','armor-feature','gold-h','gold-b','gold-c','session-notes','session-title','domain-notes','misc-notes','appearance'].forEach(id=>{
+    const el=document.getElementById(id); if(el) d[id]=el.value;
+  });
+  for(let i=0;i<3;i++){
+    ['bgq','connq'].forEach(p=>{const el=document.getElementById(p+i);if(el)d[p+i]=el.value;});
+  }
+  // custom bg questions
+  d.customBgqs = [...document.querySelectorAll('.custom-bgq-row')].map(r=>{const ins=r.querySelectorAll('input,textarea');return{q:ins[0]?.value||'',a:ins[1]?.value||''};});
+  // history entries
+  d.history = [...document.querySelectorAll('#history-list .history-entry')].map(e=>({text:e.dataset.text,ts:e.dataset.ts}));
+  // session log entries
+  d.sessionLog = [...document.querySelectorAll('#session-log .session-entry')].map(e=>({id:e.id,text:e.dataset.text,ts:e.dataset.ts,title:e.dataset.title||''}));
+  d.hope = document.querySelectorAll('#hope-pips .hope-pip.filled').length;
+  d.hp = document.querySelectorAll('#hp-boxes .hpbox.filled').length;
+  d.stress = document.querySelectorAll('#stress-boxes .stressbox.filled').length;
+  d.armor = document.querySelectorAll('#armor-pips .shield-pip.filled').length;
+  d.prof = document.querySelectorAll('#prof-dots .prof-dot.filled').length;
+  for(let t=2;t<=4;t++) for(let o=0;o<9;o++){const el=document.getElementById(`t${t}o${o}`);if(el)d[`t${t}o${o}`]=el.checked;}
+  d.exps = [...document.querySelectorAll('#exp-list .exp-row')].map(r=>[r.querySelectorAll('input')[0].value,r.querySelectorAll('input')[1].value]);
+  d.inv = [...document.querySelectorAll('#inv-list .inv-line')].map(r=>{const ins=r.querySelectorAll('input');return[ins[0]?.value||'',ins[1]?.value||''];});
+  d.invWeaps = [...document.querySelectorAll('.inv-weapon-wrap')].map(w=>{
+    const ins=w.querySelectorAll('input[type=text]'); const cbs=w.querySelectorAll('input[type=checkbox]');
+    return{n:ins[0]?.value,t:ins[1]?.value,d:ins[2]?.value,f:ins[3]?.value,p:cbs[0]?.checked,s:cbs[1]?.checked};
+  });
+  d.invArmors = [...document.querySelectorAll('.inv-armor-wrap')].map(w=>{
+    const ins=w.querySelectorAll('input[type=text]');
+    return{n:ins[0]?.value||'',thresh:ins[1]?.value||'',score:ins[2]?.value||'',f:ins[3]?.value||''};
+  });
+  // save to per-class key AND a 'last' pointer so we reload the right class on next open
+  localStorage.setItem(saveKey(currentClass), JSON.stringify(d));
+  localStorage.setItem('dh2-last-class', currentClass);
+}
+
+function restoreData(d) {
+  if (!d) return;
+  // text fields
+  Object.keys(d).forEach(k=>{
+    if(['class','exps','inv','invWeaps'].includes(k)) return;
+    if(typeof d[k]==='boolean'){const el=document.getElementById(k);if(el)el.checked=d[k];return;}
+    if(typeof d[k]==='number') return;
+    if(typeof d[k]==='string'){const el=document.getElementById(k);if(el)el.value=d[k];}
+  });
+  // checkboxes
+  for(let t=2;t<=4;t++) for(let o=0;o<9;o++){const el=document.getElementById(`t${t}o${o}`);if(el)el.checked=!!d[`t${t}o${o}`];}
+  // pips
+  if(d.hope!=null){renderHopePips(document.getElementById('hope-pips'),6,d.hope);}
+  if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'),5,d.hp,'hpbox');
+  if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'),6,d.stress,'stressbox');
+  if(d.armor!=null) makeShieldPips(document.getElementById('armor-pips'),12,d.armor);
+  if(d.prof!=null) makeProfDots(document.getElementById('prof-dots'),d.prof);
+  // dynamic lists
+  const expContainer = document.getElementById('exp-list');
+  expContainer.innerHTML='';
+  (d.exps||[]).forEach(([n,b])=>addExpRow(expContainer,n,b));
+  if(!expContainer.children.length){addExpRow(expContainer);addExpRow(expContainer);}
+  const invContainer = document.getElementById('inv-list');
+  invContainer.innerHTML='';
+  (d.inv||[]).forEach(item=>{
+    if(Array.isArray(item)) addInvRow(invContainer,item[0],item[1]);
+    else addInvRow(invContainer,item,'');
+  });
+  if(!invContainer.children.length) addInvRow(invContainer);
+  const iaContainer = document.getElementById('inv-armor-wrap');
+  if(iaContainer){iaContainer.innerHTML='';(d.invArmors||[]).forEach(a=>addInvArmor(iaContainer,a.n||'',a.thresh||'',a.score||'',a.f||''));}
+  const iwContainer = document.getElementById('inv-weapons-wrap');
+  iwContainer.innerHTML='';
+  (d.invWeaps||[]).forEach(w=>addInvWeapon(iwContainer,w.n||'',w.t||'',w.d||'',w.f||''));
+  // custom bg questions
+  const cbContainer = document.getElementById('custom-bgq-list');
+  if(cbContainer){cbContainer.innerHTML='';(d.customBgqs||[]).forEach(({q,a})=>addCustomBgq(q,a));}
+  // history entries
+  const hList = document.getElementById('history-list');
+  if(hList){hList.innerHTML='';(d.history||[]).forEach(({text,ts})=>appendHistoryEntry(text,ts));}
+  // session log entries — stored newest-first so restore in reverse to re-insert newest-first
+  const sLog = document.getElementById('session-log');
+  const sEmpty = document.getElementById('session-log-empty');
+  if(sLog){
+    sLog.innerHTML='';
+    const entries = d.sessionLog||[];
+    entries.forEach(({text,ts,title,id})=>appendSessionEntry(text,ts,title||''));
+    if(sEmpty) sEmpty.style.display = entries.length ? 'none' : '';
+  }
+}
+
+function loadSheet() {
+  // Check for last used class
+  const lastCls = localStorage.getItem('dh2-last-class');
+  // Also check legacy key for backwards compat
+  let legacyData = null;
+  try { legacyData = JSON.parse(localStorage.getItem('dh2-sheet')); } catch {}
+  const cls = lastCls || (legacyData && legacyData.class) || null;
+  if (!cls || !CLASSES[cls]) return;
+  currentClass = cls;
+  document.getElementById('class-picker').value = cls;
+  buildPages(cls);
+  // Try per-class key first, fall back to legacy
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(saveKey(cls))); } catch {}
+  if (!d && legacyData && legacyData.class === cls) d = legacyData;
+  restoreData(d);
+  renderSidebar();
+}
+
+function switchClass(cls) {
+  if (!cls) return;
+  if (currentClass && cls === currentClass) return; // already on this class, nothing to do
+  if (currentClass) {
+    const hasData = (() => {
+      try { const d = JSON.parse(localStorage.getItem(saveKey(currentClass))); return d && (d['f-name']||d.exps?.some(e=>e[0])); } catch { return false; }
+    })();
+    if (hasData && !confirm(`Switch to ${cls}? Your ${currentClass} sheet will be saved separately and you can switch back anytime.`)) {
+      document.getElementById('class-picker').value = currentClass;
+      return;
+    }
+  }
+  // Save current class data before switching
+  if (currentClass) save();
+  currentClass = cls;
+  localStorage.setItem('dh2-last-class', cls);
+  buildPages(cls);
+  // Restore any existing data for the new class
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(saveKey(cls))); } catch {}
+  restoreData(d);
+  renderSidebar();
+}
+
+// ─────────────────────────────────────────────
+// CHARACTER LIST (sidebar)
+// ─────────────────────────────────────────────
+function getAllCharKeys() {
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('dh2-sheet-') && k !== 'dh2-sheet-') keys.push(k);
+  }
+  return keys;
+}
+
+function renderMobileCharBar() {
+  const inner = document.getElementById('mob-char-inner');
+  if (!inner) return;
+  // remove old char buttons but keep the + New button
+  inner.querySelectorAll('.mob-char-btn').forEach(b => b.remove());
+  const newBtn = inner.querySelector('.mob-new-btn');
+  const keys = getAllCharKeys();
+  const chars = [];
+  keys.forEach(k => {
+    try { const d = JSON.parse(localStorage.getItem(k)); if (d && d.class) chars.push({key:k,data:d}); } catch {}
+  });
+  chars.sort((a,b)=>(a.data['f-name']||a.data.class).localeCompare(b.data['f-name']||b.data.class));
+  chars.forEach(({key,data}) => {
+    const btn = document.createElement('button');
+    btn.className = 'mob-char-btn' + (key === saveKey(currentClass) ? ' active' : '');
+    btn.innerHTML = `<span>${escHtml(data['f-name']||'(unnamed)')}</span><span class="mob-cls">${escHtml(data.class||'')}${data['f-level']?' · Lv '+data['f-level']:''}</span>`;
+    btn.onclick = () => loadCharacter(key);
+    inner.insertBefore(btn, newBtn);
+  });
+}
+
+function renderSidebar() {
+  const list = document.getElementById('char-list');
+  const empty = document.getElementById('sidebar-empty');
+  const keys = getAllCharKeys();
+  // collect valid chars
+  const chars = [];
+  keys.forEach(k => {
+    try {
+      const d = JSON.parse(localStorage.getItem(k));
+      if (d && d.class) chars.push({ key: k, data: d });
+    } catch {}
+  });
+  // sort by name
+  chars.sort((a, b) => (a.data['f-name'] || a.data.class).localeCompare(b.data['f-name'] || b.data.class));
+
+  // clear existing items (keep empty msg)
+  list.querySelectorAll('.char-item').forEach(el => el.remove());
+
+  if (chars.length === 0) {
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
+  chars.forEach(({ key, data }) => {
+    const item = document.createElement('div');
+    item.className = 'char-item' + (key === saveKey(currentClass) && data['f-name'] === (document.getElementById('f-name')||{}).value ? ' active' : '');
+    // determine active: same save key
+    const isActive = key === saveKey(currentClass);
+    if (isActive) item.classList.add('active');
+
+    const name = data['f-name'] || '(unnamed)';
+    const cls = data.class || '';
+    const lvl = data['f-level'] ? `Lv ${data['f-level']}` : '';
+    item.innerHTML = `
+      <div class="char-item-body" onclick="loadCharacter('${key}')">
+        <div class="char-name">${escHtml(name)}</div>
+        <div class="char-meta">${escHtml(cls)}${lvl ? ' · ' + lvl : ''}</div>
+      </div>
+      <button class="char-del" onclick="deleteCharacter('${key}', event)" title="Delete">×</button>`;
+    list.appendChild(item);
+  });
+  renderMobileCharBar();
+}
+
+function loadCharacter(key) {
+  try {
+    const d = JSON.parse(localStorage.getItem(key));
+    if (!d || !d.class || !CLASSES[d.class]) return;
+    if (currentClass && currentClass !== d.class) save(); // save current before switching
+    currentClass = d.class;
+    localStorage.setItem('dh2-last-class', d.class);
+    document.getElementById('class-picker').value = d.class;
+    buildPages(d.class);
+    restoreData(d);
+    renderSidebar();
+  } catch(e) { console.error(e); }
+}
+
+function deleteCharacter(key, e) {
+  e.stopPropagation();
+  const d = JSON.parse(localStorage.getItem(key)||'{}');
+  const name = d['f-name'] || d.class || 'this character';
+  if (!confirm(`Delete ${name}? This cannot be undone.`)) return;
+  localStorage.removeItem(key);
+  // if we deleted the active one, clear the view
+  if (key === saveKey(currentClass)) {
+    currentClass = '';
+    localStorage.removeItem('dh2-last-class');
+    document.getElementById('class-picker').value = '';
+    document.getElementById('pages').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);"><p style="font-family:\'Cinzel\',serif;font-size:14px;letter-spacing:0.1em;">Select a class above to begin.</p></div>';
+  }
+  renderSidebar();
+}
+
+function newCharacter() {
+  if (currentClass) save();
+  currentClass = '';
+  localStorage.removeItem('dh2-last-class');
+  document.getElementById('class-picker').value = '';
+  document.getElementById('pages').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);"><p style="font-family:\'Cinzel\',serif;font-size:14px;letter-spacing:0.1em;">Select a class above to begin.</p></div>';
+  renderSidebar();
+}
+
+function saveSheet() {
+  save();
+  renderSidebar();
+  // flash active state
+  document.querySelectorAll('.char-item').forEach(el => el.classList.remove('active'));
+  const activeKey = saveKey(currentClass);
+  document.querySelectorAll('.char-item').forEach(el => {
+    if (el.querySelector('[onclick*="'+activeKey+'"]')) el.classList.add('active');
+  });
+  const btn = event.currentTarget;
+  const t = btn.textContent;
+  btn.textContent = 'Saved ✓';
+  setTimeout(() => btn.textContent = t, 1500);
+}
+
+function clearSheet() {
+  if (!confirm(`Clear the ${currentClass} sheet? This cannot be undone.`)) return;
+  localStorage.removeItem(saveKey(currentClass));
+  localStorage.removeItem('dh2-last-class');
+  currentClass = '';
+  document.getElementById('class-picker').value = '';
+  document.getElementById('pages').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);"><p style="font-family:\'Cinzel\',serif;font-size:14px;letter-spacing:0.1em;">Select a class above to begin.</p></div>';
+  renderSidebar();
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  const next = isLight ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('dh2-theme', next);
+  document.getElementById('theme-btn').textContent = next === 'light' ? '☾ Dark Mode' : '☀ Light Mode';
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('dh2-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = saved === 'light' ? '☾ Dark Mode' : '☀ Light Mode';
+}
+
+// ── INIT ──
+initTheme();
+loadSheet();
+renderSidebar();
+// restore last active tab
+const savedTab = localStorage.getItem('dh2-active-tab');
+if (savedTab === 'notes') showSheetTab('notes');
+</script>
+</body>
+</html>
