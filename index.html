@@ -62,7 +62,7 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font
 
 /* ── PAGE LAYOUT ── */
 .pages{max-width:1100px;margin:0 auto;padding:1rem;}
-.page{background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:1.5rem;overflow:hidden;}
+.page{background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;overflow:hidden;}
 .page-inner{padding:1.25rem;}
 
 /* ── CLASS HEADER ── */
@@ -340,8 +340,8 @@ textarea{resize:vertical;line-height:1.6;background:var(--in);border:1px solid v
   background: var(--bg2);
   border-bottom: 1px solid var(--border2);
   padding: 0 1rem;
-  position: sticky;
-  top: 48px;
+  position: relative;
+  top: 0;
   z-index: 90;
 }
 .sheet-tab {
@@ -1133,14 +1133,14 @@ function buildPages(cls) {
     <div class="q-block">
       <div class="bg-q">${q}</div>
       <textarea class="answer-area" id="bgq${i}" rows="3" oninput="save()" placeholder="Your answer..."></textarea>
-      <button class="add-hist-btn" onclick="submitSingleQ('bgq${i}', ${JSON.stringify(q)})">Add to History ↓</button>
+      <button class="add-hist-btn" onclick="submitSingleQ('bgq${i}', this.dataset.q)" data-q="${c.bgQuestions[i].replace(/"/g,'&quot;')}">Add to Background ↓</button>
     </div>`).join('');
 
   const connqBlocks = c.connQuestions.map((q,i)=>`
     <div class="q-block">
       <div class="conn-q">${q}</div>
       <textarea class="answer-area" id="connq${i}" rows="3" oninput="save()" placeholder="Your answer..."></textarea>
-      <button class="add-hist-btn" onclick="submitSingleQ('connq${i}', ${JSON.stringify(q)})">Add to History ↓</button>
+      <button class="add-hist-btn" onclick="submitSingleQ('connq${i}', this.dataset.q)" data-q="${c.connQuestions[i].replace(/"/g,'&quot;')}">Add to Background ↓</button>
     </div>`).join('');
 
   p2.innerHTML = `
@@ -1148,11 +1148,10 @@ function buildPages(cls) {
     <!-- ① HISTORY — OWN FULL SECTION AT TOP -->
     <div class="section-block">
       <div class="section-block-header">
-        <div class="section-block-title">Character History</div>
-        <button onclick="addManualHistory()" class="hdr-btn">+ Add Entry</button>
+        <div class="section-block-title">Character Background</div>
       </div>
       <div class="page-inner" style="padding-top:0.75rem;">
-        <div id="history-empty" style="font-size:13px;color:var(--muted);font-style:italic;text-align:center;padding:1.5rem 0;">No history yet — submit answers from the questions below or add entries manually.</div>
+        <div id="history-empty" style="font-size:13px;color:var(--muted);font-style:italic;text-align:center;padding:1.5rem 0;">No background entries yet — answer questions below and submit them.</div>
         <div id="history-list"></div>
       </div>
     </div>
