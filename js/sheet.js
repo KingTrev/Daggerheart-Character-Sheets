@@ -1248,7 +1248,7 @@ function renderS0Step(id) {
         'Does anyone in the group keep a secret from the others? Do you know what it is?',
         'What\'s something the party does together that feels like a ritual or tradition, even if you\'ve never said it out loud?',
       ];
-      const active = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : [];
+      const active = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : suggested.slice(0, 4);
       return s0Section('Party Connections', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Go around the table and answer these together. Add suggested questions from the dropdown, or write your own. When done, hit <strong>Send to Background</strong>.</p>
 
@@ -1305,7 +1305,7 @@ function renderS0Step(id) {
         'What\'s the food/snack situation at the table?',
         'How do you prefer to end sessions — at a natural beat, on a cliffhanger, or at a set time?',
       ];
-      const active = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : [];
+      const active = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : suggested.slice(0, 4);
       return s0Section('Table Agreements', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are for the whole table — GM included. Add suggested questions or write your own. When done, hit <strong>Send to Background</strong>.</p>
 
@@ -1733,12 +1733,12 @@ function showSheetTab(tab) {
     const el = document.getElementById('nav-' + t);
     if (el) el.classList.toggle('active', t === tab);
   });
+  localStorage.setItem('dh2-active-tab', tab);
   // Show class picker only on character sheet tab
   const classSection = document.getElementById('nav-class-section');
   const classDivider = document.getElementById('nav-class-divider');
   if (classSection) classSection.style.display = tab === 'sheet' ? '' : 'none';
   if (classDivider) classDivider.style.display = tab === 'sheet' ? '' : 'none';
-  localStorage.setItem('dh2-active-tab', tab);
   if (tab === 'cards') { renderLoadout(); renderCardBrowser(); }
   if (tab === 'sheet') { renderLoadoutQuick(); }
   if (tab === 'ref') {
@@ -2075,7 +2075,7 @@ function applyClassDefaults(cls) {
 function restoreData(d) {
   if (!d) { applyClassDefaults(currentClass); return; }
   // Also apply defaults if this is a fresh character with no traits filled in yet
-  const hasTraits = d['t-agility'] || d['t-strength'] || d['t-finesse'];
+  const hasTraits = ['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge'].some(k => d[k] !== undefined && d[k] !== '');
   if (!hasTraits) applyClassDefaults(currentClass);
   // text fields
   Object.keys(d).forEach(k=>{
@@ -2154,6 +2154,18 @@ function loadSheet() {
   restoreData(d);
   renderSidebar();
   renderLoadoutQuick();
+}
+
+function prefillSuggestedTraits(cls) {
+  const c = CLASSES[cls];
+  if (!c || !c.traits) return;
+  ['agility','strength','finesse','instinct','presence','knowledge'].forEach(t => {
+    const el = document.getElementById('t-' + t);
+    if (el && !el.value && c.traits[t] !== undefined) {
+      el.value = c.traits[t] >= 0 ? '+' + c.traits[t] : String(c.traits[t]);
+    }
+  });
+  save();
 }
 
 function switchClass(cls, silent=false) {
