@@ -46,7 +46,7 @@ function adjustHopeCount(delta) {
   if (!container) return;
   const current = container.querySelectorAll('.hope-pip').length;
   const filled = container.querySelectorAll('.hope-pip.filled').length;
-  const newCount = Math.min(12, Math.max(1, current + delta));
+  const newCount = Math.min(6, Math.max(1, current + delta));
   if (newCount === current) return;
   renderHopePips(container, newCount, Math.min(filled, newCount));
   save();
@@ -1016,7 +1016,7 @@ function renderS0Step(id) {
       <p style="font-size:14px;line-height:1.8;margin-bottom:1.25rem;color:var(--muted);">Which die is higher determines whether good or bad fortune ripples out from your action — even when you succeed.</p>
       ${s0Card('✦ SUCCESS WITH HOPE', '<p style="font-size:13px;line-height:1.7;">The Hope Die is higher. You succeed <em>and</em> gain a Hope token. Use Hope later to boost rolls, activate abilities, or help allies.</p>', 'var(--gold)')}
       ${s0Card('✦ SUCCESS WITH FEAR', '<p style="font-size:13px;line-height:1.7;">The Fear Die is higher. You succeed, but the GM gains a Fear token — expect a complication, a twist, or something to go sideways elsewhere.</p>', 'var(--red)')}
-      ${s0Card('✦ CRITICAL SUCCESS', '<p style="font-size:13px;line-height:1.7;">Both dice show the same number and you succeed. Something exceptional happens — you exceed expectations and gain Hope.</p>', 'var(--teal)')}
+      ${s0Card('✦ CRITICAL SUCCESS', '<p style="font-size:13px;line-height:1.7;">Both dice show the same number — <em>automatic success regardless of Difficulty</em>. Gain a Hope, clear a Stress. On attacks, deal critical damage (add max possible damage dice to the roll).</p>', 'var(--teal)')}
       ${s0Card('✦ FAILURE WITH FEAR', '<p style="font-size:13px;line-height:1.7;">You don\'t meet the Difficulty and the Fear Die is higher. The GM gains Fear. Things go badly — but failure always moves the story forward.</p>', 'var(--muted)')}
       <p style="font-size:12px;line-height:1.7;color:var(--muted);margin-top:0.5rem;">With <strong>advantage</strong> you roll an extra Hope Die and keep the two best. With <strong>disadvantage</strong> you roll an extra Fear Die and keep the two best.</p>
     `);
@@ -1033,7 +1033,7 @@ function renderS0Step(id) {
       ${s0Card('HP & STRESS', `<p style="font-size:13px;line-height:1.75;margin-bottom:8px;">You have two damage tracks. <strong>Stress</strong> is mental and emotional strain — manageable but limiting. <strong>Hit Points</strong> are physical wounds. When you mark your last HP, you make a <strong>Death Move</strong> — a dramatic moment that might save you, change you, or end your story.</p>`, 'var(--red)')}
       ${s0Card('DAMAGE THRESHOLDS', `<p style="font-size:13px;line-height:1.75;">Instead of subtracting exact numbers, damage is compared against three thresholds. Below Minor = nothing. Minor = mark 1 HP. Major = mark 2 HP. Severe = mark 3 HP. <strong>Add your level to all thresholds</strong> — you get tougher as you grow.</p>`, 'var(--gold)')}
       ${s0Card('ARMOR & EVASION', `<p style="font-size:13px;line-height:1.75;">Your <strong>Evasion</strong> is the Difficulty for attacks against you. When an attack succeeds, you can mark an <strong>Armor Slot</strong> to reduce the damage severity by one threshold. Slots clear on a rest.</p>`, 'var(--teal)')}
-      ${s0Card('RESTS', `<p style="font-size:13px;line-height:1.75;"><strong>Short rest:</strong> Clear all Stress and Armor Slots. Take 1 downtime move. <strong>Long rest:</strong> Clear everything including HP. Take 2 downtime moves. The GM decides when rests are available — they\'re not guaranteed.</p>`, 'var(--muted)')}
+      ${s0Card('RESTS', `<p style="font-size:13px;line-height:1.75;"><strong>Short rest:</strong> Clear all Stress &amp; Armor Slots. Take 2 downtime moves. <strong>Long rest:</strong> Clear everything including HP. Take 2 downtime moves. The GM decides when rests are available — they\'re not guaranteed.</p>`, 'var(--muted)')}
     `);
 
     case 'pick-class': return s0Section('Choose Your Class', `
@@ -2011,10 +2011,7 @@ function save() {
   d.stressTotal = document.querySelectorAll('#stress-boxes .stressbox').length;
   d.armor = document.querySelectorAll('#armor-pips .shield-pip.filled').length;
   d.prof = document.querySelectorAll('#prof-dots .prof-dot.filled').length;
-  // conditions
-  ['vulnerable','restrained','hidden','stunned','frightened','on-fire','silenced','corroded','poisoned'].forEach(id => {
-    const el = document.getElementById('cond-'+id); if(el) d['cond-'+id] = el.checked;
-  });
+
   // class-specific
   d.prayerDice = savePrayerDice();
   d.companion = saveCompanion();
