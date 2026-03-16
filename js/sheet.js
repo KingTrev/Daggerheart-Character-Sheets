@@ -2434,7 +2434,7 @@ function deleteCharacter(key, e) {
     currentClass = '';
     localStorage.removeItem('dh2-last-class');
     document.getElementById('class-picker').value = '';
-    document.getElementById('pages').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);"><p style="font-family:\'Cinzel\',serif;font-size:14px;letter-spacing:0.1em;">Select a class from the sidebar to begin.</p></div>';
+    document.getElementById('pages').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:1.5rem;"><div style="font-family:\'Cinzel\',serif;font-size:13px;letter-spacing:0.15em;color:var(--muted);">NO CHARACTER LOADED</div><button onclick="newCharacter()" style="font-family:\'Cinzel\',serif;font-size:12px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:14px 32px;border-radius:6px;cursor:pointer;">+ New Character</button></div>';
   }
   renderSidebar();
 }
@@ -2469,7 +2469,7 @@ function newCharDirect() {
   currentClass = '';
   localStorage.removeItem('dh2-last-class');
   document.getElementById('class-picker').value = '';
-  document.getElementById('pages').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);"><p style="font-family:\'Cinzel\',serif;font-size:14px;letter-spacing:0.1em;">Select a class to begin.</p></div>';
+  document.getElementById('pages').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:1.5rem;"><div style="font-family:\'Cinzel\',serif;font-size:13px;letter-spacing:0.15em;color:var(--muted);">NO CHARACTER LOADED</div><button onclick="newCharacter()" style="font-family:\'Cinzel\',serif;font-size:12px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:14px 32px;border-radius:6px;cursor:pointer;">+ New Character</button></div>';
   renderSidebar();
   showSheetTab('sheet');
 }
@@ -2611,7 +2611,7 @@ function clearSheet() {
   localStorage.removeItem('dh2-last-class');
   currentClass = '';
   document.getElementById('class-picker').value = '';
-  document.getElementById('pages').innerHTML = '<div style="text-align:center;padding:3rem;color:var(--muted);"><p style="font-family:\'Cinzel\',serif;font-size:14px;letter-spacing:0.1em;">Select a class from the sidebar to begin.</p></div>';
+  document.getElementById('pages').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:1.5rem;"><div style="font-family:\'Cinzel\',serif;font-size:13px;letter-spacing:0.15em;color:var(--muted);">NO CHARACTER LOADED</div><button onclick="newCharacter()" style="font-family:\'Cinzel\',serif;font-size:12px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:14px 32px;border-radius:6px;cursor:pointer;">+ New Character</button></div>';
   renderSidebar();
 }
 
