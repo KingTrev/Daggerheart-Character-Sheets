@@ -458,6 +458,54 @@ body {
 .char-level-field { width: 70px; }
 .char-level-field input { width: 100%; }
 
+.portrait-slot {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius);
+  background: var(--bg4);
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: border-color 0.15s;
+  margin-right: 1.25rem;
+}
+.portrait-slot:hover { border-color: var(--gold-dim); }
+.portrait-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait-slot .portrait-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-family: 'Cinzel', serif;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  padding: 8px;
+}
+.portrait-slot .portrait-placeholder svg { opacity: 0.4; }
+.portrait-slot .portrait-remove {
+  display: none;
+  position: absolute;
+  top: 3px; right: 3px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  font-size: 11px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.portrait-slot:hover .portrait-remove { display: flex; }
+
 /* ═══════════════════════════════
    INPUTS
 ═══════════════════════════════ */
