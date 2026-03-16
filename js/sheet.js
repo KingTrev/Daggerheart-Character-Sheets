@@ -216,10 +216,25 @@ function renderFeatureBar() {
     }
   }
 
-  if (!cards.length) { bar.style.display = 'none'; return; }
-  bar.style.display = 'grid';
-  bar.style.gridTemplateColumns = cards.length === 3 ? '1fr 1fr 1fr' : cards.length === 2 ? '1fr 1fr' : '1fr';
-  bar.innerHTML = cards.join('');
+  if (!cards.length) { bar.style.display = 'none'; } 
+  else {
+    bar.style.display = 'grid';
+    bar.style.gridTemplateColumns = cards.length === 3 ? '1fr 1fr 1fr' : cards.length === 2 ? '1fr 1fr' : '1fr';
+    bar.innerHTML = cards.join('');
+  }
+
+  // Show heritage HP/stress tip if ancestry has relevant features
+  const tip = document.getElementById('heritage-hp-tip');
+  if (tip && ancestryVal && ANCESTRY_DATA[ancestryVal]) {
+    const features = ANCESTRY_DATA[ancestryVal].features || [];
+    const hpFeature = features.find(f => f.text.includes('Hit Point slot'));
+    const stressFeature = features.find(f => f.text.includes('Stress slot'));
+    const msgs = [];
+    if (hpFeature) msgs.push(`✦ ${ancestryVal} — <strong>${hpFeature.name}:</strong> ${hpFeature.text} Use + to add it.`);
+    if (stressFeature) msgs.push(`✦ ${ancestryVal} — <strong>${stressFeature.name}:</strong> ${stressFeature.text} Use + to add it.`);
+    if (msgs.length) { tip.innerHTML = msgs.join('<br>'); tip.style.display = 'block'; }
+    else tip.style.display = 'none';
+  } else if (tip) { tip.style.display = 'none'; }
 }
 
 function onHeritageChange() { renderFeatureBar(); }
@@ -329,9 +344,8 @@ function buildPages(cls) {
       <div id="feature-bar" style="display:none;margin-bottom:0.75rem;gap:0.5rem;"></div>
 
       <!-- TRAITS ROW -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <span style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);letter-spacing:0.1em;">TRAITS</span>
-        <button onclick="fillSuggestedTraits()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:3px 10px;border-radius:3px;cursor:pointer;">✦ Fill Suggested</button>
+      <div style="display:flex;align-items:center;margin-bottom:6px;">
+        <span style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);letter-spacing:0.1em;">TRAITS — Suggested: ${c.suggestedTraits.replace(/\n/g,' · ')}</span>
       </div>
       <div class="traits-row" style="margin-bottom:0;">
         ${['agility','strength','finesse','instinct','presence','knowledge'].map(t=>`
@@ -392,6 +406,7 @@ function buildPages(cls) {
                 <div class="checkbox-row" id="stress-boxes"></div>
               </div>
             </div>
+            <div id="heritage-hp-tip" style="display:none;margin-top:6px;font-family:'Crimson Pro',serif;font-size:11px;color:var(--gold);background:var(--gold-faint);border:1px solid var(--gold-dim);border-radius:4px;padding:4px 8px;line-height:1.5;"></div>
           </div>
 
           <div>
@@ -1173,7 +1188,7 @@ function renderS0Step(id) {
       });
       return s0Section('Your Traits', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are your six core stats. ${cls && clsData ? `Your <strong>${cls}</strong> starts with the suggested spread — edit any value and it'll sync to your character sheet.` : 'Choose a class first to see suggested traits.'}</p>
-        ${cls && clsData ? `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.7;"><span>Suggested: <strong>${clsData.suggestedTraits.replace(/\n/g,' · ')}</strong></span><button onclick="s0FillSuggestedTraits()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:4px 12px;border-radius:3px;cursor:pointer;white-space:nowrap;margin-left:12px;">✦ Fill</button></div>` : ''}
+        ${cls && clsData ? `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.7;">Suggested: <strong>${clsData.suggestedTraits.replace(/\n/g,' · ')}</strong></div>` : ''}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;">
           ${liveTraits.map(({name,val})=>`
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
@@ -2109,18 +2124,17 @@ function applyClassDefaults(cls) {
 }
 
 function restoreData(d) {
-  if (!d) { applyClassDefaults(currentClass); return; }
-  // Also apply defaults if this is a fresh character with no traits filled in yet
-  const hasTraits = ['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge'].some(k => d[k] !== undefined && d[k] !== '');
-  if (!hasTraits) applyClassDefaults(currentClass);
+  // Always apply class defaults first so traits/hp/stress are never blank
+  applyClassDefaults(currentClass);
+  if (!d) return;
   const traitIds = new Set(['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge']);
-  // text fields
+  // text fields — only restore non-empty values
   Object.keys(d).forEach(k=>{
     if(['class','exps','inv','invWeaps'].includes(k)) return;
     if(typeof d[k]==='boolean'){const el=document.getElementById(k);if(el)el.checked=d[k];return;}
     if(typeof d[k]==='number') return;
     if(typeof d[k]==='string'){
-      if(d[k]==='') return; // never overwrite with empty string
+      if(d[k]==='') return; // never overwrite defaults with empty string
       const el=document.getElementById(k);if(el)el.value=d[k];
     }
   });
@@ -2128,8 +2142,9 @@ function restoreData(d) {
   for(let t=2;t<=4;t++) for(let o=0;o<9;o++){const el=document.getElementById(`t${t}o${o}`);if(el)el.checked=!!d[`t${t}o${o}`];}
   // pips
   if(d.hope!=null){renderHopePips(document.getElementById('hope-pips'), d.hopeTotal||6, d.hope);}
-  if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'), d.hpTotal||(CLASSES[currentClass]?.hpStart||5), d.hp, 'hpbox');
-  if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'), d.stressTotal||(CLASSES[currentClass]?.stressStart||6), d.stress, 'stressbox');
+  const cls = CLASSES[currentClass];
+  if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'), d.hpTotal||(cls?.hpStart||5), d.hp, 'hpbox');
+  if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'), d.stressTotal||(cls?.stressStart||6), d.stress, 'stressbox');
   if(d.armor!=null) makeShieldPips(document.getElementById('armor-pips'),12,d.armor);
   if(d.prof!=null) makeProfDots(document.getElementById('prof-dots'),d.prof);
   // dynamic lists
