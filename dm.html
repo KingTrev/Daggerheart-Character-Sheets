@@ -7,31 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #080909;
-  --bg2:       #0e1012;
-  --bg3:       #151719;
-  --bg4:       #1c1f22;
-  --border:    rgba(255,255,255,0.07);
-  --border2:   rgba(255,255,255,0.14);
-  --text:      #e8e3d8;
-  --muted:     #aaa49c;
-  --gold:      #c9a84c;
-  --gold-dim:  #7a6530;
-  --gold-faint:#141008;
-  --red:       #c04040;
-  --red-dim:   #7a2828;
-  --red-faint: #120808;
-  --blue:      #4a7ab0;
-  --teal:      #3a8a80;
-  --r:         6px;
+  --bg:#080909;--bg2:#0e1012;--bg3:#151719;--bg4:#1c1f22;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
+  --text:#e8e3d8;--muted:#9a9490;
+  --gold:#c9a84c;--gold-dim:#7a6530;--gold-faint:#141008;
+  --red:#c04040;--red-dim:#7a2828;--red-faint:#120808;
+  --blue:#4a7ab0;--teal:#3a8a80;--r:5px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
-::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;height:100vh;overflow:hidden;display:flex;flex-direction:column;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
 /* ── LOCK ── */
 #lock{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;}
-.l-icon{width:64px;height:64px;background:var(--gold-faint);border:1px solid var(--gold-dim);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--gold);}
+.l-icon{width:60px;height:60px;background:var(--gold-faint);border:1px solid var(--gold-dim);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--gold);}
 .l-title{font-family:'Cinzel',serif;font-size:22px;font-weight:700;letter-spacing:0.08em;}
 .l-sub{font-size:14px;color:var(--muted);margin-top:-0.75rem;}
 .l-input{font-family:'Cinzel',serif;font-size:18px;letter-spacing:0.3em;text-align:center;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 16px;border-radius:var(--r);outline:none;width:260px;}
@@ -41,145 +30,159 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font
 .l-hint{font-size:12px;color:var(--muted);}
 
 /* ── HEADER ── */
-.hdr{height:46px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 1rem;gap:1rem;flex-shrink:0;}
+.hdr{height:44px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 10px;gap:10px;flex-shrink:0;}
 .brand{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.18em;color:var(--gold);white-space:nowrap;}
-.hdr-mid{flex:1;display:flex;align-items:center;gap:1.5rem;}
-
-/* Fear / Hope in header */
-.tracker{display:flex;align-items:center;gap:5px;}
-.t-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);white-space:nowrap;}
-.t-num{font-family:'Cinzel',serif;font-size:16px;font-weight:700;min-width:22px;text-align:center;}
-.fear-num{color:var(--red);}
-.hope-num{color:var(--gold);}
-.adj{width:18px;height:18px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hdr-trackers{display:flex;align-items:center;gap:12px;flex:1;padding:0 8px;}
+.tracker{display:flex;align-items:center;gap:4px;}
+.t-lbl{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--muted);white-space:nowrap;}
+.t-num{font-family:'Cinzel',serif;font-size:15px;font-weight:700;min-width:20px;text-align:center;}
+.fear-num{color:var(--red);}.hope-num{color:var(--gold);}
+.adj{width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .adj:hover{color:var(--text);}
-.pip-row{display:flex;gap:3px;flex-wrap:wrap;max-width:220px;}
-.pip{width:13px;height:13px;border-radius:50%;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;transition:all 0.1s;flex-shrink:0;}
+.pip-row{display:flex;gap:3px;flex-wrap:wrap;max-width:196px;}
+.pip{width:12px;height:12px;border-radius:50%;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;transition:all 0.1s;flex-shrink:0;}
 .pip.fear.on{background:var(--red);border-color:var(--red);}
 .pip.hope.on{background:var(--gold);border-color:var(--gold);}
-.pip:hover{transform:scale(1.15);}
-
-/* Scene in header */
-.scene-wrap{flex:1;display:flex;align-items:center;gap:6px;min-width:0;}
-.scene-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);white-space:nowrap;}
-.scene-in{flex:1;font-family:'Crimson Pro',serif;font-size:14px;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);padding:2px 6px;outline:none;min-width:0;}
+.pip:hover{transform:scale(1.2);}
+.t-div{width:1px;height:24px;background:var(--border2);flex-shrink:0;}
+.scene-wrap{display:flex;align-items:center;gap:6px;min-width:0;flex:1;}
+.scene-lbl{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--muted);white-space:nowrap;}
+.scene-in{flex:1;font-family:'Crimson Pro',serif;font-size:13px;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);padding:2px 6px;outline:none;min-width:0;}
 .scene-in::placeholder{color:var(--muted);}
-
-/* Header buttons */
-.hdr-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:5px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;}
-.hdr-btn:hover{color:var(--text);}
-.hdr-btn.gold{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-faint);}
-.hdr-btn.red{border-color:var(--red-dim);color:var(--red);background:var(--red-faint);}
+.hdr-actions{display:flex;gap:5px;flex-shrink:0;}
+.hbtn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.09em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:4px 9px;border-radius:3px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;}
+.hbtn:hover{color:var(--text);}
+.hbtn.gold{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-faint);}
+.hbtn.red{border-color:var(--red-dim);color:var(--red);background:var(--red-faint);}
 
 /* ── PLAYER STRIP ── */
 .strip-wrap{background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;}
-.pc-strip{display:flex;gap:8px;padding:6px 10px;overflow-x:auto;align-items:stretch;}
-.no-players{font-size:13px;color:var(--muted);font-style:italic;padding:8px 10px;}
-.pc-card{flex-shrink:0;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:6px 8px;min-width:150px;display:flex;flex-direction:column;gap:3px;transition:border-color 0.15s;}
+.strip-top{display:flex;align-items:stretch;gap:7px;padding:5px 10px;overflow-x:auto;min-height:80px;}
+.no-players{font-size:13px;color:var(--muted);font-style:italic;padding:8px 2px;display:flex;align-items:center;}
+.pc-card{flex-shrink:0;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:5px 7px;min-width:155px;display:flex;flex-direction:column;gap:2px;cursor:pointer;}
 .pc-card.spotlit{border-color:var(--gold-dim);box-shadow:0 0 0 1px var(--gold-dim);}
 .pc-name-row{display:flex;align-items:center;gap:4px;}
-.pc-name{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pc-cls{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--gold);}
-.pip-line{display:flex;align-items:center;gap:3px;}
-.pip-line-lbl{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.08em;color:var(--muted);width:14px;flex-shrink:0;}
-.mp{width:10px;height:10px;border-radius:2px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;flex-shrink:0;}
+.pc-name{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.spot-star{background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;padding:0;line-height:1;}
+.spot-star.on{color:var(--gold);}
+.pc-cls{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--gold);margin-bottom:1px;}
+.pip-line{display:flex;align-items:center;gap:2px;}
+.pll{font-family:'Cinzel',serif;font-size:6px;letter-spacing:0.06em;color:var(--muted);width:13px;flex-shrink:0;}
+.mp{width:9px;height:9px;border-radius:2px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;flex-shrink:0;}
 .mp.hp.on{background:var(--red);border-color:var(--red-dim);}
 .mp.st.on{background:var(--blue);border-color:var(--blue);}
 .mp.ho.on{background:var(--gold);border-color:var(--gold-dim);}
 .pc-traits-row{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;margin-top:2px;}
 .pc-t{text-align:center;}
-.pc-t-l{font-family:'Cinzel',serif;font-size:6px;color:var(--muted);}
-.pc-t-v{font-family:'Cinzel',serif;font-size:11px;font-weight:700;}
-.pc-t-v.pos{color:var(--gold);}
-.pc-t-v.neg{color:var(--red);}
-.spot-bar{display:flex;align-items:center;gap:8px;padding:4px 10px;border-top:1px solid var(--border);}
-.spot-lbl{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--muted);}
-.spot-name{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);flex:1;}
+.pc-t-l{font-family:'Cinzel',serif;font-size:5px;color:var(--muted);}
+.pc-t-v{font-family:'Cinzel',serif;font-size:10px;font-weight:700;}
+.pc-t-v.pos{color:var(--gold);}.pc-t-v.neg{color:var(--red);}
+.strip-bar{display:flex;align-items:center;gap:8px;padding:3px 10px;border-top:1px solid var(--border);}
+.spot-lbl{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.12em;color:var(--muted);}
+.spot-name{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);flex:1;}
 
-/* ── 3-PANEL DRAWER LAYOUT ── */
-.panels{flex:1;display:flex;overflow:hidden;min-height:0;}
-.panel{display:flex;flex-direction:column;border-right:1px solid var(--border2);transition:flex 0.22s ease;overflow:hidden;min-width:0;}
+/* ── MAIN LAYOUT ── */
+.main{flex:1;display:flex;overflow:hidden;min-height:0;}
+
+/* ── TABS ── */
+.tab-nav{display:flex;background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;}
+.tnav{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;padding:8px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;white-space:nowrap;}
+.tnav.on{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* ── PANEL SYSTEM ── */
+.panel{display:flex;flex-direction:column;border-right:1px solid var(--border2);transition:flex 0.2s ease;overflow:hidden;min-width:0;}
 .panel:last-child{border-right:none;}
-.panel.state-normal{flex:1;}
-.panel.state-wide{flex:3;}
-.panel.state-collapsed{flex:0 0 38px;min-width:38px;max-width:38px;}
-
-.panel-hdr{height:36px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 10px;gap:8px;cursor:pointer;flex-shrink:0;user-select:none;}
-.panel.state-collapsed .panel-hdr{border-bottom:none;flex-direction:column;justify-content:center;height:100%;padding:8px 0;gap:6px;}
-.panel-hdr-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:0.14em;color:var(--gold);flex:1;}
-.panel.state-collapsed .panel-hdr-title{writing-mode:vertical-rl;transform:rotate(180deg);font-size:8px;flex:0;letter-spacing:0.12em;}
-.panel-hdr-icon{font-size:12px;color:var(--muted);flex-shrink:0;}
-.panel.state-collapsed .panel-hdr-icon{transform:rotate(90deg);}
-
-.panel-body{flex:1;overflow-y:auto;padding:10px 12px;}
-.panel.state-collapsed .panel-body{display:none;}
-.panel.state-collapsed .panel-tabs-bar{display:none;}
-
-/* Panel tabs (right panel) */
-.panel-tabs-bar{display:flex;border-bottom:1px solid var(--border2);flex-shrink:0;}
-.ptab{flex:1;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:6px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;text-align:center;}
+.panel.wide{flex:2.5;}
+.panel.normal{flex:1;}
+.panel.slim{flex:0 0 36px;min-width:36px;max-width:36px;}
+.phdr{height:34px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 10px;gap:6px;cursor:pointer;flex-shrink:0;user-select:none;}
+.panel.slim .phdr{flex-direction:column;justify-content:center;height:100%;padding:6px 0;border-bottom:none;}
+.phdr-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:0.12em;color:var(--gold);flex:1;}
+.panel.slim .phdr-title{writing-mode:vertical-rl;transform:rotate(180deg);font-size:7px;flex:0;letter-spacing:0.1em;}
+.phdr-icon{font-size:11px;color:var(--muted);}
+.panel.slim .phdr-icon{transform:rotate(90deg);}
+.pbody{flex:1;overflow-y:auto;padding:10px 11px;}
+.panel.slim .pbody{display:none;}
+.ptabs{display:flex;border-bottom:1px solid var(--border2);flex-shrink:0;}
+.panel.slim .ptabs{display:none;}
+.ptab{flex:1;font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.08em;padding:6px 2px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;text-align:center;}
 .ptab.on{color:var(--gold);border-bottom-color:var(--gold);}
 
 /* ── REFERENCE CONTENT ── */
-.rh{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--gold);border-bottom:1px solid var(--border2);padding-bottom:4px;margin-bottom:7px;}
-.rs{margin-bottom:14px;}
-.rp{font-size:14px;line-height:1.65;color:var(--text);margin-bottom:4px;}
-.rp b{color:var(--gold);font-weight:600;}
-.rp em{color:var(--muted);}
-.rp i{color:var(--muted);font-style:italic;}
-.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px;}
-.rcard{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px 8px;}
-.rcard-t{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--gold);margin-bottom:3px;}
-.rcard-b{font-size:13px;line-height:1.5;color:var(--text);}
-.rtable{width:100%;border-collapse:collapse;margin-bottom:6px;font-size:13px;}
-.rtable th{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;color:var(--muted);text-align:left;padding:3px 5px;border-bottom:1px solid var(--border2);}
-.rtable td{padding:3px 5px;border-bottom:1px solid var(--border);}
+.rh{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:0.1em;color:var(--gold);border-bottom:1px solid var(--border2);padding-bottom:3px;margin-bottom:6px;}
+.rs{margin-bottom:12px;}
+.rp{font-size:13px;line-height:1.6;color:var(--text);margin-bottom:3px;}
+.rp b{color:var(--gold);font-weight:600;}.rp i{color:var(--muted);font-style:italic;}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px;}
+.rcard{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:5px 7px;}
+.rcard-t{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.1em;color:var(--gold);margin-bottom:2px;}
+.rcard-b{font-size:12px;line-height:1.5;color:var(--text);}
+.rtable{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:5px;}
+.rtable th{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.07em;color:var(--muted);text-align:left;padding:3px 5px;border-bottom:1px solid var(--border2);}
+.rtable td{padding:3px 5px;border-bottom:1px solid var(--border);vertical-align:top;}
 .rtable tr:last-child td{border-bottom:none;}
 .rtag{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.06em;border:1px solid var(--border);border-radius:2px;padding:1px 5px;white-space:nowrap;flex-shrink:0;background:var(--bg3);color:var(--muted);}
 .rtag.g{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
 .rtag.r{color:var(--red);border-color:var(--red-dim);background:var(--red-faint);}
 .rtag.t{color:var(--teal);border-color:var(--teal);}
 .rrow{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;}
-.rdiv{height:1px;background:var(--border2);margin:10px 0;}
+.rdiv{height:1px;background:var(--border2);margin:8px 0;}
 
-/* ── TOOLS ── */
-.tool-lbl{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--gold);display:block;margin-bottom:5px;}
-.tool-ta{width:100%;font-family:'Crimson Pro',serif;font-size:14px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:7px 9px;resize:none;outline:none;line-height:1.55;}
+/* Class cards in reference */
+.class-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.class-card{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:7px 8px;}
+.cc-name{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--gold);margin-bottom:2px;}
+.cc-domains{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--muted);margin-bottom:4px;}
+.cc-row{font-size:11px;line-height:1.5;color:var(--text);margin-bottom:2px;}
+.cc-row b{color:var(--gold);font-weight:600;}
+.cc-hope{font-size:11px;color:var(--teal);line-height:1.4;border-top:1px solid var(--border);margin-top:4px;padding-top:4px;}
+
+/* Ancestry grid */
+.anc-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.anc-card{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:5px 7px;}
+.anc-name{font-family:'Cinzel',serif;font-size:8px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.anc-feat{font-size:11px;line-height:1.4;color:var(--muted);}
+
+/* ── TOOLS (notes/clocks/adversaries) ── */
+.tool-lbl{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--gold);display:block;margin-bottom:4px;}
+.tool-ta{width:100%;font-family:'Crimson Pro',serif;font-size:13px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:6px 8px;resize:none;outline:none;line-height:1.55;}
 .tool-ta:focus{border-color:var(--border2);}
-.tool-sec{margin-bottom:14px;}
-.add-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:none;border:1px dashed var(--border2);color:var(--muted);padding:6px;border-radius:4px;cursor:pointer;width:100%;transition:all 0.12s;margin-top:4px;}
+.tool-sec{margin-bottom:12px;}
+.add-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px dashed var(--border2);color:var(--muted);padding:5px;border-radius:3px;cursor:pointer;width:100%;transition:all 0.12s;margin-top:3px;}
 .add-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
-.rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:0;}
-.rm:hover{color:var(--red);}
+.rm{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0;}.rm:hover{color:var(--red);}
 
 /* Clocks */
-.clock-row{display:flex;align-items:center;gap:6px;margin-bottom:7px;}
-.clock-in{flex:1;font-family:'Crimson Pro',serif;font-size:13px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:3px 7px;outline:none;}
-.cpips{display:flex;gap:3px;flex-wrap:wrap;}
-.cpip{width:14px;height:14px;border-radius:3px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;}
+.clock-row{display:flex;align-items:center;gap:5px;margin-bottom:6px;flex-wrap:wrap;}
+.clock-in{font-family:'Crimson Pro',serif;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:3px 6px;outline:none;min-width:80px;flex:1;}
+.cpips{display:flex;gap:2px;flex-wrap:wrap;}
+.cpip{width:13px;height:13px;border-radius:3px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;}
 .cpip.on{background:var(--gold);border-color:var(--gold-dim);}
 .cpip.on.r{background:var(--red);border-color:var(--red-dim);}
 
 /* Adversaries */
-.adv-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;margin-bottom:7px;}
-.adv-top{display:flex;align-items:center;gap:6px;padding:6px 8px;}
-.adv-name{flex:1;font-family:'Cinzel',serif;font-size:11px;font-weight:700;background:none;border:none;color:var(--text);outline:none;}
-.adv-pips{display:flex;gap:3px;flex-wrap:wrap;padding:0 8px 6px;}
-.adv-pip{width:13px;height:13px;border-radius:2px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;}
+.adv-card{background:var(--bg3);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;}
+.adv-top{display:flex;align-items:center;gap:5px;padding:5px 7px;}
+.adv-name{flex:1;font-family:'Cinzel',serif;font-size:10px;font-weight:700;background:none;border:none;color:var(--text);outline:none;}
+.adv-pips{display:flex;gap:2px;flex-wrap:wrap;padding:0 7px 5px;}
+.adv-pip{width:12px;height:12px;border-radius:2px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;}
 .adv-pip.on{background:var(--red);border-color:var(--red-dim);}
-.adv-note{width:calc(100% - 16px);margin:0 8px 7px;font-family:'Crimson Pro',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:4px 7px;outline:none;resize:none;}
+.adv-note{width:calc(100% - 14px);margin:0 7px 6px;font-family:'Crimson Pro',serif;font-size:12px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:4px 6px;outline:none;resize:none;}
 
 /* Scene log */
-.scene-entry{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:7px 9px;margin-bottom:6px;}
-.scene-entry-hdr{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.scene-entry-name{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--text);flex:1;}
-.scene-entry-ts{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);}
-.scene-entry-notes{font-size:13px;color:var(--text);line-height:1.55;white-space:pre-wrap;margin-bottom:5px;}
+.scene-entry{background:var(--bg3);border:1px solid var(--border);border-radius:3px;padding:6px 8px;margin-bottom:5px;}
+.se-hdr{display:flex;align-items:center;gap:5px;margin-bottom:3px;}
+.se-name{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--text);flex:1;}
+.se-ts{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);}
+.se-notes{font-size:12px;color:var(--text);line-height:1.5;white-space:pre-wrap;margin-bottom:4px;}
+
+/* Campaign notes layout */
+.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 </style>
 </head>
 <body>
 
-<!-- LOCK SCREEN -->
+<!-- LOCK -->
 <div id="lock">
   <div class="l-icon">⚔</div>
   <div class="l-title">GM SCREEN</div>
@@ -187,7 +190,7 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font
   <input type="password" class="l-input" id="pin-in" placeholder="••••" maxlength="30" onkeydown="if(event.key==='Enter')unlock()">
   <button class="l-btn" onclick="unlock()">ENTER THE SANCTUM</button>
   <div class="l-err" id="l-err"></div>
-  <div class="l-hint">First visit: type your PIN to set it (min 4 chars) · Shift+R for 2s to reset</div>
+  <div class="l-hint">First visit: type your PIN to set it (min 4 chars)</div>
 </div>
 
 <!-- APP -->
@@ -196,368 +199,438 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font
   <!-- HEADER -->
   <header class="hdr">
     <div class="brand">⚔ GM SCREEN</div>
-    <div class="hdr-mid">
-
+    <div class="hdr-trackers">
       <div class="tracker">
         <span class="t-lbl">FEAR</span>
         <span class="t-num fear-num" id="fear-n">0</span>
         <div class="pip-row" id="fear-pips"></div>
       </div>
-
-      <div style="width:1px;height:28px;background:var(--border2);flex-shrink:0;"></div>
-
+      <div class="t-div"></div>
       <div class="tracker">
         <span class="t-lbl">HOPE</span>
-        <button class="adj" onclick="adjHopeTotal(-1)" title="Remove slot">−</button>
+        <button class="adj" onclick="adjHopeTotal(-1)">−</button>
         <span class="t-num hope-num" id="hope-n">0</span>
-        <button class="adj" onclick="adjHopeTotal(1)" title="Add slot">+</button>
+        <button class="adj" onclick="adjHopeTotal(1)">+</button>
         <div class="pip-row" id="hope-pips"></div>
       </div>
-
-      <div style="width:1px;height:28px;background:var(--border2);flex-shrink:0;"></div>
-
+      <div class="t-div"></div>
       <div class="scene-wrap">
         <span class="scene-lbl">SCENE</span>
         <input type="text" class="scene-in" id="scene-in" placeholder="Name this scene..." oninput="autoSave()">
-        <button class="hdr-btn gold" onclick="saveScene()">+ Save Scene</button>
+        <button class="hbtn gold" onclick="saveScene()">+ Save</button>
       </div>
-
     </div>
-    <div style="display:flex;gap:6px;flex-shrink:0;">
-      <a class="hdr-btn" href="index.html" style="text-decoration:none;">🏠 Home</a>
-      <label class="hdr-btn gold" style="cursor:pointer;">⬆ Load Players<input type="file" accept=".json" style="display:none" onchange="loadPlayers(this)" multiple></label>
-      <button class="hdr-btn" onclick="saveAll()">Save</button>
-      <button class="hdr-btn red" onclick="lockGM()">Lock</button>
+    <div class="hdr-actions">
+      <a class="hbtn" href="index.html">🏠 Home</a>
+      <label class="hbtn gold" style="cursor:pointer;">⬆ Load Players<input type="file" accept=".json" style="display:none" onchange="loadPlayers(this)" multiple></label>
+      <button class="hbtn" onclick="autoSave()">Save</button>
+      <button class="hbtn red" onclick="lockGM()">Lock</button>
     </div>
   </header>
 
   <!-- PLAYER STRIP -->
   <div class="strip-wrap">
-    <div class="pc-strip" id="pc-strip">
+    <div class="strip-top" id="pc-strip">
       <div class="no-players" id="no-players">No players loaded — use ⬆ Load Players above</div>
     </div>
-    <div class="spot-bar">
+    <div class="strip-bar">
       <span class="spot-lbl">SPOTLIGHT</span>
       <span class="spot-name" id="spot-name">—</span>
-      <button class="hdr-btn" onclick="prevSpot()" style="padding:2px 8px;">◀</button>
-      <button class="hdr-btn" onclick="nextSpot()" style="padding:2px 8px;">▶</button>
-      <button class="hdr-btn" onclick="clearSpot()">Clear</button>
+      <button class="hbtn" onclick="prevSpot()" style="padding:2px 7px;">◀</button>
+      <button class="hbtn" onclick="nextSpot()" style="padding:2px 7px;">▶</button>
+      <button class="hbtn" onclick="clearSpot()">Clear</button>
     </div>
   </div>
 
-  <!-- 3 PANELS -->
-  <div class="panels" id="panels">
+  <!-- MAIN: 4 PANELS -->
+  <div class="main" id="main-panels">
 
-    <!-- LEFT: DICE & ROLLS -->
-    <div class="panel state-normal" id="panel-0">
-      <div class="panel-hdr" onclick="togglePanel(0)">
-        <span class="panel-hdr-title">DICE &amp; ROLLS</span>
-        <span class="panel-hdr-icon">⇔</span>
+    <!-- PANEL 0: DICE & ROLLS -->
+    <div class="panel normal" id="panel-0">
+      <div class="phdr" onclick="togglePanel(0)">
+        <span class="phdr-title">DICE &amp; ROLLS</span>
+        <span class="phdr-icon">⇔</span>
       </div>
-      <div class="panel-body">
+      <div class="pbody">
 
         <div class="rs">
-          <div class="rh">ACTION ROLL — STEP BY STEP</div>
-          <div class="rp"><b>1.</b> Announce action + trait</div>
-          <div class="rp"><b>2.</b> GM sets Difficulty</div>
-          <div class="rp"><b>3.</b> Roll 2d12 (Hope Die + Fear Die) + Trait modifier</div>
-          <div class="rp"><b>4.</b> Compare total to Difficulty</div>
-          <div class="rp"><b>5.</b> Announce result with Hope or Fear</div>
+          <div class="rh">ACTION ROLL</div>
+          <div class="rp"><b>1.</b> Pick a trait · <b>2.</b> GM sets Difficulty (default 12) · <b>3.</b> Declare modifiers · <b>4.</b> Roll Hope Die + Fear Die + trait · <b>5.</b> Resolve — something always changes</div>
         </div>
 
         <div class="rs">
           <div class="rh">DUALITY DICE RESULTS</div>
-          <div class="rgrid">
-            <div class="rcard"><div class="rcard-t">✦ SUCCESS WITH HOPE</div><div class="rcard-b">Total ≥ Difficulty, Hope Die higher. <b>Succeed + gain 1 Hope.</b></div></div>
-            <div class="rcard"><div class="rcard-t">✧ SUCCESS WITH FEAR</div><div class="rcard-b">Total ≥ Difficulty, Fear Die higher. <b>Succeed, GM gains 1 Fear.</b></div></div>
-            <div class="rcard"><div class="rcard-t">✦ FAILURE WITH HOPE</div><div class="rcard-b">Total &lt; Difficulty, Hope Die higher. <b>Fail + minor consequence + gain 1 Hope.</b></div></div>
-            <div class="rcard"><div class="rcard-t">✧ FAILURE WITH FEAR</div><div class="rcard-b">Total &lt; Difficulty, Fear Die higher. <b>Fail + major consequence, GM gains 1 Fear.</b></div></div>
+          <div class="rrow"><span class="rtag g">CRITICAL</span><span class="rp">Dice match — auto-succeed regardless of Difficulty. Gain Hope, clear Stress. Attack = add max dice result to damage.</span></div>
+          <div class="rrow"><span class="rtag g">SUCCESS / HOPE</span><span class="rp">Meets Difficulty, Hope Die higher. Succeed + gain 1 Hope.</span></div>
+          <div class="rrow"><span class="rtag">SUCCESS / FEAR</span><span class="rp">Meets Difficulty, Fear Die higher. Succeed, GM gains 1 Fear.</span></div>
+          <div class="rrow"><span class="rtag t">FAIL / HOPE</span><span class="rp">Below Difficulty, Hope Die higher. Fail + minor consequence + gain 1 Hope.</span></div>
+          <div class="rrow"><span class="rtag r">FAIL / FEAR</span><span class="rp">Below Difficulty, Fear Die higher. Fail + major consequence, GM gains 1 Fear.</span></div>
+        </div>
+
+        <div class="rs">
+          <div class="rh">ATTACK &amp; DAMAGE</div>
+          <div class="rp"><b>Attack:</b> Roll vs target Evasion (PCs) or Difficulty score (adversaries). Unarmed = Strength or Finesse, d4+Prof physical.</div>
+          <div class="rp"><b>On hit:</b> Roll damage + Proficiency. Compare total to thresholds:</div>
+          <div class="rgrid" style="margin-top:4px;">
+            <div class="rcard"><div class="rcard-t">MINOR</div><div class="rcard-b">Mark <b style="color:var(--red);">1 HP</b></div></div>
+            <div class="rcard"><div class="rcard-t">MAJOR</div><div class="rcard-b">Mark <b style="color:var(--red);">2 HP</b></div></div>
+            <div class="rcard" style="grid-column:1/-1;"><div class="rcard-t">SEVERE</div><div class="rcard-b">Mark <b style="color:var(--red);">3 HP</b> · Crit = add max possible dice to damage roll</div></div>
           </div>
-          <div class="rp"><b>Critical Success:</b> Matching dice — auto-succeed with bonus, gain Hope, clear Stress. Attack = add max possible dice result to damage.</div>
-        </div>
-
-        <div class="rdiv"></div>
-
-        <div class="rs">
-          <div class="rh">REACTION ROLL</div>
-          <div class="rp">Response to an attack or hazard. Works like action roll but <b>does not generate Hope or Fear</b> and doesn't trigger GM moves. Critical success ignores effects but no Hope/Stress benefit.</div>
+          <div class="rp"><b>Armor Slot:</b> Before marking HP, mark a slot to reduce severity by one threshold.</div>
         </div>
 
         <div class="rs">
-          <div class="rh">GROUP ACTION ROLL</div>
-          <div class="rp">One PC leads (action roll), others make reaction rolls. Lead gets <b>+1 per reaction success, −1 per reaction failure.</b></div>
+          <div class="rh">OTHER ROLL TYPES</div>
+          <div class="rp"><b>Reaction Roll:</b> Dodge/resist something. Like action roll but no Hope/Fear generated, no GM moves triggered. Crit = ignore effect entirely.</div>
+          <div class="rp"><b>Group Action:</b> One leader rolls action. Others make reaction rolls. Leader gets +1 per success, −1 per failure from collaborators.</div>
+          <div class="rp"><b>Tag Team:</b> Once/session per PC. Spend 3 Hope. Both roll — choose which result to use. Both roll damage and add totals on hit.</div>
         </div>
 
         <div class="rs">
-          <div class="rh">TAG TEAM ROLL</div>
-          <div class="rp">Once per session per PC — spend <b>3 Hope</b> to initiate. Both PCs roll, choose which result applies. On Hope: all gain Hope. On Fear: GM gains Fear per PC involved. Both roll damage on hit, add totals.</div>
-        </div>
-
-        <div class="rdiv"></div>
-
-        <div class="rs">
-          <div class="rh">TRAITS</div>
-          <div class="rgrid">
-            <div class="rcard"><div class="rcard-t">AGILITY</div><div class="rcard-b">Sprint, leap, maneuver</div></div>
-            <div class="rcard"><div class="rcard-t">STRENGTH</div><div class="rcard-b">Lift, smash, grapple</div></div>
-            <div class="rcard"><div class="rcard-t">FINESSE</div><div class="rcard-b">Control, hide, tinker</div></div>
-            <div class="rcard"><div class="rcard-t">INSTINCT</div><div class="rcard-b">Perceive, sense, navigate</div></div>
-            <div class="rcard"><div class="rcard-t">PRESENCE</div><div class="rcard-b">Charm, perform, deceive</div></div>
-            <div class="rcard"><div class="rcard-t">KNOWLEDGE</div><div class="rcard-b">Recall, analyze, comprehend</div></div>
-          </div>
-        </div>
-
-        <div class="rs">
-          <div class="rh">PROFICIENCY &amp; DAMAGE</div>
-          <div class="rp">Proficiency = number of damage dice. <i>Tier 1: 1 die · Tier 2: 1 die · Tier 3: 2 dice · Tier 4: 3 dice</i></div>
-          <div class="rp"><b>Unarmed:</b> [Proficiency]d4 physical. Strength or Finesse (GM's choice).</div>
-          <div class="rp"><b>Critical damage:</b> Roll damage normally, then add the <b>maximum possible result</b> of the damage dice to the total.</div>
-        </div>
-
-        <div class="rs">
-          <div class="rh">DIFFICULTY BENCHMARKS</div>
+          <div class="rh">PROFICIENCY &amp; DIFFICULTY</div>
           <table class="rtable">
-            <tr><th>DC</th><th>Example Task</th></tr>
-            <tr><td><b>5</b></td><td>Sprint Close range, easy terrain</td></tr>
-            <tr><td><b>10</b></td><td>Sprint Far range, open terrain</td></tr>
-            <tr><td><b>15</b></td><td>Sprint Close range, difficult terrain</td></tr>
-            <tr><td><b>20</b></td><td>Sprint Close range, hazardous terrain</td></tr>
-            <tr><td><b>25</b></td><td>Sprint Far range, hazardous terrain</td></tr>
+            <tr><th>Tier</th><th>Levels</th><th>Prof</th><th>Difficulty</th></tr>
+            <tr><td>1</td><td>1</td><td>+1</td><td>~11</td></tr>
+            <tr><td>2</td><td>2–4</td><td>+2</td><td>~14</td></tr>
+            <tr><td>3</td><td>5–7</td><td>+3</td><td>~17</td></tr>
+            <tr><td>4</td><td>8–10</td><td>+4</td><td>~20</td></tr>
           </table>
-          <div class="rp"><i>Attack rolls vs adversaries use their Difficulty score. Other action rolls vs adversaries also use Difficulty ± relevant Experience.</i></div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- MIDDLE: PLAYER MECHANICS -->
-    <div class="panel state-normal" id="panel-1">
-      <div class="panel-hdr" onclick="togglePanel(1)">
-        <span class="panel-hdr-title">PLAYER MECHANICS</span>
-        <span class="panel-hdr-icon">⇔</span>
-      </div>
-      <div class="panel-body">
-
-        <div class="rs">
-          <div class="rh">EVASION</div>
-          <div class="rp">Attack rolls against a PC use their <b>Evasion as the Difficulty.</b> Set by class + equipment + conditions. Against adversaries, attacks use the adversary's Difficulty.</div>
         </div>
 
         <div class="rs">
-          <div class="rh">HIT POINTS &amp; DAMAGE THRESHOLDS</div>
-          <div class="rp">Thresholds = armor base thresholds + PC level.</div>
-          <div class="rrow"><span class="rtag">MINOR</span><span class="rp">Below Major threshold → mark <b>1 HP</b></span></div>
-          <div class="rrow"><span class="rtag">MAJOR</span><span class="rp">At/above Major, below Severe → mark <b>2 HP</b></span></div>
-          <div class="rrow"><span class="rtag">SEVERE</span><span class="rp">At/above Severe → mark <b>3 HP</b></span></div>
-          <div class="rp" style="margin-top:4px;"><i>Damage reduced to 0 or below: no HP marked. When last HP marked: make a death move.</i></div>
-        </div>
-
-        <div class="rs">
-          <div class="rh">ARMOR SLOTS</div>
-          <div class="rp">Mark 1 Armor Slot to <b>reduce HP marked by 1.</b> Armor Score = base + bonuses. Armor Score of 0 = can't mark Armor Slots.</div>
-        </div>
-
-        <div class="rs">
-          <div class="rh">STRESS</div>
-          <div class="rp">When last Stress marked: become <b>Vulnerable</b> until at least 1 is cleared. When must mark Stress but can't: mark HP instead. Max Stress set by class, typically 6.</div>
-        </div>
-
-        <div class="rdiv"></div>
-
-        <div class="rs">
-          <div class="rh">HELPING AN ALLY</div>
-          <div class="rp">Spend <b>1 Hope</b> to help. They gain <b>+1 to their Hope or Fear Die result.</b> Multiple PCs can help the same roll.</div>
+          <div class="rh">RANGE SCALE</div>
+          <table class="rtable">
+            <tr><th>Range</th><th>Distance</th></tr>
+            <tr><td><b>Melee</b></td><td>Close enough to touch</td></tr>
+            <tr><td><b>Very Close</b></td><td>5–10 ft, 1–2 squares</td></tr>
+            <tr><td><b>Close</b></td><td>10–30 ft, 3–4 squares</td></tr>
+            <tr><td><b>Far</b></td><td>30–100 ft, 5–10 squares</td></tr>
+            <tr><td><b>Very Far</b></td><td>100–300 ft, 11–20 sq</td></tr>
+            <tr><td><b>Out of Range</b></td><td>Untargetable</td></tr>
+          </table>
         </div>
 
         <div class="rs">
           <div class="rh">CONDITIONS</div>
-          <div class="rrow"><span class="rtag">HIDDEN</span><span class="rp">Rolls against them have <b>disadvantage.</b> Ends when seen or when they attack.</span></div>
-          <div class="rrow"><span class="rtag">RESTRAINED</span><span class="rp"><b>Can't move.</b> Can still act from current position.</span></div>
-          <div class="rrow"><span class="rtag">VULNERABLE</span><span class="rp">All rolls targeting them have <b>advantage.</b></span></div>
-          <div class="rp" style="margin-top:5px;"><b>Clearing temp conditions (PC):</b> Make an action roll. <b>(Adversary):</b> GM spends their spotlight — no roll, but uses the adversary's action. Spend 1 Fear to end a temporary effect.</div>
+          <div class="rrow"><span class="rtag r">VULNERABLE</span><span class="rp">All rolls targeting them have advantage.</span></div>
+          <div class="rrow"><span class="rtag">RESTRAINED</span><span class="rp">Can't move. Can still take actions.</span></div>
+          <div class="rrow"><span class="rtag t">HIDDEN</span><span class="rp">Rolls against have disadvantage. Ends on attack or line of sight.</span></div>
+          <div class="rp" style="margin-top:4px;"><i>Conditions can't stack. Clear with action roll (PC) or spend Fear to spotlight adversary (GM).</i></div>
         </div>
-
-        <div class="rs">
-          <div class="rh">COUNTDOWNS</div>
-          <div class="rp"><b>Standard:</b> Ticks down 1 every action roll. Triggers at 0.</div>
-          <table class="rtable" style="margin-top:6px;">
-            <tr><th>Roll Result</th><th>Progress Clock</th><th>Consequence Clock</th></tr>
-            <tr><td>Failure w/ Fear</td><td>No advance</td><td>−3</td></tr>
-            <tr><td>Failure w/ Hope</td><td>No advance</td><td>−2</td></tr>
-            <tr><td>Success w/ Fear</td><td>−1</td><td>−1</td></tr>
-            <tr><td>Success w/ Hope</td><td>−2</td><td>No advance</td></tr>
-          </table>
-        </div>
-
-        <div class="rdiv"></div>
 
         <div class="rs">
           <div class="rh">DEATH MOVES</div>
-          <div class="rrow"><span class="rtag r">BLAZE OF GLORY</span><span class="rp">Embrace death. One last heroic act — then cross the veil.</span></div>
-          <div class="rrow"><span class="rtag">AVOID DEATH</span><span class="rp">Survive with consequences. Roll Hope Die: on a 1, gain a scar (cross out a Hope slot). Cross out last Hope slot: journey ends.</span></div>
-          <div class="rrow"><span class="rtag g">RISK IT ALL</span><span class="rp">Roll Duality Dice. Hope higher: survive, clear HP/Stress = Hope Die value. Fear higher: cross the veil. Tie: clear all HP and Stress.</span></div>
+          <div class="rrow"><span class="rtag r">BLAZE OF GLORY</span><span class="rp">One final auto-crit action, then cross the veil.</span></div>
+          <div class="rrow"><span class="rtag">AVOID DEATH</span><span class="rp">Fall unconscious. Roll Hope Die — if result ≤ level, gain a scar (cross out a Hope slot). Return when ally heals 1 HP or after long rest.</span></div>
+          <div class="rrow"><span class="rtag g">RISK IT ALL</span><span class="rp">Roll Duality Dice. Hope higher = stay up, clear HP/Stress = Hope Die value. Fear higher = die. Match = survive, clear all.</span></div>
         </div>
 
         <div class="rs">
-          <div class="rh">DOWNTIME MOVES</div>
-          <div class="rp"><b>Short rest — 2 moves:</b> Tend to Wounds (clear 1d4+Tier HP), Clear Stress (1d4+Tier), Repair Armor (1d4+Tier slots), Prepare (Hope + advantage on one roll), Work on Project. <i>GM gains 1d4 Fear.</i></div>
-          <div class="rp" style="margin-top:4px;"><b>Long rest — 2 moves:</b> Tend All Wounds, Clear All Stress, Repair All Armor, Prepare (2 Hope each), Work on Project. <i>GM gains 1d4+PCs Fear + may advance a long-term countdown.</i></div>
+          <div class="rh">DOWNTIME</div>
+          <div class="rp"><b>Short Rest — 2 moves:</b> Tend Wounds (1d4+Tier HP), Clear Stress (1d4+Tier), Repair Armor (1d4+Tier slots), Prepare (+Hope). <i>GM gains 1d4 Fear.</i></div>
+          <div class="rp"><b>Long Rest — 2 moves:</b> Same as above but clear ALL. Swap domain cards. <i>GM gains 1d4+party size Fear. Advance a long countdown.</i></div>
+          <div class="rp"><i>After 3 short rests in a row, next must be a long rest.</i></div>
+        </div>
+
+      </div>
+    </div><!-- /panel-0 -->
+
+    <!-- PANEL 1: GM MOVES -->
+    <div class="panel normal" id="panel-1">
+      <div class="phdr" onclick="togglePanel(1)">
+        <span class="phdr-title">GM MOVES</span>
+        <span class="phdr-icon">⇔</span>
+      </div>
+      <div class="pbody">
+
+        <div class="rs">
+          <div class="rh">FEAR &amp; HOPE</div>
+          <div class="rp"><b>Start:</b> 1 Fear per PC. Max 12. Carries over between sessions.</div>
+          <div class="rp"><b>Gain Fear when:</b> PC rolls with Fear · short rest (1d4) · long rest (1d4 + PCs) · certain abilities</div>
+          <div class="rp"><b>Spend Fear to:</b> Steal spotlight · Make a GM move · Use adversary Fear Feature · Use environment Fear Feature · Add adversary Experience to a roll</div>
+          <div class="rdiv"></div>
+          <div class="rp"><b>Hope max:</b> 6 per PC. Start with 2. Carries over.</div>
+          <div class="rp"><b>Players spend Hope to:</b> Add Experience (+2) · Help ally (d6 advantage die) · Activate Hope Feature (3 Hope) · Tag Team (3 Hope) · Recall domain card</div>
         </div>
 
         <div class="rs">
-          <div class="rh">SHOPPING &amp; GOLD</div>
+          <div class="rh">WHEN TO MAKE A GM MOVE</div>
+          <div class="rp">• PC <b>rolls with Fear</b></div>
+          <div class="rp">• PC <b>fails</b> an action roll</div>
+          <div class="rp">• Action has <b>unavoidable consequences</b></div>
+          <div class="rp">• PC gives you a <b>golden opportunity</b></div>
+          <div class="rp">• Players look to you for <b>what happens next</b></div>
+          <div class="rdiv"></div>
+          <div class="rrow"><span class="rtag g">CRIT</span><span class="rp">Give additional opportunity or advantage</span></div>
+          <div class="rrow"><span class="rtag g">SUCCESS/HOPE</span><span class="rp">Show how the world reacts — soft move</span></div>
+          <div class="rrow"><span class="rtag">SUCCESS/FEAR</span><span class="rp">Complication follows success — medium move</span></div>
+          <div class="rrow"><span class="rtag r">FAIL/FEAR</span><span class="rp">Hard move — direct, no opening to interrupt</span></div>
+        </div>
+
+        <div class="rs">
+          <div class="rh">GM MOVE LIST</div>
+          <div class="rp">• Show how the world reacts</div>
+          <div class="rp">• Ask a question and build on the answer</div>
+          <div class="rp">• Act on an NPC's motive</div>
+          <div class="rp">• Dangle a PC's goals to drive action</div>
+          <div class="rp">• Signal an imminent off-screen threat</div>
+          <div class="rp">• Reveal an unwelcome truth or danger</div>
+          <div class="rp">• Force the group to split up</div>
+          <div class="rp">• Make a PC mark Stress</div>
+          <div class="rp">• Make a move they don't see</div>
+          <div class="rp">• Show collateral damage</div>
+          <div class="rp">• Clear an adversary's condition</div>
+          <div class="rp">• Shift the environment</div>
+          <div class="rp">• Spotlight an adversary</div>
+          <div class="rp">• Capture something important</div>
+          <div class="rp">• Use a PC's backstory against them</div>
+          <div class="rp">• Remove an opportunity permanently</div>
+        </div>
+
+        <div class="rs">
+          <div class="rh">ADVERSARY TYPES &amp; COSTS</div>
           <table class="rtable">
-            <tr><th>Item</th><th>Cost</th></tr>
-            <tr><td>Tier 1 weapon/armor</td><td>1–5 Handfuls</td></tr>
-            <tr><td>Tier 2 weapon/armor</td><td>1–2 Bags</td></tr>
-            <tr><td>Tier 3 weapon/armor</td><td>5–10 Bags</td></tr>
-            <tr><td>Tier 4 weapon/armor</td><td>1–2 Chests</td></tr>
-          </table>
-          <div class="rp"><i>10 Handfuls = 1 Bag · 10 Bags = 1 Chest</i></div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- RIGHT: GM TOOLS -->
-    <div class="panel state-normal" id="panel-2">
-      <div class="panel-hdr" onclick="togglePanel(2)">
-        <span class="panel-hdr-title">GM TOOLS</span>
-        <span class="panel-hdr-icon">⇔</span>
-      </div>
-      <div class="panel-tabs-bar">
-        <button class="ptab on" onclick="switchTab('ref',this)">REFERENCE</button>
-        <button class="ptab" onclick="switchTab('adv',this)">ADVERSARIES</button>
-        <button class="ptab" onclick="switchTab('notes',this)">NOTES</button>
-        <button class="ptab" onclick="switchTab('clocks',this)">CLOCKS</button>
-      </div>
-
-      <!-- REFERENCE TAB -->
-      <div class="panel-body" id="tab-ref">
-        <div class="rs">
-          <div class="rh">HOPE — PLAYERS SPEND TO</div>
-          <div class="rp">• Add an Experience bonus to a roll</div>
-          <div class="rp">• Help an ally (+1 to die result)</div>
-          <div class="rp">• Initiate a Tag Team Roll (3 Hope)</div>
-          <div class="rp">• Activate a Hope Feature (usually 3 Hope)</div>
-          <div class="rp">• Recall a spent domain card</div>
-          <div class="rp"><i>Max 6 Hope per PC. Carries over between sessions.</i></div>
-        </div>
-        <div class="rs">
-          <div class="rh">FEAR — GM SPENDS TO</div>
-          <div class="rp">• Steal spotlight &amp; make a GM move</div>
-          <div class="rp">• Make an additional GM move</div>
-          <div class="rp">• Use an adversary's Fear Feature</div>
-          <div class="rp">• Use an environment's Fear Feature</div>
-          <div class="rp">• Add adversary Experience to a roll</div>
-          <div class="rp">• End a temporary condition or effect</div>
-          <div class="rp"><i>Max 12 Fear. Start with 1 Fear per PC. Gain Fear when PCs roll with Fear or rest.</i></div>
-        </div>
-        <div class="rs">
-          <div class="rh">GM MOVES — WHEN &amp; HOW</div>
-          <div class="rp">Make a move when a PC <b>rolls with Fear</b> or <b>fails an action roll.</b></div>
-          <div class="rrow" style="margin-top:5px;"><span class="rtag g">SUCCESS / HOPE</span><span class="rp">Yes, and… Player succeeds, gains Hope.</span></div>
-          <div class="rrow"><span class="rtag">SUCCESS / FEAR</span><span class="rp">Yes, but… Succeeds, then consequence. GM gains Fear.</span></div>
-          <div class="rrow"><span class="rtag t">FAILURE / HOPE</span><span class="rp">No, but… Fails + minor consequence, gains Hope.</span></div>
-          <div class="rrow"><span class="rtag r">FAILURE / FEAR</span><span class="rp">No, and… Fails + major consequence, GM gains Fear.</span></div>
-        </div>
-        <div class="rs">
-          <div class="rh">EXAMPLE GM MOVES</div>
-          <div class="rp">Have a PC mark Stress · Separate the party · Introduce a new threat · Reveal an unwelcome truth · Show collateral damage · Clear an adversary's condition · Spotlight an adversary · Trigger an environment effect · Advance a countdown · Put someone in a tough spot</div>
-          <div class="rp" style="margin-top:4px;"><i>Softer moves on Hope results, harder moves on Fear results.</i></div>
-        </div>
-        <div class="rdiv"></div>
-        <div class="rs">
-          <div class="rh">ADVERSARY TYPES</div>
-          <div class="rrow"><span class="rtag">BRUISER</span><span class="rp">High HP, high damage, close range tanks.</span></div>
-          <div class="rrow"><span class="rtag">HORDE</span><span class="rp">Many weak enemies sharing an HP pool.</span></div>
-          <div class="rrow"><span class="rtag">LEADER</span><span class="rp">Commands, summons, and buffs allies.</span></div>
-          <div class="rrow"><span class="rtag">RANGED</span><span class="rp">Fragile up close, high damage at distance.</span></div>
-          <div class="rrow"><span class="rtag">SKULK</span><span class="rp">Stealthy, hit-and-run, control-focused.</span></div>
-          <div class="rrow"><span class="rtag">SOCIAL</span><span class="rp">Manipulation, pressure, political.</span></div>
-          <div class="rrow"><span class="rtag">SOLO</span><span class="rp">One powerful enemy, Relentless passive.</span></div>
-          <div class="rrow"><span class="rtag">SUPPORT</span><span class="rp">Buffs allies, debuffs and disrupts PCs.</span></div>
-        </div>
-        <div class="rs">
-          <div class="rh">BATTLE POINTS</div>
-          <div class="rp">Start with <b>[PCs + 2]</b> points. −2 for 2+ Solos. −2 if adding +1d4 to all damage. +1 for lower-tier adversary.</div>
-          <table class="rtable" style="margin-top:5px;">
-            <tr><th>Type</th><th>Cost</th></tr>
-            <tr><td>Social / Support</td><td>1</td></tr>
-            <tr><td>Horde / Ranged / Skulk / Standard</td><td>2</td></tr>
-            <tr><td>Leader</td><td>3</td></tr>
-            <tr><td>Bruiser</td><td>4</td></tr>
-            <tr><td>Solo</td><td>5</td></tr>
+            <tr><th>Type</th><th>BP</th><th>Role</th></tr>
+            <tr><td><b>Minion</b></td><td>1</td><td>Weak alone, dangerous in numbers</td></tr>
+            <tr><td><b>Social</b></td><td>1</td><td>Manipulation, pressure, politics</td></tr>
+            <tr><td><b>Support</b></td><td>1</td><td>Buffs allies, disrupts PCs</td></tr>
+            <tr><td><b>Horde</b></td><td>2</td><td>Group acting as one HP pool</td></tr>
+            <tr><td><b>Ranged</b></td><td>2</td><td>Fragile up close, high damage at range</td></tr>
+            <tr><td><b>Skulk</b></td><td>2</td><td>Ambush, hit-and-run, control</td></tr>
+            <tr><td><b>Standard</b></td><td>2</td><td>Representative of their group</td></tr>
+            <tr><td><b>Leader</b></td><td>3</td><td>Commands, summons, buffs allies</td></tr>
+            <tr><td><b>Bruiser</b></td><td>4</td><td>High HP, high damage, close range</td></tr>
+            <tr><td><b>Solo</b></td><td>5</td><td>One powerful enemy, Relentless passive</td></tr>
           </table>
         </div>
+
+        <div class="rs">
+          <div class="rh">BUILDING ENCOUNTERS</div>
+          <div class="rp"><b>Battle Points = (3 × PCs) + 2</b></div>
+          <div class="rp">−1 easier/shorter · −2 if 2+ Solos · −2 if adding +1d4 to all damage</div>
+          <div class="rp">+1 lower-tier adversary · +1 no Bruisers/Hordes/Leaders/Solos · +2 harder/longer</div>
+        </div>
+
+        <div class="rs">
+          <div class="rh">SPOTLIGHTING ADVERSARIES</div>
+          <div class="rp">Spend 1 Fear to spotlight an adversary. Additional Fear activates Fear Features.</div>
+          <div class="rp"><b>Relentless (X):</b> Can be spotlighted up to X times per GM turn.</div>
+          <div class="rp"><b>Slow:</b> First spotlight = preparing (place token). Second = act and clear token.</div>
+        </div>
+
         <div class="rs">
           <div class="rh">STAT BENCHMARKS BY TIER</div>
           <table class="rtable">
-            <tr><th></th><th>T1</th><th>T2</th><th>T3</th><th>T4</th></tr>
+            <tr><th></th><th>T1 (Lv1)</th><th>T2 (Lv2–4)</th><th>T3 (Lv5–7)</th><th>T4 (Lv8–10)</th></tr>
             <tr><td>Difficulty</td><td>11</td><td>14</td><td>17</td><td>20</td></tr>
-            <tr><td>HP</td><td>3–9</td><td>3–10</td><td>5–12</td><td>3–11</td></tr>
+            <tr><td>HP slots</td><td>3–9</td><td>3–10</td><td>5–12</td><td>3–11</td></tr>
+            <tr><td>Attack bonus</td><td>+3–5</td><td>+4–7</td><td>+6–9</td><td>+8–12</td></tr>
           </table>
         </div>
-        <div class="rs">
-          <div class="rh">RANGE SCALE</div>
-          <table class="rtable">
-            <tr><th>Range</th><th>~Map Squares</th></tr>
-            <tr><td><b>Melee</b></td><td>Same space</td></tr>
-            <tr><td><b>Very Close</b></td><td>1–2 sq</td></tr>
-            <tr><td><b>Close</b></td><td>3–4 sq</td></tr>
-            <tr><td><b>Far</b></td><td>5–10 sq</td></tr>
-            <tr><td><b>Very Far</b></td><td>11–20 sq</td></tr>
-          </table>
-        </div>
-        <div class="rs">
-          <div class="rh">TIERS</div>
-          <div class="rp"><b>Tier 1:</b> Level 1 &nbsp;·&nbsp; <b>Tier 2:</b> Levels 2–4 &nbsp;·&nbsp; <b>Tier 3:</b> Levels 5–7 &nbsp;·&nbsp; <b>Tier 4:</b> Levels 8–10</div>
-        </div>
-        <div class="rs">
-          <div class="rh">IMPROVISING ADVERSARIES</div>
-          <div class="rp">Give them a Difficulty and a name. Base moves on their motives. They don't need stat blocks — just put spotlight on what they do and show how the world reacts. Spend Fear to escalate.</div>
-        </div>
-        <div class="rdiv"></div>
+
         <div class="rs">
           <div class="rh">GM PRINCIPLES</div>
-          <div class="rp">• Portray a rich and dangerous world</div>
-          <div class="rp">• Fill the world with interesting characters</div>
+          <div class="rp">• Begin and end with the fiction</div>
+          <div class="rp">• Collaborate at all times, especially in conflict</div>
+          <div class="rp">• Fill the world with life, wonder, and danger</div>
+          <div class="rp">• Ask questions and incorporate the answers</div>
+          <div class="rp">• Make every roll important</div>
           <div class="rp">• Play to find out what happens</div>
-          <div class="rp">• Address the characters, not the players</div>
-          <div class="rp">• Embrace failure as a story tool</div>
-          <div class="rp">• Telegraph danger before it strikes</div>
-          <div class="rp">• Be a fan of the player characters</div>
-          <div class="rp">• Spend Fear — don't hoard it</div>
-          <div class="rp">• Make the world feel consequential</div>
+          <div class="rp">• Hold on gently — prep situations, not scripts</div>
+          <div class="rdiv"></div>
+          <div class="rp"><i>Best Practices: Cultivate a curious table · Gain trust · Keep story moving · Cut to the action · Tell them what they'd know · Ground the world in motive · Reframe rather than reject</i></div>
         </div>
+
+        <div class="rs">
+          <div class="rh">FEAR SPENDING GUIDE</div>
+          <table class="rtable">
+            <tr><th>Scene Type</th><th>Fear</th></tr>
+            <tr><td>Incidental (catch-up, resupply)</td><td>0–1</td></tr>
+            <tr><td>Minor (travel, small skirmish)</td><td>1–3</td></tr>
+            <tr><td>Standard (battle with objective)</td><td>3–6</td></tr>
+            <tr><td>Major (character-defining scene)</td><td>4–8</td></tr>
+            <tr><td>Climactic (villain confrontation)</td><td>6–12</td></tr>
+          </table>
+        </div>
+
+      </div>
+    </div><!-- /panel-1 -->
+
+    <!-- PANEL 2: CLASSES & ANCESTRIES -->
+    <div class="panel normal" id="panel-2">
+      <div class="phdr" onclick="togglePanel(2)">
+        <span class="phdr-title">CLASSES &amp; ANCESTRIES</span>
+        <span class="phdr-icon">⇔</span>
+      </div>
+      <div class="pbody">
+
+        <div class="rs">
+          <div class="rh">CLASSES AT A GLANCE</div>
+          <div class="class-grid">
+
+            <div class="class-card">
+              <div class="cc-name">BARD</div>
+              <div class="cc-domains">Grace · Midnight</div>
+              <div class="cc-row"><b>EVA</b> 11 · <b>HP</b> 5 · <b>Stress</b> 6</div>
+              <div class="cc-row">Inspire others, social mastery, performance magic. Proficiency applies to allies.</div>
+              <div class="cc-hope">Hope: <i>Make Scene</i> — Spend 3 Hope to Distract a target at Close range.</div>
+            </div>
+
+            <div class="class-card">
+              <div class="cc-name">DRUID</div>
+              <div class="cc-domains">Arcana · Bone</div>
+              <div class="cc-row"><b>EVA</b> 11 · <b>HP</b> 6 · <b>Stress</b> 6</div>
+              <div class="cc-row">Nature magic, wildshape, elemental power. Strong area control.</div>
+              <div class="cc-hope">Hope: <i>Evolution</i> — Spend 3 Hope to transform into Beastform.</div>
+            </div>
+
+            <div class="class-card">
+              <div class="cc-name">GUARDIAN</div>
+              <div class="cc-domains">Blade · Valor</div>
+              <div class="cc-row"><b>EVA</b> 12 · <b>HP</b> 7 · <b>Stress</b> 6</div>
+              <div class="cc-row">Frontline tank. Protects allies. Highest base HP.</div>
+              <div class="cc-hope">Hope: <i>Frontline Tank</i> — Spend 3 Hope to clear 2 Armor Slots.</div>
+            </div>
+
+            <div class="class-card">
+              <div class="cc-name">RANGER</div>
+              <div class="cc-domains">Bone · Sage</div>
+              <div class="cc-row"><b>EVA</b> 12 · <b>HP</b> 6 · <b>Stress</b> 6</div>
+              <div class="cc-row">Ranged specialist, animal companion, precise strikes.</div>
+              <div class="cc-hope">Hope: <i>Hold Them Off</i> — Spend 3 Hope after success to force all targets to mark Stress.</div>
+            </div>
+
+            <div class="class-card">
+              <div class="cc-name">ROGUE</div>
+              <div class="cc-domains">Midnight · Grace</div>
+              <div class="cc-row"><b>EVA</b> 13 · <b>HP</b> 6 · <b>Stress</b> 6</div>
+              <div class="cc-row">Stealth, precision strikes, trickery. Highest evasion.</div>
+              <div class="cc-hope">Hope: <i>Vanishing Act</i> — Spend 3 Hope to gain Hidden after an attack.</div>
+            </div>
+
+            <div class="class-card">
+              <div class="cc-name">SERAPH</div>
+              <div class="cc-domains">Codex · Valor</div>
+              <div class="cc-row"><b>EVA</b> 12 · <b>HP</b> 7 · <b>Stress</b> 6</div>
+              <div class="cc-row">Divine support, healing, Protection. Uses Presence for Spellcast.</div>
+              <div class="cc-hope">Hope: <i>Divine Protection</i> — Spend Hope to reduce damage to self or ally.</div>
+            </div>
+
+            <div class="class-card">
+              <div class="cc-name">SORCERER</div>
+              <div class="cc-domains">Arcana · Midnight</div>
+              <div class="cc-row"><b>EVA</b> 11 · <b>HP</b> 6 · <b>Stress</b> 6</div>
+              <div class="cc-row">Raw magical power, unstable but potent. Knowledge Spellcast.</div>
+              <div class="cc-hope">Hope: <i>Controlled Chaos</i> — Spend 3 Hope to reroll damage and take the higher result.</div>
+            </div>
+
+            <div class="class-card">
+              <div class="cc-name">WARRIOR</div>
+              <div class="cc-domains">Blade · Bone</div>
+              <div class="cc-row"><b>EVA</b> 12 · <b>HP</b> 6 · <b>Stress</b> 6</div>
+              <div class="cc-row">Versatile melee fighter. Extra weapon proficiencies.</div>
+              <div class="cc-hope">Hope: <i>Adrenaline Rush</i> — Spend 3 Hope after hit to make a second attack.</div>
+            </div>
+
+            <div class="class-card" style="grid-column:1/-1;">
+              <div class="cc-name">WIZARD</div>
+              <div class="cc-domains">Arcana · Codex</div>
+              <div class="cc-row"><b>EVA</b> 11 · <b>HP</b> 5 · <b>Stress</b> 6</div>
+              <div class="cc-row">Prepared spells, wide variety, counterspells. Knowledge Spellcast. Lowest HP but versatile.</div>
+              <div class="cc-hope">Hope: <i>Spellbook</i> — Spend 3 Hope to recall and immediately cast a spent domain card.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="rdiv"></div>
+
+        <div class="rs">
+          <div class="rh">DOMAINS</div>
+          <div class="rgrid">
+            <div class="rcard"><div class="rcard-t">ARCANA</div><div class="rcard-b">Elemental & raw magic. Blasts, control, transformation.</div></div>
+            <div class="rcard"><div class="rcard-t">BLADE</div><div class="rcard-b">Combat mastery. Weapon techniques, martial flourishes.</div></div>
+            <div class="rcard"><div class="rcard-t">BONE</div><div class="rcard-b">Death, endurance, undead. Grim power & resilience.</div></div>
+            <div class="rcard"><div class="rcard-t">CODEX</div><div class="rcard-b">Knowledge, divination, wards. Information & protection.</div></div>
+            <div class="rcard"><div class="rcard-t">GRACE</div><div class="rcard-b">Social, performance, illusion. Charm & deception.</div></div>
+            <div class="rcard"><div class="rcard-t">MIDNIGHT</div><div class="rcard-b">Shadow, stealth, curses. Darkness & manipulation.</div></div>
+            <div class="rcard"><div class="rcard-t">SAGE</div><div class="rcard-b">Nature, beasts, survival. The wild and its creatures.</div></div>
+            <div class="rcard"><div class="rcard-t">VALOR</div><div class="rcard-b">Divine might, protection, auras. Holy power & defense.</div></div>
+          </div>
+        </div>
+
+        <div class="rdiv"></div>
+
+        <div class="rs">
+          <div class="rh">ANCESTRIES AT A GLANCE</div>
+          <div class="anc-grid">
+            <div class="anc-card"><div class="anc-name">CLANK</div><div class="anc-feat">Constructed body — unique ability to ignore one instance of forced movement per rest.</div></div>
+            <div class="anc-card"><div class="anc-name">DWARF</div><div class="anc-feat">Sturdy Build — advantage on rolls to resist being moved or knocked prone.</div></div>
+            <div class="anc-card"><div class="anc-name">ELF</div><div class="anc-feat">Keen Senses — advantage on Instinct rolls to notice hidden things.</div></div>
+            <div class="anc-card"><div class="anc-name">FAUN</div><div class="anc-feat">Fleet — spend 1 Hope to move up to Far range without rolling.</div></div>
+            <div class="anc-card"><div class="anc-name">FELIS</div><div class="anc-feat">Nimble — can move through spaces others can't; advantage on Agility to escape grapple.</div></div>
+            <div class="anc-card"><div class="anc-name">FIRBOLG</div><div class="anc-feat">Gentle Giant — can use Presence instead of Strength on social rolls with non-hostile creatures.</div></div>
+            <div class="anc-card"><div class="anc-name">FUNGRIL</div><div class="anc-feat">Spore Cloud — once per short rest, release spores to impose disadvantage on nearby attackers.</div></div>
+            <div class="anc-card"><div class="anc-name">GALAPA</div><div class="anc-feat">Shell — once per long rest, retreat into shell for resistance to physical damage until next turn.</div></div>
+            <div class="anc-card"><div class="anc-name">GIANT</div><div class="anc-feat">Endurance — gain +1 permanent HP slot at character creation.</div></div>
+            <div class="anc-card"><div class="anc-name">GOBLIN</div><div class="anc-feat">Scurry — can use reaction to move Very Close when an ally succeeds on an attack.</div></div>
+            <div class="anc-card"><div class="anc-name">HALFLING</div><div class="anc-feat">Luck — once per session, reroll any dice result and take the new result.</div></div>
+            <div class="anc-card"><div class="anc-name">HUMAN</div><div class="anc-feat">Adaptable — gain one additional Experience at character creation.</div></div>
+            <div class="anc-card"><div class="anc-name">INFERNIS</div><div class="anc-feat">Infernal Resistance — resistance to fire damage and advantage to resist fear effects.</div></div>
+            <div class="anc-card"><div class="anc-name">KATARI</div><div class="anc-feat">Predator — advantage on rolls to track, stalk, or ambush a target.</div></div>
+            <div class="anc-card"><div class="anc-name">ORC</div><div class="anc-feat">Tusks — on successful Melee attack, spend 1 Hope to deal bonus damage equal to Strength.</div></div>
+            <div class="anc-card"><div class="anc-name">RIBBET</div><div class="anc-feat">Amphibious — breathe underwater, ignore difficult terrain from water or mud.</div></div>
+            <div class="anc-card"><div class="anc-name">SIMIAN</div><div class="anc-feat">Prehensile — can use tail or feet as an extra hand; advantage on climbing rolls.</div></div>
+            <div class="anc-card"><div class="anc-name">WANDERER</div><div class="anc-feat">Traveler's Knowledge — once per session, recall useful information about a place or culture.</div></div>
+          </div>
+        </div>
+
+        <div class="rdiv"></div>
+
+        <div class="rs">
+          <div class="rh">COMMUNITIES</div>
+          <div class="rgrid">
+            <div class="rcard"><div class="rcard-t">HIGHBORNE</div><div class="rcard-b">Noble lineage. Social advantage in upper-class settings.</div></div>
+            <div class="rcard"><div class="rcard-t">WANDERER</div><div class="rcard-b">Nomadic. Advantage on survival and navigation rolls.</div></div>
+            <div class="rcard"><div class="rcard-t">ORDERBORNE</div><div class="rcard-b">Military or religious institution. Disciplined and connected.</div></div>
+            <div class="rcard"><div class="rcard-t">RIDGEBORNE</div><div class="rcard-b">Mountain communities. Advantage in harsh terrain and weather.</div></div>
+            <div class="rcard"><div class="rcard-t">SLYBORNE</div><div class="rcard-b">Criminal underworld. Advantage on rolls involving illicit activity.</div></div>
+            <div class="rcard"><div class="rcard-t">UNDERBORNE</div><div class="rcard-b">Cave-dwellers or underground. Darkvision and subterranean knowledge.</div></div>
+            <div class="rcard"><div class="rcard-t">LOREBORNE</div><div class="rcard-b">Academic or scholarly. Advantage on Knowledge and research rolls.</div></div>
+            <div class="rcard"><div class="rcard-t">WILDBORNE</div><div class="rcard-b">Raised in the wilderness. Advantage with animals and natural environments.</div></div>
+            <div class="rcard"><div class="rcard-t">LIGHTFOOT</div><div class="rcard-b">Stealthy community. Movement is naturally silent.</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /panel-2 -->
+
+    <!-- PANEL 3: CAMPAIGN & NOTES -->
+    <div class="panel normal" id="panel-3">
+      <div class="phdr" onclick="togglePanel(3)">
+        <span class="phdr-title">CAMPAIGN &amp; NOTES</span>
+        <span class="phdr-icon">⇔</span>
+      </div>
+      <div class="ptabs">
+        <button class="ptab on" onclick="switchTab('session',this)">SESSION</button>
+        <button class="ptab" onclick="switchTab('campaign',this)">CAMPAIGN</button>
+        <button class="ptab" onclick="switchTab('adv',this)">ADVERSARIES</button>
+        <button class="ptab" onclick="switchTab('clocks',this)">CLOCKS</button>
       </div>
 
-      <!-- ADVERSARIES TAB -->
-      <div class="panel-body" id="tab-adv" style="display:none;">
-        <div id="adv-list"></div>
-        <button class="add-btn" onclick="addAdv()">+ Add Adversary</button>
-      </div>
-
-      <!-- NOTES TAB -->
-      <div class="panel-body" id="tab-notes" style="display:none;">
+      <!-- SESSION TAB -->
+      <div class="pbody" id="tab-session">
         <div class="tool-sec">
           <span class="tool-lbl">SESSION NOTES</span>
-          <textarea class="tool-ta" id="gm-notes" rows="7" placeholder="What's happening this session..." oninput="autoSave()"></textarea>
+          <textarea class="tool-ta" id="gm-notes" rows="6" placeholder="What's happening this session — beats, tensions, player focus..." oninput="autoSave()"></textarea>
         </div>
         <div class="tool-sec">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
-            <span class="tool-lbl" style="margin-bottom:0;">SCENE LOG</span>
-            <button class="hdr-btn" onclick="clearScenes()" style="font-size:8px;">Clear All</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <span class="tool-lbl" style="margin:0;">SCENE LOG</span>
+            <button class="hbtn" onclick="clearScenes()" style="font-size:7px;">Clear All</button>
           </div>
+          <div style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:6px;">Name a scene in the header bar above and click + Save to log it here.</div>
           <div id="scene-log"></div>
-        </div>
-        <div class="tool-sec">
-          <span class="tool-lbl">PLOT THREADS</span>
-          <textarea class="tool-ta" id="gm-plot" rows="4" placeholder="Ongoing threads, open hooks, foreshadowing..." oninput="autoSave()"></textarea>
-        </div>
-        <div class="tool-sec">
-          <span class="tool-lbl">NPC NOTES</span>
-          <textarea class="tool-ta" id="gm-npcs" rows="4" placeholder="Key NPCs, motivations, locations..." oninput="autoSave()"></textarea>
         </div>
         <div class="tool-sec">
           <span class="tool-lbl">LOOT &amp; REWARDS</span>
@@ -565,21 +638,48 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font
         </div>
       </div>
 
+      <!-- CAMPAIGN TAB -->
+      <div class="pbody" id="tab-campaign" style="display:none;">
+        <div class="tool-sec">
+          <span class="tool-lbl">CAMPAIGN STORY</span>
+          <textarea class="tool-ta" id="gm-story" rows="7" placeholder="The overarching narrative — what's at stake, the big bad, the world..." oninput="autoSave()"></textarea>
+        </div>
+        <div class="tool-sec">
+          <span class="tool-lbl">PLOT THREADS</span>
+          <textarea class="tool-ta" id="gm-plot" rows="5" placeholder="Open hooks, ongoing threads, foreshadowing..." oninput="autoSave()"></textarea>
+        </div>
+        <div class="tool-sec">
+          <span class="tool-lbl">NPC ROSTER</span>
+          <textarea class="tool-ta" id="gm-npcs" rows="6" placeholder="Key NPCs — name, role, motivation, location, relationship to party..." oninput="autoSave()"></textarea>
+        </div>
+        <div class="tool-sec">
+          <span class="tool-lbl">WORLD NOTES</span>
+          <textarea class="tool-ta" id="gm-world" rows="5" placeholder="Locations, factions, history, secrets the GM knows..." oninput="autoSave()"></textarea>
+        </div>
+      </div>
+
+      <!-- ADVERSARIES TAB -->
+      <div class="pbody" id="tab-adv" style="display:none;">
+        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:8px;">Track enemies for the current encounter. Click pips to mark damage.</div>
+        <div id="adv-list"></div>
+        <button class="add-btn" onclick="addAdv()">+ Add Adversary</button>
+      </div>
+
       <!-- CLOCKS TAB -->
-      <div class="panel-body" id="tab-clocks" style="display:none;">
-        <div style="font-size:13px;color:var(--text);font-style:italic;margin-bottom:10px;line-height:1.6;">Countdown clocks build tension. Gold = progress toward something good. Red = danger approaching.</div>
+      <div class="pbody" id="tab-clocks" style="display:none;">
+        <div style="font-size:12px;color:var(--text);line-height:1.6;margin-bottom:8px;">Countdown clocks build tension. <span style="color:var(--gold);">Gold</span> = progress toward good. <span style="color:var(--red);">Red ⚠</span> = danger approaching. Fill all segments to trigger.</div>
         <div id="clock-list"></div>
         <button class="add-btn" onclick="addClock()">+ Add Clock</button>
       </div>
 
-    </div><!-- /panel-2 -->
+    </div><!-- /panel-3 -->
 
-  </div><!-- /panels -->
+  </div><!-- /main -->
 </div><!-- /app -->
 
 <script>
-const PINKEY='dh2-gm-pin', DATAKEY='dh2-gm-data';
-let gm={fear:0,hope:0,scene:'',notes:'',plot:'',npcs:'',loot:'',clocks:[],advs:[],scenes:[],players:[]};
+const PINKEY='dh2-gm-pin', DATAKEY='dh2-gm-data2';
+let gm={fear:0,hope:0,hopeTotal:6,scene:'',notes:'',plot:'',npcs:'',loot:'',story:'',world:'',clocks:[],advs:[],scenes:[],players:[]};
 let players=[], spotIdx=-1, clocks=[], advs=[], scenes=[];
 
 // ── LOCK ──
@@ -592,33 +692,38 @@ function unlock(){
     localStorage.setItem(PINKEY,btoa(v));
     enterApp();
   } else {
-    btoa(v)===stored?enterApp():showErr('Incorrect PIN')&&(document.getElementById('pin-in').value='');
-    if(btoa(v)!==stored) document.getElementById('pin-in').value='';
+    if(btoa(v)===stored) enterApp();
+    else {showErr('Incorrect PIN');document.getElementById('pin-in').value='';}
   }
 }
 function showErr(m){const e=document.getElementById('l-err');e.textContent=m;setTimeout(()=>e.textContent='',2500);}
 function enterApp(){
   document.getElementById('lock').style.display='none';
-  const a=document.getElementById('app');
-  a.style.display='flex';
-  loadAll();
-  renderFear();
-  renderHope();
+  document.getElementById('app').style.display='flex';
+  loadAll(); renderFear(); renderHope();
 }
 function lockGM(){
   document.getElementById('lock').style.display='flex';
   document.getElementById('app').style.display='none';
   document.getElementById('pin-in').value='';
 }
+let rTimer=null;
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('lock').style.display!=='none'&&e.key==='r'&&e.shiftKey)
+    rTimer=setTimeout(()=>{if(confirm('Reset PIN?')){localStorage.removeItem(PINKEY);showErr('PIN cleared.');}},2000);
+});
+document.addEventListener('keyup',()=>{clearTimeout(rTimer);rTimer=null;});
 
-// ── FEAR / HOPE (fixed: always 12 fear pips, always 10 hope pips) ──
+// ── FEAR / HOPE ──
 function renderFear(){
-  document.getElementById('fear-n').textContent=gm.fear;
+  const f=Math.max(0,Math.min(12,gm.fear||0));
+  gm.fear=f;
+  document.getElementById('fear-n').textContent=f;
   const c=document.getElementById('fear-pips');
   c.innerHTML='';
   for(let i=0;i<12;i++){
     const p=document.createElement('div');
-    p.className='pip fear'+(i<gm.fear?' on':'');
+    p.className='pip fear'+(i<f?' on':'');
     const idx=i;
     p.onclick=()=>{gm.fear=idx<gm.fear?idx:idx+1;renderFear();autoSave();};
     c.appendChild(p);
@@ -639,39 +744,33 @@ function renderHope(){
     p.onclick=()=>{gm.hope=idx<gm.hope?idx:idx+1;renderHope();autoSave();};
     c.appendChild(p);
   }
-  // Always show 2 permanent ghost pips if total < 2 (shouldn't happen but safety)
 }
-function adjFear(d){gm.fear=Math.max(0,Math.min(12,gm.fear+d));renderFear();autoSave();}
 function adjHopeTotal(d){gm.hopeTotal=Math.max(0,Math.min(12,(gm.hopeTotal||6)+d));renderHope();autoSave();}
-function adjHope(d){gm.hope=Math.max(0,Math.min(gm.hopeTotal||6,gm.hope+d));renderHope();autoSave();}
 
 // ── SAVE / LOAD ──
 function autoSave(){
-  gm.fear; gm.hope;
   gm.scene=document.getElementById('scene-in')?.value||'';
   gm.notes=document.getElementById('gm-notes')?.value||'';
   gm.plot=document.getElementById('gm-plot')?.value||'';
   gm.npcs=document.getElementById('gm-npcs')?.value||'';
   gm.loot=document.getElementById('gm-loot')?.value||'';
-  gm.clocks=clocks;
-  gm.advs=advs;
-  gm.scenes=scenes;
-  gm.players=players;
+  gm.story=document.getElementById('gm-story')?.value||'';
+  gm.world=document.getElementById('gm-world')?.value||'';
+  gm.clocks=clocks; gm.advs=advs; gm.scenes=scenes; gm.players=players;
   localStorage.setItem(DATAKEY,JSON.stringify(gm));
 }
-function saveAll(){autoSave();}
 function loadAll(){
   try{
     const d=JSON.parse(localStorage.getItem(DATAKEY));
     if(!d)return;
     gm={...gm,...d};
-    gm.fear=Math.max(0,Math.min(12,gm.fear||0));
-    gm.hope=Math.max(0,Math.min(10,gm.hope||0));
     document.getElementById('scene-in').value=gm.scene||'';
     document.getElementById('gm-notes').value=gm.notes||'';
     document.getElementById('gm-plot').value=gm.plot||'';
     document.getElementById('gm-npcs').value=gm.npcs||'';
     document.getElementById('gm-loot').value=gm.loot||'';
+    document.getElementById('gm-story').value=gm.story||'';
+    document.getElementById('gm-world').value=gm.world||'';
     if(gm.clocks?.length){clocks=gm.clocks;renderClocks();}
     if(gm.advs?.length){advs=gm.advs;renderAdvs();}
     if(gm.scenes?.length){scenes=gm.scenes;renderSceneLog();}
@@ -682,10 +781,13 @@ function loadAll(){
 // ── SCENE LOG ──
 function saveScene(){
   const name=document.getElementById('scene-in').value.trim();
-  if(!name)return;
+  if(!name){alert('Name the scene first in the SCENE field above.');return;}
   const notes=document.getElementById('gm-notes').value;
   const ts=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   scenes.unshift({name,notes,ts});
+  // Switch to session tab so they can see it saved
+  const btn=document.querySelector('.ptab');
+  switchTab('session',btn);
   renderSceneLog();
   autoSave();
 }
@@ -693,19 +795,21 @@ function renderSceneLog(){
   const log=document.getElementById('scene-log');
   if(!log)return;
   if(!scenes.length){
-    log.innerHTML='<div style="font-size:13px;color:var(--muted);font-style:italic;padding:4px 0;">No scenes saved yet. Name a scene above and click + Save Scene.</div>';
+    log.innerHTML='<div style="font-size:12px;color:var(--muted);font-style:italic;">No scenes saved yet.</div>';
     return;
   }
   log.innerHTML=scenes.map((s,i)=>`
     <div class="scene-entry">
-      <div class="scene-entry-hdr">
-        <span class="scene-entry-name">${esc(s.name)}</span>
-        <span class="scene-entry-ts">${s.ts}</span>
+      <div class="se-hdr">
+        <span class="se-name">${esc(s.name)}</span>
+        <span class="se-ts">${s.ts}</span>
+        <button class="hbtn" onclick="loadScene(${i})" style="font-size:7px;padding:2px 6px;">↩ Load</button>
         <button class="rm" onclick="removeScene(${i})">×</button>
       </div>
-      ${s.notes?`<div class="scene-entry-notes">${esc(s.notes)}</div>`:''}
-      <button class="hdr-btn" onclick="loadScene(${i})" style="font-size:9px;">↩ Load</button>
-    </div>`).join('');
+      ${s.notes?`<div class="se-notes">${esc(s.notes.substring(0,200))}${s.notes.length>200?'…':''}</div>`:''}`
+  ).join('</div>');
+  // Close last div
+  if(scenes.length) log.innerHTML += '</div>';
 }
 function loadScene(i){
   const s=scenes[i];
@@ -725,19 +829,19 @@ function loadPlayers(input){
         const chars=data.characters||[data];
         chars.forEach(c=>{
           if(!c.class)return;
-          const idx=players.findIndex(p=>p.class===c.class&&p.name===c['f-name']);
+          const idx=players.findIndex(p=>p.class===c.class);
           const obj={
             name:c['f-name']||c.class, class:c.class,
             subclass:c['f-subclass']||'', level:c['f-level']||'1',
-            evasion:c['f-evasion']||'',
+            evasion:c['f-evasion']||'', ancestry:c['f-ancestry']||'',
             portrait:data.portraits?.[c.class]||null,
             traits:{agility:c['t-agility']||'',strength:c['t-strength']||'',finesse:c['t-finesse']||'',instinct:c['t-instinct']||'',presence:c['t-presence']||'',knowledge:c['t-knowledge']||''},
             hp:c.hp??0, hpTotal:c.hpTotal??5,
             stress:c.stress??0, stressTotal:c.stressTotal??6,
             hope:c.hope??0, hopeTotal:c.hopeTotal??6,
-            spotlit:false
+            armor:c.armor??0, spotlit:false
           };
-          if(idx>=0){const old=players[idx];players[idx]={...obj,spotlit:old.spotlit};}
+          if(idx>=0){obj.spotlit=players[idx].spotlit;players[idx]=obj;}
           else players.push(obj);
         });
         renderPlayers();autoSave();
@@ -760,9 +864,9 @@ function buildPC(p,i){
   const card=document.createElement('div');
   card.className='pc-card'+(p.spotlit?' spotlit':'');
   const tShort={agility:'AGI',strength:'STR',finesse:'FIN',instinct:'INS',presence:'PRE',knowledge:'KNO'};
-  const hpPips=pips(p.hpTotal,p.hp,'hp',i,'hp');
-  const stPips=pips(p.stressTotal,p.stress,'st',i,'stress');
-  const hoPips=pips(p.hopeTotal,p.hope,'ho',i,'hope');
+  const hpP=pips(p.hpTotal,p.hp,'hp',i,'hp');
+  const stP=pips(p.stressTotal,p.stress,'st',i,'stress');
+  const hoP=pips(p.hopeTotal,p.hope,'ho',i,'hope');
   const traitsHtml=Object.entries(tShort).map(([t,s])=>{
     const v=p.traits[t]||'—';
     const n=parseFloat(v);
@@ -772,12 +876,12 @@ function buildPC(p,i){
   card.innerHTML=`
     <div class="pc-name-row">
       <span class="pc-name">${esc(p.name)}</span>
-      <button class="hdr-btn" onclick="toggleSpot(${i})" style="font-size:8px;padding:1px 5px;">${p.spotlit?'★':'☆'}</button>
+      <button class="spot-star${p.spotlit?' on':''}" onclick="toggleSpot(${i})">${p.spotlit?'★':'☆'}</button>
     </div>
-    <div class="pc-cls">${esc(p.class)} · Lv${p.level} · EVA ${p.evasion||'—'}</div>
-    <div class="pip-line"><span class="pip-line-lbl">HP</span>${hpPips}</div>
-    <div class="pip-line"><span class="pip-line-lbl">STR</span>${stPips}</div>
-    <div class="pip-line"><span class="pip-line-lbl">HOP</span>${hoPips}</div>
+    <div class="pc-cls">${esc(p.class)}${p.subclass?' · '+esc(p.subclass):''} · Lv${p.level} · EVA ${p.evasion||'—'}</div>
+    <div class="pip-line"><span class="pll">HP</span>${hpP}</div>
+    <div class="pip-line"><span class="pll">STR</span>${stP}</div>
+    <div class="pip-line"><span class="pll">HOP</span>${hoP}</div>
     <div class="pc-traits-row">${traitsHtml}</div>`;
   return card;
 }
@@ -815,41 +919,40 @@ function updateSpotName(){
 }
 
 // ── PANEL DRAWERS ──
-// States cycle: normal → wide → collapsed → normal
 function togglePanel(idx){
-  const ps=['panel-0','panel-1','panel-2'].map(id=>document.getElementById(id));
+  const ids=['panel-0','panel-1','panel-2','panel-3'];
+  const ps=ids.map(id=>document.getElementById(id));
   const p=ps[idx];
-  const states=['state-normal','state-wide','state-collapsed'];
-  const cur=states.find(s=>p.classList.contains(s))||'state-normal';
-  if(cur==='state-normal'){
-    // Expand this, collapse others
+  const states=['wide','normal','slim'];
+  const cur=states.find(s=>p.classList.contains(s))||'normal';
+  if(cur==='normal'){
+    // Expand this, others go normal (not slim)
     ps.forEach((pp,i)=>{
       pp.classList.remove(...states);
-      pp.classList.add(i===idx?'state-wide':'state-collapsed');
+      pp.classList.add(i===idx?'wide':'slim');
     });
-  } else if(cur==='state-wide'){
-    // Back to equal
-    ps.forEach(pp=>{pp.classList.remove(...states);pp.classList.add('state-normal');});
+  } else if(cur==='wide'){
+    ps.forEach(pp=>{pp.classList.remove(...states);pp.classList.add('normal');});
   } else {
-    // Was collapsed — expand to wide, others go normal
+    // Was slim — expand to wide, others normal
     ps.forEach((pp,i)=>{
       pp.classList.remove(...states);
-      pp.classList.add(i===idx?'state-wide':'state-normal');
+      pp.classList.add(i===idx?'wide':'normal');
     });
   }
 }
 
-// ── RIGHT PANEL TABS ──
+// ── TABS (panel-3) ──
 function switchTab(name,btn){
-  ['ref','adv','notes','clocks'].forEach(n=>{
+  ['session','campaign','adv','clocks'].forEach(n=>{
     const el=document.getElementById('tab-'+n);
     if(el)el.style.display=n===name?'':'none';
   });
   document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  // If collapsed, expand the panel
-  const p=document.getElementById('panel-2');
-  if(p.classList.contains('state-collapsed')) togglePanel(2);
+  if(btn)btn.classList.add('on');
+  // Expand panel-3 if slim
+  const p=document.getElementById('panel-3');
+  if(p.classList.contains('slim'))togglePanel(3);
 }
 
 // ── CLOCKS ──
@@ -861,14 +964,14 @@ function renderClocks(){
   clocks.forEach((c,i)=>{
     const row=document.createElement('div');row.className='clock-row';
     const pipsHtml=Array.from({length:c.total},(_,j)=>
-      `<div class="cpip${j<c.filled?(c.red?' on r':' on'):''}" onclick="cpip(${i},${j})"></div>`
+      `<div class="cpip${j<c.filled?(c.red?' on r':' on'):''}\" onclick=\"cpip(${i},${j})\"></div>`
     ).join('');
     row.innerHTML=`
       <input class="clock-in" value="${esc(c.name)}" placeholder="Clock name..." oninput="clocks[${i}].name=this.value;autoSave()">
-      <select style="font-family:'Cinzel',serif;font-size:9px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:3px;outline:none;" onchange="clocks[${i}].total=parseInt(this.value);clocks[${i}].filled=Math.min(clocks[${i}].filled,clocks[${i}].total);renderClocks();autoSave()">
+      <select style="font-family:'Cinzel',serif;font-size:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:2px 4px;border-radius:3px;outline:none;" onchange="clocks[${i}].total=parseInt(this.value);clocks[${i}].filled=Math.min(clocks[${i}].filled,clocks[${i}].total);renderClocks();autoSave()">
         ${[4,6,8,10,12].map(n=>`<option value="${n}"${n===c.total?' selected':''}>${n}</option>`).join('')}
       </select>
-      <label style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:3px;cursor:pointer;white-space:nowrap;">
+      <label style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:2px;cursor:pointer;white-space:nowrap;">
         <input type="checkbox"${c.red?' checked':''} onchange="clocks[${i}].red=this.checked;renderClocks();autoSave()"> ⚠
       </label>
       <div class="cpips">${pipsHtml}</div>
@@ -879,7 +982,7 @@ function renderClocks(){
 function cpip(ci,pi){clocks[ci].filled=pi<clocks[ci].filled?pi:pi+1;renderClocks();autoSave();}
 
 // ── ADVERSARIES ──
-function addAdv(){advs.push({name:'',hp:5,marked:0,notes:''});renderAdvs();autoSave();}
+function addAdv(){advs.push({name:'',hp:5,marked:0,notes:'',type:'Standard'});renderAdvs();autoSave();}
 function renderAdvs(){
   const list=document.getElementById('adv-list');list.innerHTML='';
   advs.forEach((a,i)=>{
@@ -887,16 +990,19 @@ function renderAdvs(){
     const pipsHtml=Array.from({length:a.hp},(_,j)=>
       `<div class="adv-pip${j<a.marked?' on':''}" onclick="apip(${i},${j})"></div>`
     ).join('');
+    const types=['Minion','Social','Support','Horde','Ranged','Skulk','Standard','Leader','Bruiser','Solo'];
+    const typeOpts=types.map(t=>`<option${t===a.type?' selected':''}>${t}</option>`).join('');
     card.innerHTML=`
       <div class="adv-top">
-        <input class="adv-name" value="${esc(a.name)}" placeholder="Adversary name..." oninput="advs[${i}].name=this.value;autoSave()">
-        <label style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);display:flex;align-items:center;gap:4px;">HP
-          <input type="number" min="1" max="30" value="${a.hp}" style="width:36px;font-family:'Cinzel',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:2px 4px;border-radius:3px;outline:none;" onchange="advs[${i}].hp=Math.max(1,parseInt(this.value)||1);advs[${i}].marked=Math.min(advs[${i}].marked,advs[${i}].hp);renderAdvs();autoSave()">
+        <input class="adv-name" value="${esc(a.name)}" placeholder="Name..." oninput="advs[${i}].name=this.value;autoSave()">
+        <select style="font-family:'Cinzel',serif;font-size:7px;background:var(--bg2);border:1px solid var(--border);color:var(--muted);padding:2px 4px;border-radius:3px;outline:none;" onchange="advs[${i}].type=this.value;autoSave()">${typeOpts}</select>
+        <label style="font-family:'Cinzel',serif;font-size:8px;color:var(--muted);display:flex;align-items:center;gap:3px;">HP
+          <input type="number" min="1" max="30" value="${a.hp}" style="width:34px;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:2px 3px;border-radius:3px;outline:none;" onchange="advs[${i}].hp=Math.max(1,parseInt(this.value)||1);advs[${i}].marked=Math.min(advs[${i}].marked,advs[${i}].hp);renderAdvs();autoSave()">
         </label>
         <button class="rm" onclick="advs.splice(${i},1);renderAdvs();autoSave()">×</button>
       </div>
       <div class="adv-pips">${pipsHtml}</div>
-      <textarea class="adv-note" rows="1" placeholder="Notes, conditions, abilities..." oninput="advs[${i}].notes=this.value;autoSave()">${esc(a.notes)}</textarea>`;
+      <textarea class="adv-note" rows="1" placeholder="Conditions, abilities, notes..." oninput="advs[${i}].notes=this.value;autoSave()">${esc(a.notes)}</textarea>`;
     list.appendChild(card);
   });
 }
@@ -904,14 +1010,6 @@ function apip(ai,pi){advs[ai].marked=pi<advs[ai].marked?pi:pi+1;renderAdvs();aut
 
 // ── UTILS ──
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-
-// ── PIN RESET ──
-let rTimer=null;
-document.addEventListener('keydown',e=>{
-  if(document.getElementById('lock').style.display!=='none'&&e.key==='r'&&e.shiftKey)
-    rTimer=setTimeout(()=>{if(confirm('Reset PIN? You will need to set a new one.'))localStorage.removeItem(PINKEY);showErr('PIN cleared — set a new one.');},2000);
-});
-document.addEventListener('keyup',()=>{clearTimeout(rTimer);rTimer=null;});
 </script>
 </body>
 </html>
