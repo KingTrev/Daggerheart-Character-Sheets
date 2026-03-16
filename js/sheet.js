@@ -589,20 +589,7 @@ function buildPages(cls) {
   const p2 = document.createElement('div');
   p2.className = 'page';
 
-  // Build bgq and connq question blocks with individual "Add to History" buttons
-  const bgqBlocks = c.bgQuestions.map((q,i)=>`
-    <div class="q-block">
-      <div class="bg-q">${q}</div>
-      <textarea class="answer-area" id="bgq${i}" rows="3" oninput="save()" placeholder="Your answer..."></textarea>
-      <button class="add-hist-btn" onclick="submitSingleQ('bgq${i}', this.dataset.q)" data-q="${c.bgQuestions[i].replace(/"/g,'&quot;')}">Add to Background ↓</button>
-    </div>`).join('');
-
-  const connqBlocks = c.connQuestions.map((q,i)=>`
-    <div class="q-block">
-      <div class="conn-q">${q}</div>
-      <textarea class="answer-area" id="connq${i}" rows="3" oninput="save()" placeholder="Your answer..."></textarea>
-      <button class="add-hist-btn" onclick="submitSingleQ('connq${i}', this.dataset.q)" data-q="${c.connQuestions[i].replace(/"/g,'&quot;')}">Add to Background ↓</button>
-    </div>`).join('');
+  // Suggested questions removed — players use custom questions or Session 0
 
   p2.innerHTML = `
 
@@ -628,20 +615,7 @@ function buildPages(cls) {
       </div>
       <div id="bgq-body" style="display:none;">
         <div class="page-inner" style="padding-top:0.75rem;">
-          <p style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:1rem;">Answer any of the following. Use <em>Add to History</em> on each one individually, or <em>Submit All</em> to log everything at once. You can also add your own below.</p>
-          <div class="cols cols-2" style="gap:1.5rem;">
-            <div>
-              <div class="sh" style="margin-bottom:0.75rem;">Background</div>
-              ${bgqBlocks}
-            </div>
-            <div>
-              <div class="sh" style="margin-bottom:0.75rem;">Connections</div>
-              ${connqBlocks}
-              <p style="font-size:11px;color:var(--muted);font-style:italic;margin-top:1rem;">Then work with the GM to generate two starting Experiences for your character.</p>
-            </div>
-          </div>
-          <div class="sh" style="margin-top:1.25rem;margin-bottom:0.5rem;">Custom Questions</div>
-          <p style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:0.5rem;">Write your own questions and answers.</p>
+          <p style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:1rem;">Write your own background questions and answers, or use Session 0 to generate them with your party.</p>
           <div id="custom-bgq-list"></div>
           <button class="add-row-btn" onclick="addCustomBgq();save()">+ Add Question</button>
         </div>
@@ -2022,9 +1996,7 @@ function save() {
   const anc = document.getElementById('f-ancestry'); if(anc) d['f-ancestry'] = anc.value;
   const com = document.getElementById('f-community'); if(com) d['f-community'] = com.value;
   const sub = document.getElementById('f-subclass'); if(sub) d['f-subclass'] = sub.value;
-  for(let i=0;i<3;i++){
-    ['bgq','connq'].forEach(p=>{const el=document.getElementById(p+i);if(el)d[p+i]=el.value;});
-  }
+  // bgq/connq removed — questions now handled via custom-bgq-list only
   // custom bg questions
   d.customBgqs = [...document.querySelectorAll('.custom-bgq-row')].map(r=>{const ins=r.querySelectorAll('input,textarea');return{q:ins[0]?.value||'',a:ins[1]?.value||''};});
   // history entries
