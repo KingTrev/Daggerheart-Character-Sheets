@@ -201,9 +201,9 @@ body {
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--hdr-h));
+  height: 100vh;
   position: sticky;
-  top: var(--hdr-h);
+  top: 0;
   overflow: hidden;
 }
 
@@ -328,6 +328,31 @@ body {
 }
 .nav-new-char:hover { color: var(--text); background: var(--bg3); }
 
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 1rem;
+  height: 52px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border2);
+}
+
+.nav-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 10px 1rem 12px;
+  flex-shrink: 0;
+}
+
+.nav-actions .hbtn {
+  flex: 1 1 auto;
+  font-size: 10px;
+  padding: 5px 8px;
+  white-space: nowrap;
+}
+
 .sidebar-empty {
   font-size: 12px;
   color: var(--muted);
@@ -344,7 +369,7 @@ body {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - var(--hdr-h));
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -995,46 +1020,22 @@ html[data-theme="light"] .custom-bgq-row { background: var(--bg4) !important; bo
 </div>
 
 <!-- ── TOP HEADER ── -->
-<header class="app-header">
-  <div class="header-brand">
-    <div class="brand-mark">S</div>
-    <div class="brand-text">
-      THE SHEET
-      <span class="brand-sub">DAGGERHEART</span>
-    </div>
-  </div>
-  <div class="header-middle">
-    <div class="char-selector">
-      <label>CLASS</label>
-      <select class="class-select" id="class-picker" onchange="switchClass(this.value)">
-        <option value="">— Choose —</option>
-        <option value="Bard">Bard</option>
-        <option value="Druid">Druid</option>
-        <option value="Guardian">Guardian</option>
-        <option value="Ranger">Ranger</option>
-        <option value="Rogue">Rogue</option>
-        <option value="Seraph">Seraph</option>
-        <option value="Sorcerer">Sorcerer</option>
-        <option value="Warrior">Warrior</option>
-        <option value="Wizard">Wizard</option>
-      </select>
-    </div>
-  </div>
-  <div class="header-actions">
-    <button class="hbtn icon" id="theme-btn-hdr" onclick="toggleTheme()" title="Toggle theme">☀</button>
-    <button class="hbtn" onclick="exportCharacters()" title="Export all characters to a file">⬇ Export</button>
-    <button class="hbtn" onclick="document.getElementById('import-file-input').click()" title="Import characters from a file">⬆ Import</button>
-    <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importCharacters(this)">
-    <button class="hbtn" onclick="window.print()">Print</button>
-    <button class="hbtn primary" onclick="saveSheet()">Save</button>
-  </div>
-</header>
+
 
 <!-- ── APP SHELL ── -->
 <div class="app-shell">
 
   <!-- ── LEFT NAV ── -->
   <nav class="app-nav">
+
+    <!-- Brand -->
+    <div class="nav-brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-text">
+        THE SHEET
+        <span class="brand-sub">DAGGERHEART</span>
+      </div>
+    </div>
 
     <div class="nav-section">
       <div class="nav-section-label">Navigate</div>
@@ -1066,6 +1067,17 @@ html[data-theme="light"] .custom-bgq-row { background: var(--bg4) !important; bo
       </div>
     </div>
     <button class="nav-new-char" onclick="newCharacter()">+ New Character</button>
+
+    <div class="nav-divider"></div>
+
+    <div class="nav-actions">
+      <button class="hbtn icon" onclick="toggleTheme()" title="Toggle theme">☀</button>
+      <button class="hbtn" onclick="exportCharacters()" title="Export">⬇ Export</button>
+      <button class="hbtn" onclick="document.getElementById('import-file-input').click()" title="Import">⬆ Import</button>
+      <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importCharacters(this)">
+      <button class="hbtn" onclick="window.print()">Print</button>
+      <button class="hbtn primary" onclick="saveSheet()">Save</button>
+    </div>
 
   </nav>
 
