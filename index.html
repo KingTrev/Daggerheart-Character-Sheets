@@ -61,8 +61,8 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font
 .class-select option{background:var(--bg3);}
 
 /* ── PAGE LAYOUT ── */
-.pages{max-width:1100px;margin:0 auto;padding:1rem;padding-top:1.25rem;}
-.page{background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;overflow:hidden;}
+.pages{width:100%;padding:1rem;padding-top:1.25rem;box-sizing:border-box;}
+.page{background:var(--bg2);border:1px solid var(--border);border-radius:8px;margin-bottom:1rem;overflow:hidden;width:100%;box-sizing:border-box;}
 .page-inner{padding:1.25rem;}
 
 /* ── CLASS HEADER ── */
@@ -73,7 +73,8 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font
 .class-tagline{font-style:italic;font-size:13px;color:var(--muted);flex:1;line-height:1.5;}
 .char-fields{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center;}
 .char-fields-row1{display:grid;grid-template-columns:1fr auto;gap:6px;}
-.char-fields-row2{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;}
+.char-fields-row2{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:end;}
+
 .char-level-field{width:70px;}
 .char-level-field input{width:100%;}
 .char-fields-row1 .ey,
@@ -442,6 +443,183 @@ html[data-theme="light"] .card-type-badge.GRIMOIRE { background: #f4e8f4; color:
 .card-section-header:first-child { margin-top: 0; }
 
 
+/* ── CLASS REFERENCE ── */
+.subclass-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.subclass-header {
+  background: var(--bg4);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.subclass-class-tag {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.subclass-name {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.04em;
+}
+.subclass-spellcast {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  margin-left: auto;
+  white-space: nowrap;
+}
+.subclass-body { padding: 12px 14px; }
+.subclass-tier {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.subclass-tier:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.subclass-tier-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.subclass-tier-label.foundation { color: var(--teal); }
+.subclass-tier-label.specialization { color: var(--gold); }
+.subclass-tier-label.mastery { color: var(--red); }
+.subclass-tier-text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text);
+}
+.subclass-tier-text strong { font-weight: 700; }
+.subclass-tier-text em { font-style: italic; }
+.ref-section-hdr {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  padding: 6px 0 8px;
+  border-bottom: 1px solid var(--border2);
+  margin-bottom: 12px;
+}
+.beastform-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+}
+.beastform-card {
+  background: var(--bg4);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 10px 12px;
+}
+.beastform-tier-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.beastform-name {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.beastform-stats {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+.beastform-text {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text);
+}
+
+/* ── CONDITIONS ── */
+.cond-label-active { background:var(--red-faint) !important; border-color:var(--red) !important; color:var(--red) !important; }
+
+/* ── PRAYER DICE ── */
+.prayer-die {
+  width:36px; height:36px;
+  background:var(--bg4);
+  border:2px solid var(--gold-dim);
+  border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cinzel',serif; font-size:15px; font-weight:700; color:var(--gold);
+  cursor:pointer; position:relative; transition:all 0.15s;
+}
+.prayer-die.spent { opacity:0.35; text-decoration:line-through; border-color:var(--border); }
+.prayer-die-rm {
+  position:absolute; top:-5px; right:-5px;
+  width:14px; height:14px; border-radius:50%;
+  background:var(--bg4); border:1px solid var(--border2);
+  color:var(--muted); font-size:9px; line-height:14px; text-align:center;
+  cursor:pointer; display:none;
+}
+.prayer-die:hover .prayer-die-rm { display:block; }
+
+/* ── COMPANION HP ── */
+.companion-hpbox { width:20px; height:17px; border:1px solid var(--border2); border-radius:2px; background:var(--bg3); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:9px; transition:all 0.1s; flex-shrink:0; }
+.companion-hpbox.filled { background:var(--red-faint); border-color:var(--red); color:var(--red); }
+
+/* ── COUNTDOWN ── */
+.countdown-row {
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:5px;
+  padding:8px 10px;
+  margin-bottom:6px;
+}
+.countdown-pips { display:flex; gap:4px; flex-wrap:wrap; margin-top:5px; }
+.cd-pip {
+  width:20px; height:20px; border-radius:3px;
+  border:1px solid var(--border2); background:var(--bg4);
+  cursor:pointer; transition:all 0.1s; flex-shrink:0;
+}
+.cd-pip.marked { background:var(--red-faint); border-color:var(--red); }
+
+/* ── STYLED SELECTS ── */
+.hdr-select {
+  font-family: 'Crimson Pro', serif;
+  font-size: 15px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 4px 24px 4px 8px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c9a84c'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.hdr-select:hover { border-color: var(--gold-dim); }
+.hdr-select:focus { border-color: var(--gold); }
+html[data-theme="light"] .hdr-select { background-color: #f5f0e8; }
+
 /* ── LOADOUT QUICK PANEL ── */
 .lq-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);}
 .lq-row:last-child{border-bottom:none;}
@@ -464,7 +642,10 @@ html[data-theme="light"] .card-type-badge.GRIMOIRE { background: #f4e8f4; color:
   position: relative;
   top: 0;
   z-index: 90;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.sheet-tabs::-webkit-scrollbar { display: none; }
 .sheet-tab {
   font-family: 'Cinzel', serif;
   font-size: 10px;
@@ -583,7 +764,7 @@ html[data-theme="light"] .sheet-tab.active { color: var(--gold); }
 .sidebar-new:hover { color: var(--text); background: var(--bg3); }
 
 .main-area { flex: 1; min-width: 0; overflow-y: auto; }
-.pages { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+.pages { width: 100%; padding: 1rem; box-sizing: border-box; }
 
 .sidebar-empty {
   font-size: 12px;
@@ -651,6 +832,7 @@ html[data-theme="light"] .thresh-label { font-weight: 700; }
   </select>
   <button class="tbtn" id="theme-btn" onclick="toggleTheme()">☀ Light Mode</button>
   <button class="tbtn" onclick="window.print()">Print / PDF</button>
+  <button class="tbtn" onclick="showSheetTab('s0')">Session 0</button>
   <button class="tbtn gold" onclick="saveSheet()">Save</button>
 </div>
 
@@ -677,9 +859,11 @@ html[data-theme="light"] .thresh-label { font-weight: 700; }
 
     <!-- TAB BAR -->
     <div class="sheet-tabs" id="sheet-tabs">
+      <button class="sheet-tab" id="tab-s0-btn" onclick="showSheetTab('s0')">Session 0</button>
+      <button class="sheet-tab" id="tab-ref-btn" onclick="showSheetTab('ref')">Class Reference</button>
       <button class="sheet-tab active" id="tab-sheet-btn" onclick="showSheetTab('sheet')">Character Sheet</button>
-      <button class="sheet-tab" id="tab-notes-btn" onclick="showSheetTab('notes')">Session Notes</button>
       <button class="sheet-tab" id="tab-cards-btn" onclick="showSheetTab('cards')">Domain Cards</button>
+      <button class="sheet-tab" id="tab-notes-btn" onclick="showSheetTab('notes')">Session Notes</button>
     </div>
 
     <!-- SHEET TAB -->
@@ -772,12 +956,256 @@ html[data-theme="light"] .thresh-label { font-weight: 700; }
       </div>
     </div>
 
+    <!-- SESSION 0 TAB -->
+    <div id="tab-s0" style="display:none;">
+      <div id="s0-wizard" style="max-width:680px;margin:0 auto;padding:1rem;"></div>
+    </div>
+
+    <!-- CLASS REFERENCE TAB -->
+    <div id="tab-ref" style="display:none;">
+      <div class="pages">
+        <div class="page">
+          <div class="section-block-header" style="flex-wrap:wrap;gap:0.5rem;">
+            <div class="section-block-title">Class Reference</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+              <select id="ref-class-picker" onchange="renderClassRef()" style="font-family:'Cinzel',serif;font-size:9px;padding:4px 8px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:3px;">
+                <option value="">— Select Class —</option>
+                <option value="Bard">Bard</option>
+                <option value="Druid">Druid</option>
+                <option value="Guardian">Guardian</option>
+                <option value="Ranger">Ranger</option>
+                <option value="Rogue">Rogue</option>
+                <option value="Seraph">Seraph</option>
+                <option value="Sorcerer">Sorcerer</option>
+                <option value="Warrior">Warrior</option>
+                <option value="Wizard">Wizard</option>
+              </select>
+            </div>
+          </div>
+          <div class="page-inner" id="class-ref-content">
+            <p style="font-size:13px;color:var(--muted);font-style:italic;text-align:center;padding:1.5rem 0;">Select a class above to view its subclasses and reference info.</p>
+          </div>
+        </div>
+
+        <!-- ANCESTRY REFERENCE -->
+        <div class="page">
+          <div class="section-block-header">
+            <div class="section-block-title">Ancestry Reference</div>
+          </div>
+          <div class="page-inner">
+            <div id="ancestry-ref-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;"></div>
+          </div>
+        </div>
+
+        <!-- COMMUNITY REFERENCE -->
+        <div class="page">
+          <div class="section-block-header">
+            <div class="section-block-title">Community Reference</div>
+          </div>
+          <div class="page-inner">
+            <div id="community-ref-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
 <script>
 // ─────────────────────────────────────────────
+// ANCESTRY DATA
+// ─────────────────────────────────────────────
+const ANCESTRY_DATA = {
+  Clank: {
+    description: 'Clanks are sentient mechanical beings built from a variety of materials, including metal, wood, and stone.',
+    features: [
+      { name: 'Purposeful Design', text: 'Decide who made you and for what purpose. At character creation, choose one of your Experiences that best aligns with this purpose and gain a permanent +1 bonus to it.' },
+      { name: 'Efficient', text: 'When you take a short rest, you can choose a long rest move instead of a short rest move.' },
+    ]
+  },
+  Drakona: {
+    description: 'Drakona resemble wingless dragons in humanoid form and possess a powerful elemental breath.',
+    features: [
+      { name: 'Scales', text: 'Your scales act as natural protection. When you would take Severe damage, you can mark a Stress to mark 1 fewer Hit Points.' },
+      { name: 'Elemental Breath', text: 'Choose an element for your breath (such as electricity, fire, or ice). You can use this breath against a target or group of targets within Very Close range, treating it as an instinct weapon that deals d8 magic damage using your Proficiency.' },
+    ]
+  },
+  Dwarf: {
+    description: 'Dwarves are most easily recognized as short humanoids with square frames, dense musculature, and thick hair.',
+    features: [
+      { name: 'Thick Skin', text: 'When you take Minor damage, you can mark 2 Stress instead of marking a Hit Point.' },
+      { name: 'Increased Fortitude', text: 'Spend 3 Hope to halve incoming physical damage.' },
+    ]
+  },
+  Elf: {
+    description: 'Elves are typically tall humanoids with pointed ears and acutely attuned senses.',
+    features: [
+      { name: 'Quick Reactions', text: 'Mark a Stress to gain advantage on a reaction roll.' },
+      { name: 'Celestial Trance', text: 'During a rest, you can drop into a trance to choose an additional downtime move.' },
+    ]
+  },
+  Faerie: {
+    description: 'Faeries are winged humanoid creatures with insectile features.',
+    features: [
+      { name: 'Luckbender', text: 'Once per session, after you or a willing ally within Close range makes an action roll, you can spend 3 Hope to reroll the Duality Dice.' },
+      { name: 'Wings', text: 'You can fly. While flying, you can mark a Stress after an adversary makes an attack against you to gain a +2 bonus to your Evasion against that attack.' },
+    ]
+  },
+  Faun: {
+    description: 'Fauns resemble humanoid goats with curving horns, square pupils, and cloven hooves.',
+    features: [
+      { name: 'Caprine Leap', text: 'You can leap anywhere within Close range as though you were using normal movement, allowing you to vault obstacles, jump across gaps, or scale barriers with ease.' },
+      { name: 'Kick', text: 'When you succeed on an attack against a target within Melee range, you can mark a Stress to kick yourself off them, dealing an extra 2d6 damage and knocking back either yourself or the target to Very Close range.' },
+    ]
+  },
+  Firbolg: {
+    description: 'Firbolgs are bovine humanoids typically recognized by their broad noses and long, drooping ears.',
+    features: [
+      { name: 'Charge', text: 'When you succeed on an Agility Roll to move from Far or Very Far range with one or more targets into Melee range, you can mark a Stress to deal 1d12 physical damage to all targets within Melee range.' },
+      { name: 'Unshakable', text: 'When you would mark a Stress, roll a d6. On a result of 6, don\'t mark it.' },
+    ]
+  },
+  Fungril: {
+    description: 'Fungril resemble humanoid mushrooms.',
+    features: [
+      { name: 'Fungril Network', text: 'Make an Instinct Roll (12) to use your mycelial array to speak with others of your ancestry. On a success, you can communicate across any distance.' },
+      { name: 'Death Connection', text: 'While touching a corpse that died recently, you can mark a Stress to extract one memory from the corpse related to a specific emotion or sensation of your choice.' },
+    ]
+  },
+  Galapa: {
+    description: 'Galapa resemble anthropomorphic turtles with large, domed shells into which they can retract.',
+    features: [
+      { name: 'Shell', text: 'Gain a bonus to your damage thresholds equal to your Proficiency.' },
+      { name: 'Retract', text: 'Mark a Stress to retract into your shell. While in your shell, you have resistance to physical damage, you have disadvantage on action rolls, and you can\'t move.' },
+    ]
+  },
+  Giant: {
+    description: 'Giants are towering humanoids with broad shoulders, long arms, and one to three eyes.',
+    features: [
+      { name: 'Endurance', text: 'Gain an additional Hit Point slot at character creation.' },
+      { name: 'Reach', text: 'Treat any weapon, ability, spell, or other feature that has a Melee range to have a Very Close range instead.' },
+    ]
+  },
+  Goblin: {
+    description: 'Goblins are small humanoids easily recognizable by their large eyes and massive membranous ears.',
+    features: [
+      { name: 'Surefooted', text: 'You ignore disadvantage on Agility Rolls.' },
+      { name: 'Danger Sense', text: 'Once per rest, mark a Stress to force a reaction against you or an ally within Very Close range.' },
+    ]
+  },
+  Halfling: {
+    description: 'Halflings are small humanoids with large hairy feet and prominent rounded ears.',
+    features: [
+      { name: 'Luckbringer', text: 'At the start of each session, everyone in your party gains a Hope.' },
+      { name: 'Internal Compass', text: 'When you roll a 1 on your Hope Die, you can reroll it.' },
+    ]
+  },
+  Human: {
+    description: 'Humans are most easily recognized by their dexterous hands, rounded ears, and bodies built for endurance.',
+    features: [
+      { name: 'High Stamina', text: 'Gain an additional Stress slot at character creation.' },
+      { name: 'Adaptability', text: 'When you fail a roll that utilized one of your Experiences, you can mark a Stress to reroll.' },
+    ]
+  },
+  Infernis: {
+    description: 'Infernis are humanoids who possess sharp canine teeth, pointed ears, and horns. They are the descendants of demons from the Circles Below.',
+    features: [
+      { name: 'Fearless', text: 'When you roll with Fear, you can mark 2 Stress to change it into a roll with Hope instead.' },
+      { name: 'Dread Visage', text: 'You have advantage on rolls to intimidate hostile creatures.' },
+    ]
+  },
+  Katari: {
+    description: 'Katari are feline humanoids with retractable claws, vertically slit pupils, and high, triangular ears.',
+    features: [
+      { name: 'Feline Instincts', text: 'When you make an Agility Roll, you can spend 2 Hope to reroll your Hope Die.' },
+      { name: 'Retracting Claws', text: 'Make an Agility Roll to scratch a target within Melee range. On a success, they become temporarily Vulnerable.' },
+    ]
+  },
+  Orc: {
+    description: 'Orcs are humanoids most easily recognized by their square features and boar-like tusks that protrude from their lower jaw.',
+    features: [
+      { name: 'Sturdy', text: 'When you have 1 Hit Point remaining, attacks against you have disadvantage.' },
+      { name: 'Tusks', text: 'When you succeed on an attack against a target within Melee range, you can spend a Hope to gore the target with your tusks, dealing an extra 1d6 damage.' },
+    ]
+  },
+  Ribbet: {
+    description: 'Ribbets resemble anthropomorphic frogs with protruding eyes and webbed hands and feet.',
+    features: [
+      { name: 'Amphibious', text: 'You can breathe and move naturally underwater.' },
+      { name: 'Long Tongue', text: 'You can use your long tongue to grab onto things within Close range. Mark a Stress to use your tongue as a Finesse Close weapon that deals d12 physical damage using your Proficiency.' },
+    ]
+  },
+  Simiah: {
+    description: 'Simiah resemble anthropomorphic monkeys and apes with long limbs and prehensile feet.',
+    features: [
+      { name: 'Natural Climber', text: 'You have advantage on Agility Rolls that involve balancing and climbing.' },
+      { name: 'Nimble', text: 'Gain a permanent +1 bonus to your Evasion at character creation.' },
+    ]
+  },
+};
+
+// ─────────────────────────────────────────────
+// COMMUNITY DATA
+// ─────────────────────────────────────────────
+const COMMUNITY_DATA = {
+  Highborne: {
+    description: 'Being part of a highborne community means you\'re accustomed to a life of elegance, opulence, and prestige within the upper echelons of society.',
+    features: [
+      { name: 'Privilege', text: 'You have advantage on rolls to consort with nobles, negotiate prices, or leverage your reputation to get what you want.' },
+    ]
+  },
+  Loreborne: {
+    description: 'Being part of a loreborne community means you\'re from a society that favors strong academic or political prowess.',
+    features: [
+      { name: 'Well-Read', text: 'You have advantage on rolls that involve the history, culture, or politics of a prominent person or place.' },
+    ]
+  },
+  Orderborne: {
+    description: 'Being part of an orderborne community means you\'re from a collective that focuses on discipline or faith, and you uphold a set of principles that reflect your experience there.',
+    features: [
+      { name: 'Dedicated', text: 'Record three sayings or values your upbringing instilled in you. Once per rest, when you describe how you\'re embodying one of these principles through your current action, you can roll a d20 as your Hope Die.' },
+    ]
+  },
+  Ridgeborne: {
+    description: 'Being part of a ridgeborne community means you\'ve called the rocky peaks and sharp cliffs of the mountainside home.',
+    features: [
+      { name: 'Steady', text: 'You have advantage on rolls to traverse dangerous cliffs and ledges, navigate harsh environments, and use your survival knowledge.' },
+    ]
+  },
+  Seaborne: {
+    description: 'Being part of a seaborne community means you lived on or near a large body of water.',
+    features: [
+      { name: 'Know the Tide', text: 'You can sense the ebb and flow of life. When you roll with Fear, place a token on this card equal to your level. Before you make an action roll, you can spend any number of these tokens to gain a +1 bonus to the roll for each token spent. At the end of each session, clear all unspent tokens.' },
+    ]
+  },
+  Slyborne: {
+    description: 'Being part of a slyborne community means you come from a group that operates outside the law, including all manner of criminals, grifters, and con artists.',
+    features: [
+      { name: 'Scoundrel', text: 'You have advantage on rolls to negotiate with criminals, detect lies, or find a safe place to hide.' },
+    ]
+  },
+  Underborne: {
+    description: 'Being part of an underborne community means you\'re from a subterranean society.',
+    features: [
+      { name: 'Low-Light Living', text: 'When you\'re in an area with low light or heavy shadow, you have advantage on rolls to hide, investigate, or perceive details within that area.' },
+    ]
+  },
+  Wanderborne: {
+    description: 'Being part of a wanderborne community means you\'ve lived as a nomad, forgoing a permanent home and experiencing a wide variety of cultures.',
+    features: [
+      { name: 'Nomadic Pack', text: 'Add a Nomadic Pack to your inventory. Once per session, you can spend a Hope to reach into this pack and pull out a mundane item that\'s useful to your situation. Work with the GM to figure out what item you take out.' },
+    ]
+  },
+  Wildborne: {
+    description: 'Being part of a wildborne community means you lived deep within the forest.',
+    features: [
+      { name: 'Lightfoot', text: 'Your movement is naturally silent. You have advantage on rolls to move without being heard.' },
+    ]
+  },
+};
+
 // CLASS DATA
 // ─────────────────────────────────────────────
 const CLASSES = {
@@ -952,6 +1380,7 @@ function shieldSVG() {
 // RENDER PIPS
 // ─────────────────────────────────────────────
 function renderHopePips(container, count, filled) {
+  if (!container) return;
   container.innerHTML = '';
   for (let i=0;i<count;i++) {
     const p = document.createElement('div');
@@ -965,11 +1394,23 @@ function renderHopePips(container, count, filled) {
   }
 }
 
+function adjustHopeCount(delta) {
+  const container = document.getElementById('hope-pips');
+  if (!container) return;
+  const current = container.querySelectorAll('.hope-pip').length;
+  const filled = container.querySelectorAll('.hope-pip.filled').length;
+  const newCount = Math.min(12, Math.max(1, current + delta));
+  if (newCount === current) return;
+  renderHopePips(container, newCount, Math.min(filled, newCount));
+  save();
+}
+
 function getPipCount(container, cls) {
   return container.querySelectorAll('.'+cls+'.filled').length;
 }
 
 function makeShieldPips(container, count, filled) {
+  if (!container) return;
   container.innerHTML = '';
   for (let i=0;i<count;i++) {
     const p = document.createElement('div');
@@ -986,6 +1427,7 @@ function makeShieldPips(container, count, filled) {
 }
 
 function makeBoxPips(container, count, filled, cls) {
+  if (!container) return;
   container.innerHTML = '';
   for (let i=0;i<count;i++) {
     const b = document.createElement('div');
@@ -998,15 +1440,23 @@ function makeBoxPips(container, count, filled, cls) {
     });
     container.appendChild(b);
   }
-  // add dotted extras for expansion
-  for (let i=0;i<3;i++) {
-    const d = document.createElement('div');
-    d.className = 'dotted-box';
-    container.appendChild(d);
-  }
+}
+
+function adjustBoxCount(containerId, cls, delta) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const current = container.querySelectorAll('.'+cls).length;
+  const filled = container.querySelectorAll('.'+cls+'.filled').length;
+  const min = cls === 'hpbox' ? 1 : 1;
+  const max = 12;
+  const newCount = Math.min(max, Math.max(min, current + delta));
+  if (newCount === current) return;
+  makeBoxPips(container, newCount, Math.min(filled, newCount), cls);
+  save();
 }
 
 function makeProfDots(container, filled) {
+  if (!container) return;
   container.innerHTML = '';
   for (let i=0;i<6;i++) {
     const d = document.createElement('div');
@@ -1035,6 +1485,96 @@ function addExpRow(container, name='', bonus='') {
 }
 
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function stripTags(s){return String(s||'').replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,'').trim();}
+
+// Split "Name — Trait — Damage — Handed\nFeature text" cleanly
+function wPart(str, idx) {
+  if (!str) return '';
+  const main = str.split('\n')[0];
+  const parts = main.split('—');
+  return stripTags((parts[idx]||'').trim());
+}
+function wFeature(str) {
+  if (!str) return '';
+  const lines = str.split('\n');
+  const main = lines[0];
+  const parts = main.split('—');
+  // The 4th dash-segment (index 3) is handedness like "One-Handed"
+  const handed = stripTags((parts[3]||'').trim());
+  // Lines after the first are the feature description
+  const feat = stripTags(lines.slice(1).join(' ').trim());
+  // Combine: "One-Handed — Quick: When you make an attack..."
+  if (handed && feat) return handed + ' — ' + feat;
+  return handed || feat;
+}
+
+function buildFeatureCard(title, subtitle, features, accentColor) {
+  const id = 'fc-' + title.replace(/\s+/g,'-').toLowerCase() + '-' + Math.random().toString(36).slice(2,6);
+  const featureHTML = features.map(f =>
+    `<div style="margin-bottom:6px;"><strong style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.06em;color:${accentColor};">${f.name}:</strong> <span style="font-size:12.5px;line-height:1.6;">${f.text}</span></div>`
+  ).join('');
+  return `<div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid ${accentColor};border-radius:0 5px 5px 0;overflow:hidden;">
+    <div onclick="toggleFeatureCard('${id}')" style="display:flex;align-items:center;justify-content:space-between;padding:7px 10px;cursor:pointer;gap:8px;">
+      <div>
+        <span style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--text);letter-spacing:0.06em;">${title}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);margin-left:8px;">${subtitle}</span>
+      </div>
+      <span id="${id}-arrow" style="font-size:10px;color:var(--muted);flex-shrink:0;">▾</span>
+    </div>
+    <div id="${id}" style="display:none;padding:0 10px 9px;border-top:1px solid var(--border);">
+      <div style="padding-top:8px;">${featureHTML}</div>
+    </div>
+  </div>`;
+}
+
+function toggleFeatureCard(id) {
+  const el = document.getElementById(id);
+  const arrow = document.getElementById(id + '-arrow');
+  if (!el) return;
+  const open = el.style.display !== 'none';
+  el.style.display = open ? 'none' : '';
+  if (arrow) arrow.textContent = open ? '▾' : '▴';
+}
+
+function renderFeatureBar() {
+  const bar = document.getElementById('feature-bar');
+  if (!bar) return;
+  const ancestryVal = document.getElementById('f-ancestry')?.value || '';
+  const communityVal = document.getElementById('f-community')?.value || '';
+  const subclassVal = document.getElementById('f-subclass')?.value || '';
+
+  const cards = [];
+
+  if (communityVal && COMMUNITY_DATA[communityVal]) {
+    const d = COMMUNITY_DATA[communityVal];
+    cards.push(buildFeatureCard(communityVal, 'Community — ' + d.description.split('.')[0] + '.', d.features, 'var(--gold-dim)'));
+  }
+  if (ancestryVal && ANCESTRY_DATA[ancestryVal]) {
+    const d = ANCESTRY_DATA[ancestryVal];
+    cards.push(buildFeatureCard(ancestryVal, 'Ancestry — ' + d.description.split('.')[0] + '.', d.features, 'var(--teal)'));
+  }
+  if (subclassVal && currentClass && SUBCLASSES[currentClass]) {
+    const sub = SUBCLASSES[currentClass].subclasses.find(s => s.name === subclassVal);
+    if (sub) {
+      const tierFeatures = [
+        { name: 'Foundation', text: sub.foundation.replace(/<[^>]*>/g,'') },
+        { name: 'Specialization (Lv 5)', text: sub.specialization.replace(/<[^>]*>/g,'') },
+        { name: 'Mastery (Lv 8)', text: sub.mastery.replace(/<[^>]*>/g,'') },
+      ];
+      cards.push(buildFeatureCard(subclassVal, (sub.spellcast ? 'Spellcast: ' + sub.spellcast + ' · ' : '') + 'Subclass', tierFeatures, 'var(--red-dim)'));
+    }
+  }
+
+  if (!cards.length) { bar.style.display = 'none'; return; }
+  bar.style.display = 'grid';
+  bar.style.gridTemplateColumns = cards.length === 3 ? '1fr 1fr 1fr' : cards.length === 2 ? '1fr 1fr' : '1fr';
+  bar.innerHTML = cards.join('');
+}
+
+function onHeritageChange() { renderFeatureBar(); }
+function onSubclassChange() { renderFeatureBar(); }
+function onAncestryChange() { renderFeatureBar(); }
+function onCommunityChange() { renderFeatureBar(); }
 
 function addInvRow(container, val='', qty='') {
   const row = document.createElement('div');
@@ -1100,6 +1640,7 @@ function buildPages(cls) {
       <div class="class-name-block">
         <div class="class-name-big">${cls.toUpperCase()}</div>
         <div class="class-domains">${c.domains}</div>
+        <button onclick="s0GoTo(S0_STEPS.findIndex(s=>s.id==='pick-class'));showSheetTab('s0');" style="margin-top:8px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 8px;border-radius:3px;cursor:pointer;width:100%;">↺ Change Class</button>
       </div>
       <div class="char-fields">
         <div class="char-fields-row1">
@@ -1107,16 +1648,37 @@ function buildPages(cls) {
           <div><span class="ey">Pronouns</span><input type="text" id="f-pronouns" placeholder="they/them..." oninput="save()"></div>
         </div>
         <div class="char-fields-row2">
-          <div><span class="ey">Heritage</span><input type="text" id="f-heritage" placeholder="Ribbet, Human, Faun..." oninput="save()"></div>
-          <div><span class="ey">Subclass</span><input type="text" id="f-subclass" placeholder="Subclass..." oninput="save()"></div>
+          <div>
+            <span class="ey">Heritage</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <select id="f-community" class="hdr-select" onchange="onHeritageChange();save()">
+                <option value="">Community...</option>
+                ${Object.keys(COMMUNITY_DATA).map(a=>`<option value="${a}">${a}</option>`).join('')}
+              </select>
+              <select id="f-ancestry" class="hdr-select" onchange="onHeritageChange();save()">
+                <option value="">Ancestry...</option>
+                ${Object.keys(ANCESTRY_DATA).map(a=>`<option value="${a}">${a}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+          <div>
+            <span class="ey">Subclass</span>
+            <select id="f-subclass" class="hdr-select" onchange="onSubclassChange();save()">
+              <option value="">Pick subclass...</option>
+              ${(SUBCLASSES[cls]?.subclasses||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}
+            </select>
+          </div>
           <div class="char-level-field"><span class="ey">Level</span><input type="number" id="f-level" min="1" max="10" placeholder="1" oninput="save()"></div>
         </div>
       </div>
     </div>
     <div class="page-inner">
 
+      <!-- HERITAGE + SUBCLASS FEATURE BAR -->
+      <div id="feature-bar" style="display:none;margin-bottom:0.75rem;gap:0.5rem;"></div>
+
       <!-- TRAITS ROW -->
-      <div class="traits-row" style="margin-bottom:1rem;">
+      <div class="traits-row" style="margin-bottom:0;">
         ${['agility','strength','finesse','instinct','presence','knowledge'].map(t=>`
         <div class="trait-block">
           <div class="trait-name">${t.toUpperCase()}</div>
@@ -1125,12 +1687,14 @@ function buildPages(cls) {
         </div>`).join('')}
       </div>
 
+    </div>
+
+    <div class="page-inner" style="padding-top:0.75rem;">
       <div class="p1-grid">
 
         <!-- LEFT COLUMN -->
         <div class="p1-left">
 
-          <!-- EVASION + ARMOR -->
           <div>
             <div style="display:flex;gap:8px;margin-bottom:0.75rem;">
               <div style="flex:1;">
@@ -1147,42 +1711,40 @@ function buildPages(cls) {
             </div>
           </div>
 
-          <!-- DAMAGE & HEALTH -->
           <div>
             <div class="sh">Damage & Health</div>
             <p style="font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);text-align:center;margin-bottom:6px;">Add your current level to your damage thresholds.</p>
             <div class="thresh-row">
-              <div class="thresh-box">
-                <div class="thresh-label">Minor Damage</div>
-                <input type="number" class="thresh-num" id="thresh-minor" placeholder="—" oninput="save()">
-                <div class="thresh-mark">Mark 1 HP</div>
-              </div>
-              <div class="thresh-box">
-                <div class="thresh-label">Major Damage</div>
-                <input type="number" class="thresh-num" id="thresh-major" placeholder="—" oninput="save()">
-                <div class="thresh-mark">Mark 2 HP</div>
-              </div>
-              <div class="thresh-box">
-                <div class="thresh-label">Severe Damage</div>
-                <input type="number" class="thresh-num" id="thresh-severe" placeholder="—" oninput="save()">
-                <div class="thresh-mark">Mark 3 HP</div>
-              </div>
+              <div class="thresh-box"><div class="thresh-label">Minor</div><input type="number" class="thresh-num" id="thresh-minor" placeholder="—" oninput="save()"><div class="thresh-mark">1 HP</div></div>
+              <div class="thresh-box"><div class="thresh-label">Major</div><input type="number" class="thresh-num" id="thresh-major" placeholder="—" oninput="save()"><div class="thresh-mark">2 HP</div></div>
+              <div class="thresh-box"><div class="thresh-label">Severe</div><input type="number" class="thresh-num" id="thresh-severe" placeholder="—" oninput="save()"><div class="thresh-mark">3 HP</div></div>
             </div>
             <div class="hp-stress-area">
               <div>
-                <span class="ey">HP</span>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+                  <span class="ey" style="margin:0;">HP</span>
+                  <button onclick="adjustBoxCount('hp-boxes','hpbox',-1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">−</button>
+                  <button onclick="adjustBoxCount('hp-boxes','hpbox',1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">+</button>
+                </div>
                 <div class="checkbox-row" id="hp-boxes"></div>
               </div>
               <div>
-                <span class="ey">Stress</span>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+                  <span class="ey" style="margin:0;">Stress</span>
+                  <button onclick="adjustBoxCount('stress-boxes','stressbox',-1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">−</button>
+                  <button onclick="adjustBoxCount('stress-boxes','stressbox',1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">+</button>
+                </div>
                 <div class="checkbox-row" id="stress-boxes"></div>
               </div>
             </div>
           </div>
 
-          <!-- HOPE -->
           <div>
-            <div class="sh">Hope</div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+              <div class="sh" style="margin:0;flex:1;">Hope</div>
+              <button onclick="adjustHopeCount(-1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">−</button>
+              <button onclick="adjustHopeCount(1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">+</button>
+            </div>
             <p style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:4px;font-style:italic;">Spend a Hope to use an experience or help an ally.</p>
             <div class="hope-pips" id="hope-pips"></div>
             <div style="padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;margin-top:6px;font-size:12px;line-height:1.5;">
@@ -1190,7 +1752,6 @@ function buildPages(cls) {
             </div>
           </div>
 
-          <!-- EXPERIENCE -->
           <div>
             <div class="sh">Experience</div>
             <p style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:6px;">Spend a Hope to add an applicable Experience to a roll.</p>
@@ -1198,7 +1759,6 @@ function buildPages(cls) {
             <button class="add-row-btn" onclick="addExpRow(document.getElementById('exp-list'));save()">+ Add Experience</button>
           </div>
 
-          <!-- GOLD -->
           <div>
             <div class="sh">Gold</div>
             <div class="gold-row">
@@ -1208,17 +1768,47 @@ function buildPages(cls) {
             </div>
           </div>
 
-          <!-- CLASS FEATURE -->
           <div>
             <div class="sh">Class Feature</div>
             <div class="cf-name">${c.featureName}</div>
             <div class="cf-body" id="cf-body">${c.featureBody.replace(/\n/g,'<br>')}</div>
           </div>
 
+          <div>
+            <div class="sh">Conditions</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;">
+              ${['Vulnerable','Restrained','Hidden','Stunned','Frightened','On Fire','Silenced','Corroded','Poisoned'].map(cond=>`
+              <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;font-family:'Crimson Pro',serif;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 7px;transition:all 0.12s;" id="cond-label-${cond.replace(/\s/g,'-').toLowerCase()}">
+                <input type="checkbox" id="cond-${cond.replace(/\s/g,'-').toLowerCase()}" onchange="onConditionChange(this)" style="width:auto;accent-color:var(--red);"> ${cond}
+              </label>`).join('')}
+            </div>
+            <input type="text" id="cond-custom" placeholder="Custom condition..." oninput="save()" style="font-size:12px;">
+          </div>
+
+          <div>
+            <div class="sh">Death Move</div>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-family:'Crimson Pro',serif;">
+              <input type="checkbox" id="death-move-used" onchange="save()" style="width:auto;accent-color:var(--red);"> Death move triggered this session
+            </label>
+            <textarea id="death-move-notes" rows="2" placeholder="Describe what happened..." oninput="save()" style="margin-top:5px;resize:none;font-size:12px;"></textarea>
+          </div>
+
+          ${cls === 'Seraph' ? `
+          <div>
+            <div class="sh">Prayer Dice</div>
+            <p style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:6px;">Roll d4s equal to your Spellcast trait at session start.</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px;">
+              <button onclick="addPrayerDie()" style="font-family:'Cinzel',serif;font-size:8px;padding:2px 8px;border-radius:3px;border:1px solid var(--gold-dim);background:var(--gold-faint);color:var(--gold);cursor:pointer;">+ Add</button>
+              <button onclick="clearPrayerDice()" style="font-family:'Cinzel',serif;font-size:8px;padding:2px 8px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;">Clear All</button>
+            </div>
+            <div id="prayer-dice-row" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+          </div>` : ''}
+
         </div>
 
-        <!-- MIDDLE COLUMN: ACTIVE WEAPONS -->
+        <!-- MIDDLE COLUMN -->
         <div class="p1-mid">
+
           <div>
             <div class="sh">Active Weapons</div>
             <div style="text-align:center;margin-bottom:8px;">
@@ -1229,56 +1819,70 @@ function buildPages(cls) {
             <div class="weapon-section" style="margin-bottom:8px;">
               <div class="weapon-label">Primary</div>
               <div class="weapon-fields">
-                <div class="wfield"><span class="ey">Name</span><input type="text" id="w1-name" placeholder="${c.suggestedPrimary.split('—')[0].trim()}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w1-trait" placeholder="${(c.suggestedPrimary.split('—')[1]||'').trim()}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w1-damage" placeholder="${(c.suggestedPrimary.split('—')[2]||'').trim()}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="w1-name" placeholder="${wPart(c.suggestedPrimary,0)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w1-trait" placeholder="${wPart(c.suggestedPrimary,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w1-damage" placeholder="${wPart(c.suggestedPrimary,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w1-feature" placeholder="${(c.suggestedPrimary.split('—')[3]||'').trim()}" oninput="save()"></div>
+              <div class="wfield"><span class="ey">Feature</span><textarea id="w1-feature" rows="2" placeholder="${wFeature(c.suggestedPrimary)}" oninput="save()" style="resize:none;"></textarea></div>
             </div>
 
             <div class="weapon-section" style="margin-bottom:8px;">
               <div class="weapon-label">Secondary</div>
               <div class="weapon-fields">
-                <div class="wfield"><span class="ey">Name</span><input type="text" id="w2-name" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[0]||'').trim():''}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w2-trait" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[1]||'').trim():''}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w2-damage" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[2]||'').trim():''}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="w2-name" placeholder="${wPart(c.suggestedSecondary,0)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w2-trait" placeholder="${wPart(c.suggestedSecondary,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w2-damage" placeholder="${wPart(c.suggestedSecondary,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w2-feature" placeholder="${c.suggestedSecondary?(c.suggestedSecondary.split('—')[3]||'').trim():''}" oninput="save()"></div>
+              <div class="wfield"><span class="ey">Feature</span><textarea id="w2-feature" rows="2" placeholder="${wFeature(c.suggestedSecondary)}" oninput="save()" style="resize:none;"></textarea></div>
             </div>
 
-            <!-- ACTIVE ARMOR -->
             <div class="sh" style="margin-top:8px;">Active Armor</div>
             <div class="weapon-section">
               <div class="weapon-fields" style="grid-template-columns:2fr 1fr 1fr;">
-                <div class="wfield"><span class="ey">Name</span><input type="text" id="armor-name" placeholder="${c.suggestedArmor.split('—')[0].trim()}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Base Thresholds</span><input type="text" id="armor-thresh" placeholder="${(c.suggestedArmor.split('—')[1]||'').trim()}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Base Score</span><input type="text" id="armor-score" placeholder="${(c.suggestedArmor.split('—')[2]||'').trim()}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="armor-name" placeholder="${wPart(c.suggestedArmor,0)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Base Thresholds</span><input type="text" id="armor-thresh" placeholder="${wPart(c.suggestedArmor,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Base Score</span><input type="text" id="armor-score" placeholder="${wPart(c.suggestedArmor,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield" style="margin-top:4px;"><span class="ey">Feature</span><input type="text" id="armor-feature" placeholder="${c.suggestedArmor.includes('\n')?c.suggestedArmor.split('\n')[1].trim():''}" oninput="save()"></div>
+              <div class="wfield" style="margin-top:4px;"><span class="ey">Feature</span><textarea id="armor-feature" rows="2" placeholder="${wFeature(c.suggestedArmor)}" oninput="save()" style="resize:none;"></textarea></div>
             </div>
 
-            <!-- INVENTORY -->
             <div class="sh" style="margin-top:8px;">Inventory</div>
             <div id="inv-list" style="margin-bottom:4px;"></div>
             <button class="add-row-btn" onclick="addInvRow(document.getElementById('inv-list'));save()">+ Add Item</button>
-
-            <!-- INVENTORY ARMOR -->
             <div style="margin-top:8px;" id="inv-armor-wrap"></div>
             <button class="add-row-btn" onclick="addInvArmor(document.getElementById('inv-armor-wrap'));save()" style="margin-top:4px;">+ Add Inventory Armor</button>
-
-            <!-- INVENTORY WEAPONS -->
             <div style="margin-top:8px;" id="inv-weapons-wrap"></div>
             <button class="add-row-btn" onclick="addInvWeapon(document.getElementById('inv-weapons-wrap'));save()" style="margin-top:4px;">+ Add Inventory Weapon</button>
           </div>
+
+          ${cls === 'Ranger' ? `
+          <div>
+            <div class="sh">Companion</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+              <div><span class="ey">Name</span><input type="text" id="companion-name" placeholder="Companion name..." oninput="save()"></div>
+              <div><span class="ey">Species</span><input type="text" id="companion-species" placeholder="Wolf, Hawk..." oninput="save()"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px;">
+              <div><span class="ey">Evasion</span><input type="number" id="companion-evasion" placeholder="10" oninput="save()"></div>
+              <div><span class="ey">Damage</span><input type="text" id="companion-damage" placeholder="d6 phy" oninput="save()"></div>
+              <div><span class="ey">Trait</span><input type="text" id="companion-trait" placeholder="Agility" oninput="save()"></div>
+            </div>
+            <div style="margin-bottom:6px;">
+              <span class="ey">Companion HP</span>
+              <div style="display:flex;align-items:center;gap:5px;margin-top:3px;">
+                <button onclick="adjustBoxCount('companion-hp','companion-hpbox',-1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">−</button>
+                <div class="checkbox-row" id="companion-hp" style="flex-wrap:wrap;"></div>
+                <button onclick="adjustBoxCount('companion-hp','companion-hpbox',1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">+</button>
+              </div>
+            </div>
+            <div><span class="ey">Features & Level-Up Options</span><textarea id="companion-features" rows="4" placeholder="Companion features, level-up choices..." oninput="save()" style="resize:none;"></textarea></div>
+          </div>` : ''}
+
         </div>
 
-        <!-- RIGHT COLUMN: QUICK NOTES -->
+        <!-- RIGHT COLUMN -->
         <div class="p1-right">
-          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0.85rem 1rem;text-align:center;">
-            <div class="sh" style="margin-bottom:6px;">Session Notes</div>
-            <p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:8px;">Session notes & log live in the Session Notes tab.</p>
-            <button onclick="showSheetTab('notes')" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:6px 16px;border-radius:4px;cursor:pointer;">Go to Session Notes →</button>
-          </div>
+
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;overflow:hidden;">
             <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0.75rem;background:var(--bg4);border-bottom:1px solid var(--border);">
               <div class="sh" style="margin:0;">Domain Cards</div>
@@ -1287,14 +1891,23 @@ function buildPages(cls) {
             <div id="loadout-quick" style="padding:0.5rem 0.75rem;"></div>
             <div id="loadout-quick-empty" style="padding:0.75rem;font-size:12px;color:var(--muted);font-style:italic;text-align:center;">No cards in loadout.<br>Go to Domain Cards tab to add.</div>
           </div>
+
           <div>
             <div class="sh">Miscellaneous</div>
-            <textarea id="misc-notes" rows="9" placeholder="Scars, conditions, special notes..." oninput="save()"></textarea>
+            <textarea id="misc-notes" rows="8" placeholder="Scars, conditions, special notes..." oninput="save()"></textarea>
           </div>
+
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:0.85rem 1rem;text-align:center;">
+            <div class="sh" style="margin-bottom:6px;">Session Notes</div>
+            <p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:8px;">Session notes & log live in the Session Notes tab.</p>
+            <button onclick="showSheetTab('notes')" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:6px 16px;border-radius:4px;cursor:pointer;">Go to Session Notes →</button>
+          </div>
+
         </div>
 
       </div>
-    </div>`;
+    </div>
+    `;
   pages.appendChild(p1);
 
   // ── PAGE 2: HISTORY → BACKGROUND QUESTIONS → GUIDE (collapsible) ──
@@ -1407,6 +2020,7 @@ function buildPages(cls) {
   makeBoxPips(document.getElementById('stress-boxes'), 6, 0, 'stressbox');
   makeShieldPips(document.getElementById('armor-pips'), 12, 0);
   renderHopePips(document.getElementById('hope-pips'), 6, 0);
+  renderCompanionHp();
   makeProfDots(document.getElementById('prof-dots'), 1);
   addExpRow(document.getElementById('exp-list'));
   addExpRow(document.getElementById('exp-list'));
@@ -1740,21 +2354,47 @@ function renderLoadoutQuick() {
     const card = DOMAIN_CARDS.find(c => c.id === id);
     if (!card) return;
     const isFlipped = flipped.includes(id);
+    // Strip HTML for the snippet preview
+    const plainText = stripTags(card.text.replace(/<br>/g,' '));
+    const snippet = plainText.length > 80 ? plainText.slice(0, 80) + '…' : plainText;
+    const snippetId = 'lq-snip-' + id;
+
     const row = document.createElement('div');
     row.className = 'lq-row';
+    row.style.flexDirection = 'column';
+    row.style.alignItems = 'stretch';
     row.innerHTML = `
-      <div class="lq-name${isFlipped?' used':''}">${card.name}</div>
-      <div class="lq-type">${card.type}</div>
-      <button class="lq-flip${isFlipped?' flipped':''}" onclick="toggleFlip('${id}')">${isFlipped?'↺ Reset':'Flip'}</button>`;
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="lq-name${isFlipped?' used':''}" style="flex:1;">${card.name}</div>
+        <span class="lq-type">${card.type} · Lv${card.level}</span>
+        <button class="lq-flip${isFlipped?' flipped':''}" onclick="toggleFlip('${id}')">${isFlipped?'↺':'Flip'}</button>
+        <button onclick="toggleLqSnippet('${snippetId}')" style="font-size:10px;background:none;border:none;color:var(--muted);cursor:pointer;padding:2px 4px;" title="Show card text">▾</button>
+      </div>
+      <div id="${snippetId}" style="display:none;margin-top:5px;padding:6px 8px;background:var(--bg2);border-radius:4px;border:1px solid var(--border);">
+        <div style="font-size:11.5px;line-height:1.6;color:var(--text);">${card.text.replace(/\n/g,'<br>')}</div>
+      </div>`;
     container.appendChild(row);
   });
-  // Add a "Clear all" button if any are flipped
+  // Reset All button
   if (flipped.length > 0) {
     const btn = document.createElement('button');
-    btn.style.cssText = 'width:100%;margin-top:6px;font-family:\'Cinzel\',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:4px;border-radius:3px;cursor:pointer;';
+    btn.style.cssText = "width:100%;margin-top:6px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:4px;border-radius:3px;cursor:pointer;";
     btn.textContent = '↺ Reset All Cards';
     btn.onclick = clearFlipped;
     container.appendChild(btn);
+  }
+}
+
+function toggleLqSnippet(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const btn = el.previousElementSibling?.querySelector('[title="Show card text"]');
+  if (el.style.display === 'none') {
+    el.style.display = '';
+    if (btn) btn.textContent = '▴';
+  } else {
+    el.style.display = 'none';
+    if (btn) btn.textContent = '▾';
   }
 }
 
@@ -1826,16 +2466,1241 @@ function renderCardBrowser() {
   });
 }
 
+// ─────────────────────────────────────────────
+// SUBCLASS DATA
+// ─────────────────────────────────────────────
+const SUBCLASSES = {
+  Bard: {
+    tagline: 'As a bard, you know how to get people to talk, bring attention to yourself, and use words or music to influence the world around you.',
+    subclasses: [
+      {
+        name: 'Troubadour',
+        spellcast: 'Presence',
+        foundation: '<em>Gifted Performer:</em> Describe how you perform for others. You can play each song once per long rest:\n• <em>Relaxing Song:</em> You and all allies within Close range clear a Stress.\n• <em>Epic Song:</em> Make a target within Close range temporarily <em>Vulnerable</em>.\n• <em>Heartbreaking Song:</em> You and all allies within Close range gain a Hope.',
+        specialization: '<em>Maestro:</em> Your rallying songs steel the courage of those who listen. When you give a Rally Die to an ally, they can gain a Hope or clear a Stress.',
+        mastery: '<em>Virtuoso:</em> You are among the greatest of your craft and your skill is boundless. You can perform each of your "Gifted Performer" feature\'s songs twice instead of once per long rest.',
+      },
+      {
+        name: 'Wordsmith',
+        spellcast: 'Presence',
+        foundation: '<em>Rousing Speech:</em> Once per long rest, you can give a heartfelt, inspiring speech. All allies within Far range clear 2 Stress.\n\n<em>Heart of a Poet:</em> After you make an action roll to impress, persuade, or offend someone, you can <strong>spend a Hope</strong> to add a <strong>d4</strong> to the roll.',
+        specialization: '<em>Eloquent:</em> Your moving words boost morale. Once per session, when you encourage an ally, you can do one of the following:\n• Allow them to find a mundane object or tool they need.\n• Help an Ally without spending Hope.\n• Give them an additional downtime move during their next rest.',
+        mastery: '<em>Epic Poetry:</em> Your Rally Die increases to a <strong>d10</strong>. Additionally, when you Help an Ally, you can narrate the moment as if you were writing the tale of their heroism in a memoir. When you do, roll a <strong>d10</strong> as your advantage die.',
+      },
+    ],
+  },
+  Druid: {
+    tagline: 'As a druid, you are a force of nature, preserving the balance of life and death by channeling the wilds themselves through you.',
+    subclasses: [
+      {
+        name: 'Warden of the Elements',
+        spellcast: 'Instinct',
+        foundation: '<em>Elemental Incarnation:</em> <strong>Mark a Stress</strong> to <em>Channel</em> one of the following elements until you take Severe damage or until your next rest:\n• <em>Fire:</em> When an adversary within Melee range deals damage to you, they take <strong>1d10</strong> magic damage.\n• <em>Earth:</em> Gain a bonus to your damage thresholds equal to your Proficiency.\n• <em>Water:</em> When you deal damage to an adversary within Melee range, all other adversaries within Very Close range must mark a Stress.\n• <em>Air:</em> You can hover, gaining advantage on Agility Rolls.',
+        specialization: '<em>Elemental Aura:</em> Once per rest while <em>Channeling</em>, you can assume an aura matching your element. The aura affects targets within Close range until your <em>Channeling</em> ends.\n• <em>Fire:</em> When an adversary marks 1 or more Hit Points, they must also mark a Stress.\n• <em>Earth:</em> Your allies gain a +1 bonus to Strength.\n• <em>Water:</em> When an adversary deals damage to you, you can <strong>mark a Stress</strong> to move them anywhere within Very Close range of where they are.\n• <em>Air:</em> When you or an ally takes damage from an attack beyond Melee range, reduce the damage by <strong>1d8</strong>.',
+        mastery: '<em>Elemental Dominion:</em> You further embody your element. While <em>Channeling</em>, you gain the following benefit:\n• <em>Fire:</em> You gain a +1 bonus to your Proficiency for attacks and spells that deal damage.\n• <em>Earth:</em> When you would mark Hit Points, roll a <strong>d6</strong> per Hit Point marked. For each result of 6, reduce the number of Hit Points you mark by 1.\n• <em>Water:</em> When an attack against you succeeds, you can <strong>mark a Stress</strong> to make the attacker temporarily <em>Vulnerable</em>.\n• <em>Air:</em> You gain a +1 bonus to your Evasion and can fly.',
+      },
+      {
+        name: 'Warden of Renewal',
+        spellcast: 'Instinct',
+        foundation: '<em>Clarity of Nature:</em> Once per long rest, you can create a space of natural serenity within Close range. When you spend a few minutes resting within the space, clear Stress equal to your Instinct, distributed as you choose between you and your allies.\n\n<em>Regeneration:</em> Touch a creature and <strong>spend 3 Hope</strong>. That creature clears <strong>1d4</strong> Hit Points.',
+        specialization: '<em>Regenerative Reach:</em> You can target creatures within Very Close range with your "Regeneration" feature.\n\n<em>Warden\'s Protection:</em> Once per long rest, <strong>spend 2 Hope</strong> to clear 2 Hit Points on <strong>1d4</strong> allies within Close range.',
+        mastery: '<em>Defender:</em> Your animal transformation embodies a healing guardian spirit. When you\'re in Beastform and an ally within Close range marks 2 or more Hit Points, you can <strong>mark a Stress</strong> to reduce the number of Hit Points they mark by 1.',
+      },
+    ],
+    beastforms: [
+      // Tier 1
+      { tier: 1, name: 'Agile Scout', examples: 'Fox, Mouse, Weasel', stats: 'Agility +1 | Evasion +2 | Melee Agility d4 phy', text: '<em>Advantage on:</em> deceive, locate, sneak\n<em>Agile:</em> Your movement is silent, and you can spend a Hope to move up to Far range without rolling.\n<em>Fragile:</em> When you take Major or greater damage, you drop out of Beastform.' },
+      { tier: 1, name: 'Household Friend', examples: 'Cat, Dog, Rabbit', stats: 'Instinct +1 | Evasion +2 | Melee Instinct d6 phy', text: '<em>Advantage on:</em> climb, locate, protect\n<em>Companion:</em> When you Help an Ally, you can roll a d8 as your advantage die.\n<em>Fragile:</em> When you take Major or greater damage, you drop out of Beastform.' },
+      { tier: 1, name: 'Nimble Grazer', examples: 'Deer, Gazelle, Goat', stats: 'Agility +1 | Evasion +3 | Melee Agility d6 phy', text: '<em>Advantage on:</em> leap, sneak, sprint\n<em>Elusive Prey:</em> When an attack roll against you would succeed, you can mark a Stress and roll a d4. Add the result to your Evasion against this attack.\n<em>Fragile:</em> When you take Major or greater damage, you drop out of Beastform.' },
+      { tier: 1, name: 'Pack Predator', examples: 'Coyote, Hyena, Wolf', stats: 'Strength +2 | Evasion +1 | Melee Strength d8+2 phy', text: '<em>Advantage on:</em> attack, sprint, track\n<em>Hobbling Strike:</em> When you succeed on an attack against a target within Melee range, you can mark a Stress to make the target temporarily Vulnerable.\n<em>Pack Hunting:</em> When you succeed on an attack against the same target as an ally who acts immediately before you, add a d8 to your damage roll.' },
+      { tier: 1, name: 'Aquatic Scout', examples: 'Eel, Fish, Octopus', stats: 'Agility +1 | Evasion +2 | Melee Agility d4 phy', text: '<em>Advantage on:</em> navigate, sneak, swim\n<em>Aquatic:</em> You can breathe and move naturally underwater.\n<em>Fragile:</em> When you take Major or greater damage, you drop out of Beastform.' },
+      { tier: 1, name: 'Stalking Arachnid', examples: 'Tarantula, Wolf Spider', stats: 'Finesse +1 | Evasion +2 | Melee Finesse d6+1 phy', text: '<em>Advantage on:</em> attack, climb, sneak\n<em>Venomous Bite:</em> When you succeed on an attack within Melee range, the target becomes temporarily Poisoned. A Poisoned creature takes 1d10 direct physical damage each time they act.\n<em>Webslinger:</em> You can create a strong web material useful for both adventuring and battle. You can temporarily Restrain a target within Close range by succeeding on a Finesse Roll against them.' },
+      // Tier 2
+      { tier: 2, name: 'Armored Sentry', examples: 'Armadillo, Pangolin, Turtle', stats: 'Strength +1 | Evasion +1 | Melee Strength d8+2 phy', text: '<em>Advantage on:</em> dig, locate, protect\n<em>Armored Shell:</em> Your hardened exterior gives you resistance to physical damage. Additionally, mark an Armor Slot to retract into your shell. While in your shell, physical damage is reduced by a number equal to your Armor Score (after applying resistance), but you can\'t perform other actions without leaving this form.\n<em>Cannonball:</em> Mark a Stress to allow an ally to throw or launch you at an adversary. The ally makes an attack roll (Agility or Strength) against a target within Close range. On a success, the adversary takes d12+2 physical damage using the thrower\'s Proficiency.' },
+      { tier: 2, name: 'Powerful Beast', examples: 'Bear, Bull, Moose', stats: 'Strength +1 | Evasion +3 | Melee Strength d10+4 phy', text: '<em>Advantage on:</em> navigate, protect, scare\n<em>Rampage:</em> When you roll a 1 on a damage die, you can roll a d10 and add the result to the damage roll. Before you make an attack roll, you can mark a Stress to gain a +1 bonus to your Proficiency for that attack.\n<em>Thick Hide:</em> You gain a +2 bonus to your damage thresholds.' },
+      { tier: 2, name: 'Mighty Strider', examples: 'Camel, Horse, Zebra', stats: 'Agility +1 | Evasion +2 | Melee Agility d8+1 phy', text: '<em>Advantage on:</em> leap, navigate, sprint\n<em>Carrier:</em> You can carry up to two willing allies with you when you move.\n<em>Trample:</em> Mark a Stress to move up to Close range in a straight line and make an attack against all targets within Melee range of the line. Targets you succeed against take d8+1 physical damage and are temporarily Vulnerable.' },
+      { tier: 2, name: 'Striking Serpent', examples: 'Cobra, Rattlesnake, Viper', stats: 'Finesse +1 | Evasion +2 | Very Close Finesse d8+4 phy', text: '<em>Advantage on:</em> climb, deceive, sprint\n<em>Venomous Strike:</em> Make an attack against any number of targets within Very Close range. On a success, a target is temporarily Poisoned. A Poisoned creature takes 1d10 physical direct damage each time they act.\n<em>Warning Hiss:</em> Mark a Stress to force any number of targets within Melee range to move back to Very Close range.' },
+      { tier: 2, name: 'Pouncing Predator', examples: 'Cheetah, Lion, Panther', stats: 'Instinct +1 | Evasion +3 | Melee Instinct d8+6 phy', text: '<em>Advantage on:</em> attack, climb, sneak\n<em>Fleet:</em> Spend a Hope to move up to Far range without rolling.\n<em>Takedown:</em> Mark a Stress to move into Melee range of a target and make an attack roll against them. On a success, you gain a +2 bonus to your Proficiency for this attack and the target must mark a Stress.' },
+      { tier: 2, name: 'Winged Beast', examples: 'Hawk, Owl, Raven', stats: 'Finesse +1 | Evasion +3 | Melee Finesse d4+2 phy', text: '<em>Advantage on:</em> deceive, locate, scare\n<em>Bird\'s-Eye View:</em> You can fly at will. Once per rest while airborne, you can ask the GM a question about the scene below you without needing to roll. The first time a character makes a roll to act on this information, they gain advantage.\n<em>Hollow Bones:</em> You gain a −2 penalty to your damage thresholds.' },
+      // Tier 3
+      { tier: 3, name: 'Great Predator', examples: 'Dire Wolf, Velociraptor, Sabertooth', stats: 'Strength +2 | Evasion +2 | Melee Strength d12+8 phy', text: '<em>Advantage on:</em> attack, sneak, sprint\n<em>Carrier:</em> You can carry up to two willing allies with you when you move.\n<em>Vicious Maul:</em> When you succeed on an attack against a target, you can spend a Hope to make them temporarily Vulnerable and gain a +1 bonus to your Proficiency for this attack.' },
+      { tier: 3, name: 'Mighty Lizard', examples: 'Alligator, Crocodile, Gila Monster', stats: 'Instinct +2 | Evasion +1 | Melee Instinct d10+7 phy', text: '<em>Advantage on:</em> attack, sneak, track\n<em>Physical Defense:</em> You gain a +3 bonus to your damage thresholds.\n<em>Snapping Strike:</em> When you succeed on an attack within Melee range, you can spend a Hope to clamp that opponent in your jaws, making them temporarily Restrained and Vulnerable.' },
+      { tier: 3, name: 'Great Winged Beast', examples: 'Giant Eagle, Falcon', stats: 'Finesse +2 | Evasion +3 | Melee Finesse d8+6 phy', text: '<em>Advantage on:</em> deceive, distract, locate\n<em>Bird\'s-Eye View:</em> You can fly at will. Once per rest while airborne, you can ask the GM a question about the scene below you without needing to roll.\n<em>Carrier:</em> You can carry up to two willing allies with you when you move.' },
+      { tier: 3, name: 'Aquatic Predator', examples: 'Dolphin, Orca, Shark', stats: 'Agility +2 | Evasion +4 | Melee Agility d10+6 phy', text: '<em>Advantage on:</em> attack, swim, track\n<em>Aquatic:</em> You can breathe and move naturally underwater.\n<em>Vicious Maul:</em> When you succeed on an attack, you can spend a Hope to make them temporarily Vulnerable and gain a +1 bonus to your Proficiency for this attack.' },
+      { tier: 3, name: 'Legendary Beast', examples: 'Upgraded Tier 1 Option', stats: 'Pick a Tier 1 form — see bonuses below', text: '<em>Evolved:</em> Pick a Tier 1 Beastform option and become a larger, more powerful version of that creature. You retain all traits and features from the original form and gain:\n• A +6 bonus to damage rolls\n• A +1 bonus to the trait used by this form\n• A +2 bonus to Evasion' },
+      { tier: 3, name: 'Legendary Hybrid', examples: 'Griffon, Sphinx', stats: 'Strength +2 | Evasion +3 | Melee Strength d10+8', text: '<em>Hybrid Features:</em> To transform into this creature, mark an additional Stress. Choose any two Beastform options from Tiers 1–2. Choose a total of four advantages and two features from those options.' },
+      // Tier 4
+      { tier: 4, name: 'Massive Behemoth', examples: 'Elephant, Mammoth, Rhinoceros', stats: 'Strength +3 | Evasion +1 | Melee Strength d12+12 phy', text: '<em>Advantage on:</em> locate, protect, scare, sprint\n<em>Carrier:</em> You can carry up to four willing allies with you when you move.\n<em>Demolish:</em> Spend a Hope to move up to Far range in a straight line and make an attack against all targets within Melee range of the line. Targets you succeed against take d8+10 physical damage and are temporarily Vulnerable.\n<em>Undaunted:</em> You gain a +2 bonus to all your damage thresholds.' },
+      { tier: 4, name: 'Terrible Lizard', examples: 'Brachiosaurus, Tyrannosaurus', stats: 'Strength +3 | Evasion +2 | Melee Strength d12+10 phy', text: '<em>Advantage on:</em> attack, deceive, scare, track\n<em>Devastating Strikes:</em> When you deal Severe damage to a target within Melee range, you can mark a Stress to force them to mark an additional Hit Point.\n<em>Massive Stride:</em> You can move up to Far range without rolling. You ignore rough terrain due to your size.' },
+      { tier: 4, name: 'Mythic Aerial Hunter', examples: 'Dragon, Pterodactyl, Roc, Wyvern', stats: 'Finesse +3 | Evasion +4 | Melee Finesse d10+11 phy', text: '<em>Advantage on:</em> attack, deceive, locate, navigate\n<em>Carrier:</em> You can carry up to three willing allies with you when you move.\n<em>Deadly Raptor:</em> You can fly at will and move up to Far range as part of your action. When you move in a straight line into Melee range of a target from at least Close range and make an attack in the same action, you can reroll all damage dice that rolled a result lower than your Proficiency.' },
+      { tier: 4, name: 'Epic Aquatic Beast', examples: 'Giant Squid, Whale', stats: 'Agility +3 | Evasion +3 | Melee Agility d10+10 phy', text: '<em>Advantage on:</em> locate, protect, scare, track\n<em>Ocean Master:</em> You can breathe and move naturally underwater. When you succeed on an attack within Melee range, you can temporarily Restrain them.\n<em>Unyielding:</em> When you would mark an Armor Slot, roll a d6. On a result of 5 or higher, reduce the severity by one threshold without marking an Armor Slot.' },
+      { tier: 4, name: 'Mythic Beast', examples: 'Upgraded Tier 1 or Tier 2 Option', stats: 'Pick a Tier 1 or Tier 2 form — see bonuses below', text: '<em>Evolved:</em> Pick a Tier 1 or Tier 2 Beastform option and become a larger, more powerful version. You retain all traits and features and gain:\n• A +9 bonus to damage rolls\n• A +2 bonus to the trait used by this form\n• A +3 bonus to Evasion\n• Your damage die increases by one size (d6→d8, d8→d10, etc.)' },
+      { tier: 4, name: 'Mythic Hybrid', examples: 'Chimera, Cockatrice, Manticore', stats: 'Strength +3 | Evasion +2 | Strength Melee d12+10 phy', text: '<em>Hybrid Features:</em> To transform, mark 2 additional Stress. Choose any three Beastform options from Tiers 1–3. Choose a total of five advantages and three features from those options.' },
+    ],
+  },
+  Guardian: {
+    tagline: 'As a guardian, you run into danger to protect your party, keeping watch over those who might not survive without you there.',
+    subclasses: [
+      {
+        name: 'Stalwart',
+        spellcast: null,
+        foundation: '<em>Unwavering:</em> Gain a permanent +1 bonus to your damage thresholds.\n\n<em>Iron Will:</em> When you take physical damage, you can <strong>mark an additional Armor Slot</strong> to reduce the severity.',
+        specialization: '<em>Unrelenting:</em> Gain a permanent +2 bonus to your damage thresholds.\n\n<em>Partners-in-Arms:</em> When an ally within Very Close range takes damage, you can <strong>mark an Armor Slot</strong> to reduce the severity by one threshold.',
+        mastery: '<em>Undaunted:</em> Gain a permanent +3 bonus to your damage thresholds.\n\n<em>Loyal Protector:</em> When an ally within Close range has 2 or fewer Hit Points and would take damage, you can <strong>mark a Stress</strong> to sprint to their side and take the damage instead.',
+      },
+      {
+        name: 'Vengeance',
+        spellcast: null,
+        foundation: '<em>At Ease:</em> Gain an additional Stress slot.\n\n<em>Revenge:</em> When an adversary within Melee range succeeds on an attack against you, you can <strong>mark 2 Stress</strong> to force the attacker to mark a Hit Point.',
+        specialization: '<em>Act of Reprisal:</em> When an adversary damages an ally within Melee range, you gain a +1 bonus to your Proficiency for the next successful attack you make against that adversary.',
+        mastery: '<em>Nemesis:</em> <strong>Spend 2 Hope</strong> to <em>Prioritize</em> an adversary until your next rest. When you make an attack against your <em>Prioritized</em> adversary, you can swap the results of your Hope and Fear Dice. You can only <em>Prioritize</em> one adversary at a time.',
+      },
+    ],
+  },
+  Ranger: {
+    tagline: "As a ranger, your keen eyes and graceful haste make you indispensable when tracking down enemies and navigating the wilds.",
+    subclasses: [
+      {
+        name: 'Beastbound',
+        spellcast: 'Agility',
+        foundation: '<em>Companion:</em> You have an animal companion of your choice (at the GM\'s discretion). They stay by your side unless you tell them otherwise.\n\nTake the Ranger Companion sheet. When you level up your character, choose a level-up option for your companion from that sheet as well.',
+        specialization: '<em>Expert Training:</em> Choose an additional level-up option for your companion.\n\n<em>Battle-Bonded:</em> When an adversary attacks you while they\'re within your companion\'s Melee range, you gain a +2 bonus to your Evasion against the attack.',
+        mastery: '<em>Advanced Training:</em> Choose two additional level-up options for your companion.\n\n<em>Loyal Friend:</em> Once per long rest, when the damage from an attack would mark your companion\'s last Stress or your last Hit Point and you\'re within Close range of each other, you or your companion can sprint to the other\'s side and take that damage instead.',
+      },
+      {
+        name: 'Wayfinder',
+        spellcast: 'Agility',
+        foundation: '<em>Ruthless Predator:</em> When you make a damage roll, you can <strong>mark a Stress</strong> to gain a +1 bonus to your Proficiency. When you deal Severe damage to an adversary, they must mark a Stress.\n\n<em>Path Forward:</em> When you\'re traveling to a place you\'ve previously visited or you carry an object that has been at the location before, you can identify the shortest, most direct path to your destination.',
+        specialization: '<em>Elusive Predator:</em> When your Focus makes an attack against you, you gain a +2 bonus to your Evasion against the attack.',
+        mastery: '<em>Apex Predator:</em> Before you make an attack roll against your Focus, you can <strong>spend a Hope</strong>. On a successful attack, you remove a Fear from the GM\'s Fear pool.',
+      },
+    ],
+  },
+  Rogue: {
+    tagline: 'As a rogue, you have experience fighting with your blade as well as your wit, preferring to move quickly and fight quietly.',
+    subclasses: [
+      {
+        name: 'Nightwalker',
+        spellcast: 'Finesse',
+        foundation: '<em>Shadow Stepper:</em> You can move from shadow to shadow. When you move into an area of darkness or a shadow cast by another creature or object, you can <strong>mark a Stress</strong> to disappear from where you are and reappear inside another shadow within Far range. When you reappear, you are <em>Cloaked</em>.',
+        specialization: '<em>Dark Cloud:</em> Make a <strong>Spellcast Roll (15)</strong>. On a success, create a temporary dark cloud that covers any area within Close range. Anyone in this cloud can\'t see outside of it, and anyone outside of it can\'t see in. You\'re considered <em>Cloaked</em> from any adversary for whom the cloud blocks line of sight.\n\n<em>Adrenaline:</em> While you\'re <em>Vulnerable</em>, add your level to your damage rolls.',
+        mastery: '<em>Fleeting Shadow:</em> Gain a permanent +1 bonus to your Evasion. You can use your "Shadow Stepper" feature to move within Very Far range.\n\n<em>Vanishing Act:</em> <strong>Mark a Stress</strong> to become <em>Cloaked</em> at any time. When <em>Cloaked</em> from this feature, you automatically clear the <em>Restrained</em> condition if you have it. You remain <em>Cloaked</em> in this way until you roll with Fear or until your next rest.',
+      },
+      {
+        name: 'Syndicate',
+        spellcast: 'Finesse',
+        foundation: '<em>Well-Connected:</em> When you arrive in a prominent town or environment, you know somebody who calls this place home. Give them a name, note how you think they could be useful, and choose one fact from the following list:\n• They owe me a favor, but they\'ll be hard to find.\n• They\'re going to ask for something in exchange.\n• They\'re always in a great deal of trouble.\n• We used to be together. It\'s a long story.\n• We didn\'t part on great terms.',
+        specialization: '<em>Contacts Everywhere:</em> Once per session, you can briefly call on a shady contact. Choose one of the following benefits and describe what brought them here to help you in this moment:\n• They provide 1 handful of gold, a unique tool, or a mundane object that the situation requires.\n• On your next action roll, their help provides a +3 bonus to the result of your Hope or Fear Die.\n• The next time you deal damage, they snipe from the shadows, adding <strong>2d8</strong> to your damage roll.',
+        mastery: '<em>Reliable Backup:</em> You can use your "Contacts Everywhere" feature three times per session. The following options are added to the list of benefits you can choose from when you use that feature:\n• When you mark 1 or more Hit Points, they can rush out to shield you, reducing the Hit Points marked by 1.\n• When you make a Presence Roll in conversation, they back you up. You can roll a <strong>d20</strong> as your Hope Die.',
+      },
+    ],
+  },
+  Seraph: {
+    tagline: "As a seraph, you've taken a vow to a god who helps you channel sacred arcane power to keep your party on their feet.",
+    subclasses: [
+      {
+        name: 'Divine Wielder',
+        spellcast: 'Strength',
+        foundation: '<em>Spirit Weapon:</em> When you have an equipped weapon with a range of Melee or Very Close, it can fly from your hand to attack an adversary within Close range and then return to you. You can <strong>mark a Stress</strong> to target an additional adversary within range with the same attack roll.\n\n<em>Sparing Touch:</em> Once per long rest, touch a creature and clear 2 Hit Points or 2 Stress from them.',
+        specialization: '<em>Devout:</em> When you roll your Prayer Dice, you can roll an additional die and discard the lowest result. Additionally, you can use your "Sparing Touch" feature twice instead of once per long rest.',
+        mastery: '<em>Sacred Resonance:</em> When you roll damage for your "Spirit Weapon" feature, if any of the die results match, double the value of each matching die. For example, if you roll two 5s, they count as two 10s.',
+      },
+      {
+        name: 'Winged Sentinel',
+        spellcast: 'Strength',
+        foundation: '<em>Wings of Light:</em> You can fly. While flying, you can do the following:\n• <strong>Mark a Stress</strong> to pick up and carry another willing creature approximately your size or smaller.\n• <strong>Spend a Hope</strong> to deal an extra <strong>1d8</strong> damage on a successful attack.',
+        specialization: '<em>Ethereal Visage:</em> Your supernatural visage strikes awe and fear. While flying, you have advantage on Presence Rolls. When you succeed with Hope on a Presence Roll, you can remove a Fear from the GM\'s Fear pool instead of gaining Hope.',
+        mastery: '<em>Ascendant:</em> Gain a permanent +4 bonus to your Severe damage threshold.\n\n<em>Power of the Gods:</em> While flying, you deal an extra <strong>1d12</strong> damage instead of 1d8 from your "Wings of Light" feature.',
+      },
+    ],
+  },
+  Sorcerer: {
+    tagline: "As a sorcerer, you were born with innate magical power, and you've learned how to wield that power to get what you want.",
+    subclasses: [
+      {
+        name: 'Elemental Origin',
+        spellcast: 'Instinct',
+        foundation: '<em>Elementalist:</em> Choose one of the following elements at character creation: <strong>Air · Earth · Fire · Lightning · Water</strong>\n\nYou can shape this element into harmless effects. Additionally, <strong>spend a Hope</strong> and describe how you use your control over this element to help an action roll you\'re about to make, then either gain a +2 bonus to the roll or a +3 bonus to the roll\'s damage.',
+        specialization: '<em>Natural Evasion:</em> You can call forth your element to protect you from harm. When an attack roll against you succeeds, you can <strong>mark a Stress</strong> and describe how you use your element to defend yourself. When you do, roll a <strong>d6</strong> and add its result to your Evasion against the attack.',
+        mastery: '<em>Transcendence:</em> Once per long rest, you can transform into a physical manifestation of your element. When you do, describe your transformation and choose two of the following benefits to gain until your next rest:\n• +4 bonus to your Severe threshold\n• +1 bonus to a character trait of your choice\n• +1 bonus to your Proficiency\n• +2 bonus to your Evasion',
+      },
+      {
+        name: 'Primal Origin',
+        spellcast: 'Instinct',
+        foundation: '<em>Manipulate Magic:</em> Your primal origin allows you to modify the essence of magic itself. After you cast a spell or make an attack using a weapon that deals magic damage, you can <strong>mark a Stress</strong> to do one of the following:\n• Extend the spell or attack\'s reach by one range\n• Gain a +2 bonus to the action roll\'s result\n• Double a damage die of your choice\n• Hit an additional target within range',
+        specialization: '<em>Enchanted Aid:</em> You can enhance the magic of others with your essence. When you Help an Ally with a Spellcast Roll, you can roll a <strong>d8</strong> as your advantage die. Once per long rest, after an ally has made a Spellcast Roll with your help, you can swap the results of their Duality Dice.',
+        mastery: '<em>Arcane Charge:</em> You can gather magical energy to enhance your capabilities. When you take magic damage, you become <em>Charged</em>. Alternatively, you can <strong>spend 2 Hope</strong> to become <em>Charged</em>. When you successfully make an attack that deals magic damage while <em>Charged</em>, you can clear your <em>Charge</em> to either gain a +10 bonus to the damage roll or gain a +3 bonus to the Difficulty of a reaction roll the spell causes the target to make. You stop being <em>Charged</em> at your next long rest.',
+      },
+    ],
+  },
+  Warrior: {
+    tagline: 'As a warrior, you run into battle without hesitation or caution, knowing you can strike down whatever enemy stands in your path.',
+    subclasses: [
+      {
+        name: 'Call of the Brave',
+        spellcast: null,
+        foundation: '<em>Courage:</em> When you fail a roll with Fear, you gain a Hope.\n\n<em>Battle Ritual:</em> Once per long rest, before you attempt something incredibly dangerous or face off against a foe who clearly outmatches you, describe what ritual you perform or preparations you make. When you do, clear 2 Stress and gain 2 Hope.',
+        specialization: '<em>Rise to the Challenge:</em> You are vigilant in the face of mounting danger. While you have 2 or fewer Hit Points unmarked, you can roll a <strong>d20</strong> as your Hope Die.',
+        mastery: '<em>Camaraderie:</em> Your unwavering bravery is a rallying point for your allies. You can initiate a Tag Team Roll one additional time per session. Additionally, when an ally initiates a Tag Team Roll with you, they only need to spend 2 Hope to do so.',
+      },
+      {
+        name: 'Call of the Slayer',
+        spellcast: null,
+        foundation: '<em>Slayer:</em> You gain a pool of dice called Slayer Dice. On a roll with Hope, you can place a <strong>d6</strong> on this card instead of gaining a Hope, adding the die to the pool. You can store a number of Slayer Dice equal to your Proficiency. When you make an attack roll or damage roll, you can spend any number of these Slayer Dice, rolling them and adding their result to the roll. At the end of each session, clear all unspent Slayer Dice and gain a Hope per die cleared.',
+        specialization: '<em>Weapon Specialist:</em> You can wield multiple weapons with dangerous ease. When you succeed on an attack, you can <strong>spend a Hope</strong> to add one of the damage dice from your secondary weapon to the damage roll. Additionally, once per long rest when you roll your Slayer Dice, reroll any 1s.',
+        mastery: '<em>Martial Preparation:</em> You\'re an inspirational warrior to all who travel with you. Your party gains access to the Martial Preparation downtime move. To use this move during a rest, describe how you instruct and train with your party. You and each one who chooses this downtime move gain a <strong>d6</strong> Slayer Die. A PC with a Slayer Die can spend it to roll the die and add the result to an attack or damage roll of their choice.',
+      },
+    ],
+  },
+  Wizard: {
+    tagline: "As a wizard, you've become familiar with the arcane through the relentless study of grimoires and other tools of magic.",
+    subclasses: [
+      {
+        name: 'School of Knowledge',
+        spellcast: 'Knowledge',
+        foundation: '<em>Prepared:</em> Take an additional domain card of your level or lower from a domain you have access to.\n\n<em>Adept:</em> When you Utilize an Experience, you can <strong>mark a Stress</strong> instead of spending a Hope. If you do, double your Experience modifier for that roll.',
+        specialization: '<em>Accomplished:</em> Take an additional domain card of your level or lower from a domain you have access to.\n\n<em>Perfect Recall:</em> Once per rest, when you recall a domain card in your vault, you can reduce its Recall Cost by 1.',
+        mastery: '<em>Brilliant:</em> Take an additional domain card of your level or lower from a domain you have access to.\n\n<em>Honed Expertise:</em> When you use an Experience, roll a <strong>d6</strong>. On a result of 5 or higher, you can use it without spending Hope.',
+      },
+      {
+        name: 'School of War',
+        spellcast: 'Knowledge',
+        foundation: '<em>Battlemage:</em> You\'ve focused your studies on becoming an unconquerable force on the battlefield. Gain an additional Hit Point slot.\n\n<em>Face Your Fear:</em> When you succeed with Fear on an attack roll, you deal an extra <strong>1d10</strong> magic damage.',
+        specialization: '<em>Conjure Shield:</em> You can maintain a protective barrier of magic. While you have at least 2 Hope, you add your Proficiency to your Evasion.\n\n<em>Fueled by Fear:</em> The extra magic damage from your "Face Your Fear" feature increases to <strong>2d10</strong>.',
+        mastery: '<em>Thrive in Chaos:</em> When you succeed on an attack, you can <strong>mark a Stress</strong> after rolling damage to force the target to mark an additional Hit Point.\n\n<em>Have No Fear:</em> The extra magic damage from your "Face Your Fear" feature increases to <strong>3d10</strong>.',
+      },
+    ],
+  },
+};
+
+// ─────────────────────────────────────────────
+// CLASS REFERENCE RENDERER
+// ─────────────────────────────────────────────
+function renderAncestryRef() {
+  const grid = document.getElementById('ancestry-ref-grid');
+  if (!grid || grid.children.length) return; // already rendered
+  Object.entries(ANCESTRY_DATA).forEach(([name, data]) => {
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:0 5px 5px 0;padding:10px 12px;';
+    card.innerHTML = `
+      <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">${name}</div>
+      <div style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:8px;line-height:1.5;">${data.description}</div>
+      ${data.features.map(f=>`<div style="margin-bottom:5px;"><strong style="font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:0.06em;color:var(--teal);">${f.name}:</strong> <span style="font-size:12.5px;line-height:1.6;">${f.text}</span></div>`).join('')}`;
+    grid.appendChild(card);
+  });
+}
+
+function renderCommunityRef() {
+  const grid = document.getElementById('community-ref-grid');
+  if (!grid || grid.children.length) return;
+  Object.entries(COMMUNITY_DATA).forEach(([name, data]) => {
+    const card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--gold-dim);border-radius:0 5px 5px 0;padding:10px 12px;';
+    card.innerHTML = `
+      <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">${name}</div>
+      <div style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:8px;line-height:1.5;">${data.description}</div>
+      ${data.features.map(f=>`<div style="margin-bottom:5px;"><strong style="font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:0.06em;color:var(--gold);">${f.name}:</strong> <span style="font-size:12.5px;line-height:1.6;">${f.text}</span></div>`).join('')}`;
+    grid.appendChild(card);
+  });
+}
+
+function renderClassRef() {
+  const cls = document.getElementById('ref-class-picker')?.value;
+  const container = document.getElementById('class-ref-content');
+  if (!container) return;
+  if (!cls || !SUBCLASSES[cls]) {
+    container.innerHTML = '<p style="font-size:13px;color:var(--muted);font-style:italic;text-align:center;padding:1.5rem 0;">Select a class above to view its subclasses and reference info.</p>';
+    return;
+  }
+  const data = SUBCLASSES[cls];
+  const classData = CLASSES[cls];
+  let html = '';
+
+  // Class overview strip
+  html += `<div style="margin-bottom:1.25rem;">
+    <div style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.12em;color:var(--gold);margin-bottom:4px;">${classData?.domains || ''}</div>
+    <p style="font-size:13px;color:var(--muted);font-style:italic;line-height:1.6;">${data.tagline}</p>
+  </div>`;
+
+  // Class Feature
+  if (classData) {
+    html += `<div class="ref-section-hdr">Class Feature</div>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:1.25rem;">
+      <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">${classData.featureName}</div>
+      <div style="font-size:13px;line-height:1.65;">${classData.featureBody.replace(/\n/g,'<br>')}</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:13px;line-height:1.6;color:var(--text);">${classData.featureHope}</div>
+    </div>`;
+  }
+
+  // Subclasses
+  html += `<div class="ref-section-hdr">Subclasses</div>`;
+  data.subclasses.forEach(sub => {
+    html += `<div class="subclass-card">
+      <div class="subclass-header">
+        <span class="subclass-class-tag">${cls}</span>
+        <span class="subclass-name">${sub.name}</span>
+        ${sub.spellcast ? `<span class="subclass-spellcast">Spellcast: ${sub.spellcast}</span>` : ''}
+      </div>
+      <div class="subclass-body">
+        <div class="subclass-tier">
+          <div class="subclass-tier-label foundation">Foundation — Character Creation</div>
+          <div class="subclass-tier-text">${sub.foundation.replace(/\n/g,'<br>')}</div>
+        </div>
+        <div class="subclass-tier">
+          <div class="subclass-tier-label specialization">Specialization — Level 5</div>
+          <div class="subclass-tier-text">${sub.specialization.replace(/\n/g,'<br>')}</div>
+        </div>
+        <div class="subclass-tier">
+          <div class="subclass-tier-label mastery">Mastery — Level 8</div>
+          <div class="subclass-tier-text">${sub.mastery.replace(/\n/g,'<br>')}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  // Beastforms for Druid
+  if (data.beastforms) {
+    html += `<div class="ref-section-hdr" style="margin-top:1.25rem;">Beastform List</div>`;
+    [1,2,3,4].forEach(tier => {
+      const forms = data.beastforms.filter(b => b.tier === tier);
+      if (!forms.length) return;
+      html += `<div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.12em;color:var(--muted);margin:0.75rem 0 0.5rem;">Tier ${tier}</div>
+      <div class="beastform-grid">`;
+      forms.forEach(b => {
+        html += `<div class="beastform-card">
+          <div class="beastform-tier-badge">Tier ${b.tier}</div>
+          <div class="beastform-name">${b.name}</div>
+          <div style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:4px;">(${b.examples})</div>
+          <div class="beastform-stats">${b.stats}</div>
+          <div class="beastform-text">${b.text.replace(/\n/g,'<br>')}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+  }
+
+  container.innerHTML = html;
+}
+
+// ─────────────────────────────────────────────
+// ─────────────────────────────────────────────
+// SESSION 0 WIZARD
+// ─────────────────────────────────────────────
+function s0QKey(q) { return 'ans:' + q.substring(0, 40).replace(/\s+/g,'_').replace(/[^a-z0-9_]/gi,''); }
+
+const S0_STEPS = [
+  { id:'welcome' },
+  { id:'how-dice' },
+  { id:'how-hope' },
+  { id:'how-combat' },
+  { id:'pick-class' },
+  { id:'pick-subclass' },
+  { id:'pick-ancestry' },
+  { id:'pick-community' },
+  { id:'traits' },
+  { id:'experiences' },
+  { id:'connections' },
+  { id:'group-questions' },
+  { id:'done' },
+];
+
+let s0Step = 0;
+let s0Data = {};
+
+function loadS0Data() {
+  try { s0Data = JSON.parse(localStorage.getItem('dh2-s0-wizard')) || {}; } catch(e) { s0Data = {}; }
+  s0Step = s0Data.step || 0;
+}
+
+function saveS0Data() {
+  s0Data.step = s0Step;
+  localStorage.setItem('dh2-s0-wizard', JSON.stringify(s0Data));
+}
+
+function saveS0() { saveS0Data(); }
+
+function s0Go(dir) {
+  s0Step = Math.max(0, Math.min(S0_STEPS.length - 1, s0Step + dir));
+  saveS0Data();
+  renderS0();
+}
+
+function s0GoTo(n) {
+  s0Step = n;
+  saveS0Data();
+  renderS0();
+}
+
+function renderS0Connections() { renderS0(); }
+
+function renderS0() {
+  loadS0Data();
+  const wiz = document.getElementById('s0-wizard');
+  if (!wiz) return;
+  const step = S0_STEPS[s0Step];
+
+  // Progress bar
+  const pct = Math.round((s0Step / (S0_STEPS.length - 1)) * 100);
+  let html = `
+    <div style="margin-bottom:1.25rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.15em;color:var(--muted);">SESSION 0 — STEP ${s0Step + 1} OF ${S0_STEPS.length}</span>
+        <button onclick="if(confirm('Restart Session 0?')){s0Data={};s0Step=0;saveS0Data();renderS0();}" style="font-family:'Cinzel',serif;font-size:8px;background:none;border:1px solid var(--border2);color:var(--muted);padding:2px 8px;border-radius:3px;cursor:pointer;">↺ Restart</button>
+      </div>
+      <div style="background:var(--bg3);border-radius:4px;height:6px;overflow:hidden;">
+        <div style="background:var(--gold);height:100%;width:${pct}%;transition:width 0.3s;border-radius:4px;"></div>
+      </div>
+    </div>`;
+
+  html += renderS0Step(step.id);
+
+  // Nav buttons
+  html += `<div style="display:flex;gap:10px;margin-top:1.5rem;justify-content:space-between;">`;
+  if (s0Step > 0) html += `<button onclick="s0Go(-1)" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;background:none;border:1px solid var(--border2);color:var(--muted);padding:10px 20px;border-radius:4px;cursor:pointer;flex:1;">← Back</button>`;
+  else html += `<div></div>`;
+  if (s0Step < S0_STEPS.length - 1) html += `<button onclick="s0Go(1)" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:10px 24px;border-radius:4px;cursor:pointer;flex:2;">Continue →</button>`;
+  html += `</div>`;
+
+  wiz.innerHTML = html;
+
+  // Post-render hooks for dynamic selects
+  function wireClassSelect() {
+    const sel = document.getElementById('s0-class');
+    if (!sel) return;
+    function updatePreview() {
+      // Highlight selected card
+      document.querySelectorAll('[id^="s0-classcard-"]').forEach(el => { el.style.borderColor='var(--border)'; el.style.background='var(--bg3)'; });
+      if (sel.value) {
+        const card = document.getElementById('s0-classcard-' + sel.value);
+        if (card) { card.style.borderColor='var(--gold-dim)'; card.style.background='var(--bg4)'; }
+        // Collapse list after picking
+        const allCards = document.getElementById('s0-all-cards');
+        const toggleBtn = document.getElementById('s0-toggle-classes');
+        if (allCards) allCards.style.display = 'none';
+        if (toggleBtn) toggleBtn.textContent = '▼ Show all';
+      }
+      const preview = document.getElementById('s0-class-preview');
+      const c = CLASSES[sel.value];
+      if (preview && c) {
+        preview.innerHTML = `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:14px;margin-bottom:0.5rem;">
+          <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--gold);margin-bottom:6px;">${sel.value} — ${c.domains}</div>
+          <p style="font-size:13px;line-height:1.75;margin-bottom:10px;">${c.tagline}</p>
+          <div style="font-family:'Cinzel',serif;font-size:9px;color:var(--teal);margin-bottom:3px;">CORE FEATURE</div>
+          <p style="font-size:13px;font-weight:600;margin-bottom:4px;">${c.featureName}</p>
+          <p style="font-size:12px;line-height:1.7;color:var(--muted);">${c.featureBody.replace(/<[^>]*>/g,'').substring(0,300)}...</p>
+          <div style="margin-top:10px;font-family:'Cinzel',serif;font-size:9px;color:var(--teal);">SUGGESTED TRAITS</div>
+          <p style="font-size:12px;margin-top:3px;">${c.suggestedTraits.replace(/\n/g,' · ')}</p>
+          <div style="margin-top:8px;font-family:'Cinzel',serif;font-size:9px;color:var(--teal);">STARTING EVASION</div>
+          <p style="font-size:14px;font-weight:700;color:var(--gold);margin-top:2px;">${c.evasionStart}</p>
+        </div>`;
+      } else if (preview) { preview.innerHTML = ''; }
+    }
+    sel.addEventListener('change', () => {
+      if (sel.id) s0Data[sel.id] = sel.value;
+      saveS0Data();
+      if (sel.value) {
+        switchClass(sel.value, true);
+        setTimeout(() => renderS0(), 50);
+      }
+      updatePreview();
+    });
+    updatePreview();
+  }
+  function wireAncestrySelect() {
+    const sel = document.getElementById('s0-ancestry');
+    if (!sel) return;
+    function update() {
+      const det = document.getElementById('s0-ancestry-detail');
+      const d = ANCESTRY_DATA[sel.value];
+      if (!det) return;
+      if (!d) { det.style.display = 'none'; return; }
+      det.style.display = '';
+      det.innerHTML = `<div style="background:var(--bg3);border:1px solid var(--teal);border-radius:5px;padding:12px 14px;margin-top:10px;">
+        <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--teal);margin-bottom:6px;">${sel.value.toUpperCase()} FEATURES</div>
+        <p style="font-size:12px;line-height:1.7;margin-bottom:8px;">${d.description}</p>
+        ${d.features.map(f=>`<div style="font-size:12px;line-height:1.7;margin-bottom:4px;padding-left:10px;border-left:2px solid var(--teal);"><strong>${f.name}:</strong> ${f.text.replace(/<[^>]*>/g,'')}</div>`).join('')}
+      </div>`;
+    }
+    sel.addEventListener('change', () => { if (sel.id) s0Data[sel.id] = sel.value; saveS0Data(); update(); });
+    if (sel.value) update();
+  }
+  function wireCommunitySelect() {
+    const sel = document.getElementById('s0-community');
+    if (!sel) return;
+    function update() {
+      const det = document.getElementById('s0-community-detail');
+      const d = COMMUNITY_DATA[sel.value];
+      if (!det) return;
+      if (!d) { det.style.display = 'none'; return; }
+      det.style.display = '';
+      det.innerHTML = `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-radius:5px;padding:12px 14px;margin-top:10px;">
+        <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);margin-bottom:6px;">${sel.value.toUpperCase()} FEATURES</div>
+        <p style="font-size:12px;line-height:1.7;margin-bottom:8px;">${d.description}</p>
+        ${d.features.map(f=>`<div style="font-size:12px;line-height:1.7;margin-bottom:4px;padding-left:10px;border-left:2px solid var(--gold-dim);"><strong>${f.name}:</strong> ${f.text.replace(/<[^>]*>/g,'')}</div>`).join('')}
+      </div>`;
+    }
+    sel.addEventListener('change', () => { if (sel.id) s0Data[sel.id] = sel.value; saveS0Data(); update(); });
+    if (sel.value) update();
+  }
+  wireClassSelect();
+  wireAncestrySelect();
+  wireCommunitySelect();
+
+  // Wire "Apply to Sheet" button on done step
+  const applyBtn = document.getElementById('s0-apply-btn');
+  if (applyBtn) {
+    applyBtn.onclick = () => {
+      // Apply subclass, ancestry, community to sheet fields
+      if (s0Data['s0-subclass']) { const el = document.getElementById('f-subclass'); if (el) { el.value = s0Data['s0-subclass']; onSubclassChange(); } }
+      if (s0Data['s0-ancestry']) { const el = document.getElementById('f-ancestry'); if (el) { el.value = s0Data['s0-ancestry']; onHeritageChange(); } }
+      if (s0Data['s0-community']) { const el = document.getElementById('f-community'); if (el) { el.value = s0Data['s0-community']; onHeritageChange(); } }
+      // Full save so sidebar picks up class name
+      save();
+      renderSidebar();
+      showSheetTab('sheet');
+    };
+  }
+
+  // Re-attach textarea listeners — support both id-keyed and data-qkey-keyed
+  wiz.querySelectorAll('textarea,input[type=text]').forEach(el => {
+    el.addEventListener('input', () => {
+      const key = el.dataset.qkey || el.id;
+      if (key) { s0Data[key] = el.value; saveS0Data(); }
+    });
+    const key = el.dataset.qkey || el.id;
+    if (key && s0Data[key] !== undefined && !el.value) el.value = s0Data[key];
+  });
+  // Re-attach select listeners
+  wiz.querySelectorAll('select').forEach(el => {
+    el.addEventListener('change', () => {
+      if (el.id) s0Data[el.id] = el.value;
+      saveS0Data();
+      if (el.id === 's0-class') renderS0(); // re-render on class change
+    });
+    if (el.id && s0Data[el.id]) el.value = s0Data[el.id];
+  });
+}
+
+function s0Card(title, body, accent) {
+  return `<div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid ${accent||'var(--border2)'};border-radius:0 6px 6px 0;padding:12px 14px;margin-bottom:10px;">${title?`<div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.12em;color:${accent||'var(--muted)'};margin-bottom:5px;">${title}</div>`:''}${body}</div>`;
+}
+
+function s0Section(title, content) {
+  return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:1rem;">
+    <div style="background:var(--bg3);border-bottom:1px solid var(--border);padding:10px 14px;">
+      <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:0.1em;color:var(--gold);">${title}</div>
+    </div>
+    <div style="padding:14px;">${content}</div>
+  </div>`;
+}
+
+function renderS0Step(id) {
+  const cls = s0Data['s0-class'] || '';
+  const clsData = CLASSES[cls];
+
+  switch(id) {
+
+    case 'welcome': return s0Section('Welcome to Session 0', `
+      <p style="font-size:15px;line-height:1.8;margin-bottom:1rem;">This walkthrough will take you from zero to a fully realized character, ready to play. Along the way you'll learn how Daggerheart works, choose who your character is, and build connections with the rest of your party.</p>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;color:var(--muted);">There are no wrong answers here. The goal is to find a character that excites you and fits into the world with the people at your table.</p>
+      ${s0Card('What is Daggerheart?', `<p style="font-size:13px;line-height:1.75;">Daggerheart is a fantasy tabletop RPG by Darrington Press built around collaborative storytelling, meaningful choices, and a unique two-dice system that keeps every roll tense and unpredictable. Players are heroic adventurers; the GM brings the world to life and plays the opposition.</p>`, 'var(--teal)')}
+      ${s0Card('How long will this take?', `<p style="font-size:13px;line-height:1.75;">A full Session 0 typically runs 2–3 hours. This guide will walk you through it step by step. You can save your progress at any point and come back.</p>`, 'var(--gold-dim)')}
+    `);
+
+    case 'how-dice': return s0Section('The Dice — Hope & Fear', `
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Every action roll in Daggerheart uses two d12s — a <strong style="color:var(--gold);">Hope Die</strong> and a <strong style="color:var(--red);">Fear Die</strong>. You take the higher result, add a relevant trait score, and compare it to the Difficulty (usually 12).</p>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1.25rem;color:var(--muted);">Which die is higher determines whether good or bad fortune ripples out from your action — even when you succeed.</p>
+      ${s0Card('✦ SUCCESS WITH HOPE', '<p style="font-size:13px;line-height:1.7;">The Hope Die is higher. You succeed <em>and</em> gain a Hope token. Use Hope later to boost rolls, activate abilities, or help allies.</p>', 'var(--gold)')}
+      ${s0Card('✦ SUCCESS WITH FEAR', '<p style="font-size:13px;line-height:1.7;">The Fear Die is higher. You succeed, but the GM gains a Fear token — expect a complication, a twist, or something to go sideways elsewhere.</p>', 'var(--red)')}
+      ${s0Card('✦ CRITICAL SUCCESS', '<p style="font-size:13px;line-height:1.7;">Both dice show the same number and you succeed. Something exceptional happens — you exceed expectations and gain Hope.</p>', 'var(--teal)')}
+      ${s0Card('✦ FAILURE WITH FEAR', '<p style="font-size:13px;line-height:1.7;">You don\'t meet the Difficulty and the Fear Die is higher. The GM gains Fear. Things go badly — but failure always moves the story forward.</p>', 'var(--muted)')}
+      <p style="font-size:12px;line-height:1.7;color:var(--muted);margin-top:0.5rem;">With <strong>advantage</strong> you roll an extra Hope Die and keep the two best. With <strong>disadvantage</strong> you roll an extra Fear Die and keep the two best.</p>
+    `);
+
+    case 'how-hope': return s0Section('Hope, Fear & The GM', `
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1.25rem;">Hope and Fear are a shared economy between players and GM. It's a constant tug-of-war that reflects how the battle is going.</p>
+      ${s0Card('PLAYERS SPEND HOPE TO:', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;"><li>Add an Experience bonus to a roll</li><li>Activate class Hope abilities</li><li>Help an ally (give them advantage)</li><li>Recall a spent domain card</li><li>Reduce incoming damage (Seraph)</li></ul>`, 'var(--gold)')}
+      ${s0Card('GM SPENDS FEAR TO:', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;"><li>Make enemies act between PC turns</li><li>Introduce complications and twists</li><li>Trigger environmental dangers</li><li>Clear enemy conditions</li><li>Escalate the stakes</li></ul>`, 'var(--red)')}
+      ${s0Card('EXPERIENCES', `<p style="font-size:13px;line-height:1.7;">Experiences are specific things your character is exceptionally good at — like <em>"Navigating ancient ruins +2"</em> or <em>"Persuading merchants +3"</em>. When a roll is relevant to an Experience, spend a Hope to add its bonus.</p>`, 'var(--teal)')}
+    `);
+
+    case 'how-combat': return s0Section('Combat, Damage & Resting', `
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1.25rem;">Daggerheart combat is fluid and narrative-first. There are no strict initiative turns — the GM and players trade off the spotlight using Hope and Fear.</p>
+      ${s0Card('HP & STRESS', `<p style="font-size:13px;line-height:1.75;margin-bottom:8px;">You have two damage tracks. <strong>Stress</strong> is mental and emotional strain — manageable but limiting. <strong>Hit Points</strong> are physical wounds. When you mark your last HP, you make a <strong>Death Move</strong> — a dramatic moment that might save you, change you, or end your story.</p>`, 'var(--red)')}
+      ${s0Card('DAMAGE THRESHOLDS', `<p style="font-size:13px;line-height:1.75;">Instead of subtracting exact numbers, damage is compared against three thresholds. Below Minor = nothing. Minor = mark 1 HP. Major = mark 2 HP. Severe = mark 3 HP. <strong>Add your level to all thresholds</strong> — you get tougher as you grow.</p>`, 'var(--gold)')}
+      ${s0Card('ARMOR & EVASION', `<p style="font-size:13px;line-height:1.75;">Your <strong>Evasion</strong> is the Difficulty for attacks against you. When an attack succeeds, you can mark an <strong>Armor Slot</strong> to reduce the damage severity by one threshold. Slots clear on a rest.</p>`, 'var(--teal)')}
+      ${s0Card('RESTS', `<p style="font-size:13px;line-height:1.75;"><strong>Short rest:</strong> Clear all Stress and Armor Slots. Take 1 downtime move. <strong>Long rest:</strong> Clear everything including HP. Take 2 downtime moves. The GM decides when rests are available — they\'re not guaranteed.</p>`, 'var(--muted)')}
+    `);
+
+    case 'pick-class': return s0Section('Choose Your Class', `
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Your class is the foundation of who you are as an adventurer — your core mechanic, your starting stats, and which two <strong>domains</strong> you draw from. Browse the options below and pick what excites you.</p>
+      <div style="margin-bottom:1.25rem;">
+        <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);display:block;margin-bottom:6px;">YOUR CLASS</span>
+        <select id="s0-class" style="width:100%;font-family:'Cinzel',serif;font-size:14px;background:var(--bg3);border:1px solid var(--gold-dim);color:var(--text);padding:10px 12px;border-radius:4px;outline:none;">
+          <option value="">— Choose a class —</option>
+          ${Object.keys(CLASSES).map(c=>`<option value="${c}">${c}</option>`).join('')}
+        </select>
+      </div>
+      <div id="s0-class-preview"></div>
+      <div style="margin-top:1.25rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);">ALL CLASSES AT A GLANCE</div>
+          <button id="s0-toggle-classes" onclick="
+            var cards=document.getElementById('s0-all-cards');
+            var isHidden=cards.style.display==='none';
+            cards.style.display=isHidden?'':'none';
+            this.textContent=isHidden?'▲ Hide':'▼ Show all';
+          " style="font-family:'Cinzel',serif;font-size:9px;background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 10px;border-radius:3px;cursor:pointer;">▼ Show all</button>
+        </div>
+        <div id="s0-all-cards" style="display:none;display:grid;grid-template-columns:1fr;gap:8px;">
+          ${Object.entries(CLASSES).map(([name,c])=>`
+          <div onclick="document.getElementById('s0-class').value='${name}';document.getElementById('s0-class').dispatchEvent(new Event('change'));"
+            style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:12px 14px;cursor:pointer;transition:border-color 0.15s,background 0.15s;" id="s0-classcard-${name}">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;">
+              <span style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--text);">${name}</span>
+              <span style="font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:0.1em;">${c.domains}</span>
+            </div>
+            <p style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px;">${c.tagline}</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:2px 7px;color:var(--muted);">${c.featureName}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:2px 7px;color:var(--muted);">Evasion ${c.evasionStart}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:2px 7px;color:var(--muted);font-style:italic;">${c.descOptions.attitude}</span>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    `);
+
+    case 'pick-subclass': {
+      const subs = cls && SUBCLASSES[cls] ? SUBCLASSES[cls].subclasses : [];
+      return s0Section('Choose Your Subclass', `
+        ${!cls ? `<p style="color:var(--muted);font-style:italic;">Go back and choose a class first.</p>` : `
+        <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Every <strong>${cls}</strong> chooses one of two subclasses. Your subclass sets your <strong>Spellcast trait</strong> and gives you a path of three features — Foundation (level 1), Specialization (level 5), and Mastery (level 8).</p>
+        ${subs.map(sub => `
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
+            <div style="background:var(--bg3);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--text);">${sub.name}</div>
+              ${sub.spellcast ? `<div style="font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:0.1em;">SPELLCAST: ${sub.spellcast.toUpperCase()}</div>` : ''}
+            </div>
+            <div style="padding:12px 14px;">
+              ${s0Card('FOUNDATION (LV 1)', `<p style="font-size:12px;line-height:1.7;">${sub.foundation.replace(/<[^>]*>/g,'').substring(0,250)}${sub.foundation.length>250?'...':''}</p>`, 'var(--teal)')}
+              ${s0Card('SPECIALIZATION (LV 5)', `<p style="font-size:12px;line-height:1.7;">${sub.specialization.replace(/<[^>]*>/g,'').substring(0,200)}${sub.specialization.length>200?'...':''}</p>`, 'var(--gold)')}
+              ${s0Card('MASTERY (LV 8)', `<p style="font-size:12px;line-height:1.7;">${sub.mastery.replace(/<[^>]*>/g,'').substring(0,200)}${sub.mastery.length>200?'...':''}</p>`, 'var(--red)')}
+            </div>
+          </div>
+        `).join('')}
+        <div style="margin-top:0.5rem;">
+          <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);display:block;margin-bottom:6px;">YOUR CHOICE</span>
+          <select id="s0-subclass" style="width:100%;font-family:'Cinzel',serif;font-size:14px;background:var(--bg3);border:1px solid var(--gold-dim);color:var(--text);padding:10px 12px;border-radius:4px;outline:none;">
+            <option value="">— Choose a subclass —</option>
+            ${subs.map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}
+          </select>
+        </div>`}
+      `);
+    }
+
+    case 'pick-ancestry': return s0Section('Choose Your Ancestry', `
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Your ancestry is <em>what you are</em> — the physical and cultural heritage you were born into. Each ancestry gives you unique features that stack on top of your class abilities.</p>
+      <div style="margin-bottom:1rem;">
+        <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);display:block;margin-bottom:6px;">YOUR ANCESTRY</span>
+        <select id="s0-ancestry" style="width:100%;font-family:'Cinzel',serif;font-size:14px;background:var(--bg3);border:1px solid var(--gold-dim);color:var(--text);padding:10px 12px;border-radius:4px;outline:none;">
+          <option value="">— Choose an ancestry —</option>
+          ${Object.keys(ANCESTRY_DATA).map(a=>`<option value="${a}">${a}</option>`).join('')}
+        </select>
+      </div>
+      <div id="s0-ancestry-detail" style="display:none;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:0.75rem;">
+        ${Object.entries(ANCESTRY_DATA).map(([name,d])=>`
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px 10px;cursor:pointer;transition:border-color 0.15s;" onclick="document.getElementById('s0-ancestry').value='${name}';document.getElementById('s0-ancestry').dispatchEvent(new Event('change'));">
+          <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;">${name}</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">${d.description.split('.')[0]}.</div>
+        </div>`).join('')}
+      </div>
+      <div data-s0-init="ancestry-select"></div>
+    `);
+
+    case 'pick-community': return s0Section('Choose Your Community', `
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Your community is <em>how you were raised</em> — the society and culture that shaped your values, skills, and worldview. It's separate from your ancestry and adds another layer of features.</p>
+      <div style="margin-bottom:1rem;">
+        <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);display:block;margin-bottom:6px;">YOUR COMMUNITY</span>
+        <select id="s0-community" style="width:100%;font-family:'Cinzel',serif;font-size:14px;background:var(--bg3);border:1px solid var(--gold-dim);color:var(--text);padding:10px 12px;border-radius:4px;outline:none;">
+          <option value="">— Choose a community —</option>
+          ${Object.keys(COMMUNITY_DATA).map(a=>`<option value="${a}">${a}</option>`).join('')}
+        </select>
+      </div>
+      <div id="s0-community-detail" style="display:none;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:0.75rem;">
+        ${Object.entries(COMMUNITY_DATA).map(([name,d])=>`
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px 10px;cursor:pointer;" onclick="document.getElementById('s0-community').value='${name}';document.getElementById('s0-community').dispatchEvent(new Event('change'));">
+          <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px;">${name}</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;">${d.description.split('.')[0]}.</div>
+        </div>`).join('')}
+      </div>
+      <div data-s0-init="community-select"></div>
+    `);
+
+    case 'traits': {
+      const traitList = ['agility','strength','finesse','instinct','presence','knowledge'];
+      const traitDesc = {
+        agility:['Sprint, Leap, Maneuver','Speed, acrobatics, ranged attacks for some classes.'],
+        strength:['Lift, Smash, Grapple','Physical force, melee attacks, breaking things.'],
+        finesse:['Control, Hide, Tinker','Precision, stealth, lockpicking, delicate work.'],
+        instinct:['Perceive, Sense, Navigate','Awareness, survival, reading the room.'],
+        presence:['Charm, Perform, Deceive','Social influence, leadership, performance.'],
+        knowledge:['Recall, Analyze, Comprehend','Lore, investigation, magical study.']
+      };
+      const liveTraits = traitList.map(t => {
+        const el = document.getElementById('t-'+t);
+        const def = clsData ? (clsData.traits[t]>=0?'+'+clsData.traits[t]:String(clsData.traits[t])) : '0';
+        return { name:t, val: el ? el.value : def };
+      });
+      return s0Section('Your Traits', `
+        <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are your six core stats. ${cls && clsData ? `Your <strong>${cls}</strong> starts with the suggested spread below — tap any value to edit it. Changes sync directly to your character sheet.` : 'Choose a class first to see suggested traits.'}</p>
+        ${cls && clsData ? `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.7;">Suggested: <strong>${clsData.suggestedTraits.replace(/\n/g,' · ')}</strong></div>` : ''}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;">
+          ${liveTraits.map(({name,val})=>`
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
+            <input type="number" id="s0-trait-${name}" value="${val}"
+              oninput="var sheet=document.getElementById('t-${name}');if(sheet){sheet.value=this.value;save();}"
+              style="width:44px;font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold);background:var(--bg2);border:1px solid var(--border2);border-radius:3px;text-align:center;outline:none;padding:2px 0;flex-shrink:0;">
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--text);">${name.charAt(0).toUpperCase()+name.slice(1)}</div>
+              <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);">${traitDesc[name][0]}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:1px;">${traitDesc[name][1]}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+        <p style="font-size:12px;color:var(--muted);font-style:italic;">These values are shared with your Character Sheet — editing here updates there and vice versa.</p>
+      `);
+    }
+
+
+    case 'experiences': {
+      // Read current experiences from localStorage for this class
+      let exps = [];
+      if (currentClass) {
+        try {
+          const d = JSON.parse(localStorage.getItem(saveKey(currentClass))) || {};
+          exps = d.exps || [];
+        } catch(e) {}
+      }
+      // Ensure at least 2 rows
+      while (exps.length < 2) exps.push(['', '+2']);
+
+      return s0Section('Experiences & Domain Cards', `
+        <p style="font-size:14px;line-height:1.8;margin-bottom:0.5rem;">Experiences are specific things your character excels at beyond their raw stats. Work with your GM to come up with two. They should feel personal — not just <em>"fighting"</em> but <em>"fighting while outnumbered."</em></p>
+        <p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:1.25rem;">Examples: Navigating ruins +2 · Persuading sailors +2 · Surviving the wilderness +3 · Reading ancient texts +2</p>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:1rem;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:10px;">YOUR EXPERIENCES</div>
+          ${exps.map((e,i) => `
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+            <input type="text" id="s0-exp-name-${i}" value="${escHtml(e[0]||'')}" placeholder="Experience name..."
+              oninput="s0SaveExp()"
+              style="flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--text);font-family:'Crimson Pro',serif;font-size:14px;outline:none;">
+            <input type="text" id="s0-exp-bonus-${i}" value="${escHtml(e[1]||'+2')}" placeholder="+2"
+              oninput="s0SaveExp()"
+              style="width:54px;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:8px;color:var(--gold);font-family:'Cinzel',serif;font-size:13px;text-align:center;outline:none;">
+            <button onclick="s0RemoveExp(${i})" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;padding:0 4px;">×</button>
+          </div>`).join('')}
+          <button onclick="s0AddExpRow()" style="width:100%;margin-top:4px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:none;border:1px dashed var(--border2);color:var(--muted);padding:7px;border-radius:3px;cursor:pointer;">+ Add Experience</button>
+        </div>
+
+        ${s0Card('DOMAIN CARDS', `
+          <p style="font-size:13px;line-height:1.75;margin-bottom:8px;">At level 1 you start with <strong>2 domain cards</strong>. Browse and add cards from your class's domains${cls && clsData ? ` — <strong>${clsData.domains}</strong>` : ''}.</p>
+          <button onclick="showSheetTab('cards')" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 16px;border-radius:4px;cursor:pointer;">Browse Domain Cards →</button>
+        `, 'var(--gold)')}
+      `);
+    }
+
+
+    case 'connections': {
+      const suggested = [
+        'How did you all end up together — was it chance, a shared cause, or someone who called in a favor?',
+        'Who in this group do you trust most with your life? Who are you still figuring out?',
+        'What\'s something one of the other characters knows about you that the rest of the party doesn\'t?',
+        'You\'ve already been through something hard together. What was it, and did it bring you closer or create tension?',
+        'Who in this group challenges you the most — and why do you keep travelling with them anyway?',
+        'Who owes who a favor? Is it the kind that can actually be repaid?',
+        'What\'s something you\'ve noticed about another character that they probably don\'t realize you\'ve noticed?',
+        'If everything goes wrong on this adventure, who do you trust to make the hard call?',
+        'What does another character do that secretly annoys you, even though you\'d never say it?',
+        'Who in the party has surprised you the most since you\'ve been travelling together?',
+        'Is there anyone in this group you\'d die for without hesitation? Anyone you\'re not sure about?',
+        'What\'s a moment you witnessed that made you think differently about someone in the party?',
+        'Does anyone in the group keep a secret from the others? Do you know what it is?',
+        'What\'s something the party does together that feels like a ritual or tradition, even if you\'ve never said it out loud?',
+      ];
+      const active = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : suggested.slice(0, 4);
+      return s0Section('Party Connections', `
+        <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Go around the table and answer these together. Add suggested questions from the dropdown, or write your own. When done, hit <strong>Send to Background</strong>.</p>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:1rem;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:8px;">ADD A SUGGESTED QUESTION</div>
+          <div style="display:flex;gap:8px;">
+            <select id="s0-conn-suggest" style="flex:1;font-family:'Crimson Pro',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:7px 10px;border-radius:4px;outline:none;">
+              <option value="">— Pick a question to add —</option>
+              ${suggested.filter(q => !active.includes(q)).map(q => `<option value="${escHtml(q)}">${q.length > 70 ? q.substring(0,70)+'…' : q}</option>`).join('')}
+            </select>
+            <button onclick="s0AddConnQuestion()" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 14px;border-radius:4px;cursor:pointer;white-space:nowrap;">+ Add</button>
+          </div>
+        </div>
+
+        <div id="s0-conn-list">
+          ${active.map((q,i) => {
+            const key = 'conn:' + s0QKey(q);
+            const saved = s0Data[key] || '';
+            return `
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:10px;">
+            <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+              <p style="font-size:13px;font-weight:600;color:var(--text);line-height:1.6;flex:1;">${q}</p>
+              <button onclick="s0RemoveConnQuestion(${i})" style="background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;flex-shrink:0;padding:0;">×</button>
+            </div>
+            <textarea data-qkey="${key}" rows="2" placeholder="Discuss at the table and write what you agreed on..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:7px 9px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;resize:none;outline:none;line-height:1.6;">${escHtml(saved)}</textarea>
+          </div>`;
+          }).join('')}
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:1rem;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:8px;">WRITE YOUR OWN QUESTION</div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="s0-conn-custom-input" placeholder="Ask something specific to your party..." style="flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;outline:none;">
+            <button onclick="s0AddConnCustom()" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 14px;border-radius:4px;cursor:pointer;white-space:nowrap;">+ Add</button>
+          </div>
+        </div>
+
+        <button onclick="s0SendConnectionsToBackground()" style="width:100%;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:10px;border-radius:4px;cursor:pointer;">↓ Send Answers to Character Background</button>
+      `);
+    }
+
+    case 'group-questions': {
+      const suggested = [
+        'What tone does the group want? (Gritty & grounded / Heroic & epic / Dark & tragic / Somewhere in between)',
+        'Are there any themes or content that anyone wants to avoid entirely? Write them down.',
+        'How much roleplay vs. combat does the group want on average?',
+        'What does this party care about more than anything — gold, justice, survival, glory, or each other?',
+        'When things go wrong, does this group push forward together or does everyone look out for themselves?',
+        'What\'s the group\'s relationship with authority — work within the system, around it, or against it?',
+        'How do you handle player absence — does the story pause, or does someone run the absent character?',
+        'Is this a long campaign or a shorter arc? Does everyone have the same expectations?',
+        'How do you want to handle character death — is it permanent, or is resurrection on the table?',
+        'Are we keeping secrets between characters, or do players share info out-of-character freely?',
+        'What\'s the food/snack situation at the table?',
+        'How do you prefer to end sessions — at a natural beat, on a cliffhanger, or at a set time?',
+      ];
+      const active = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : suggested.slice(0, 4);
+      return s0Section('Table Agreements', `
+        <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are for the whole table — GM included. Add suggested questions or write your own. When done, hit <strong>Send to Background</strong>.</p>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:1rem;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:8px;">ADD A SUGGESTED QUESTION</div>
+          <div style="display:flex;gap:8px;">
+            <select id="s0-grp-suggest" style="flex:1;font-family:'Crimson Pro',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:7px 10px;border-radius:4px;outline:none;">
+              <option value="">— Pick a question to add —</option>
+              ${suggested.filter(q => !active.includes(q)).map(q => `<option value="${escHtml(q)}">${q.length > 70 ? q.substring(0,70)+'…' : q}</option>`).join('')}
+            </select>
+            <button onclick="s0AddGrpQuestion()" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 14px;border-radius:4px;cursor:pointer;white-space:nowrap;">+ Add</button>
+          </div>
+        </div>
+
+        <div id="s0-grp-list">
+          ${active.map((q,i) => {
+            const key = 'grp:' + s0QKey(q);
+            const saved = s0Data[key] || '';
+            return `
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:10px;">
+            <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+              <p style="font-size:13px;font-weight:600;color:var(--text);line-height:1.6;flex:1;">${q}</p>
+              <button onclick="s0RemoveGrpQuestion(${i})" style="background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;flex-shrink:0;padding:0;">×</button>
+            </div>
+            <textarea data-qkey="${key}" rows="2" placeholder="Discuss and write your answer..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:7px 9px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;resize:none;outline:none;line-height:1.6;">${escHtml(saved)}</textarea>
+          </div>`;
+          }).join('')}
+        </div>
+
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:1rem;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);letter-spacing:0.1em;margin-bottom:8px;">WRITE YOUR OWN QUESTION</div>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="s0-grp-custom-input" placeholder="Add a house rule, preference, or anything else..." style="flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;outline:none;">
+            <button onclick="s0AddGrpCustom()" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 14px;border-radius:4px;cursor:pointer;white-space:nowrap;">+ Add</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);display:block;margin-bottom:6px;">ADDITIONAL NOTES</span>
+          <textarea id="s0-extra-notes" rows="3" placeholder="Lines & veils, house rules, scheduling notes..." style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px 10px;color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;resize:none;outline:none;line-height:1.6;"></textarea>
+        </div>
+
+        <button onclick="s0SendGroupToBackground()" style="width:100%;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:10px;border-radius:4px;cursor:pointer;">↓ Send Table Agreements to Background</button>
+      `);
+    }
+
+
+    case 'done': {
+      // Apply session 0 choices to sheet fields
+      const applyToSheet = () => {
+        if (s0Data['s0-subclass']) { const el = document.getElementById('f-subclass'); if (el) { el.value = s0Data['s0-subclass']; el.dispatchEvent(new Event('change')); } }
+        if (s0Data['s0-ancestry']) { const el = document.getElementById('f-ancestry'); if (el) { el.value = s0Data['s0-ancestry']; el.dispatchEvent(new Event('change')); } }
+        if (s0Data['s0-community']) { const el = document.getElementById('f-community'); if (el) { el.value = s0Data['s0-community']; el.dispatchEvent(new Event('change')); } }
+        save();
+        renderFeatureBar();
+        showSheetTab('sheet');
+      };
+      return s0Section('You\'re Ready to Play', `
+        <p style="font-size:15px;line-height:1.8;margin-bottom:1rem;">Session 0 complete. Here's a summary of what you've decided:</p>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:1.25rem;">
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13px;line-height:1.9;">
+            <span style="font-family:'Cinzel',serif;font-size:10px;color:var(--muted);">CLASS</span><span style="font-weight:600;">${s0Data['s0-class']||'—'}</span>
+            <span style="font-family:'Cinzel',serif;font-size:10px;color:var(--muted);">SUBCLASS</span><span>${s0Data['s0-subclass']||'—'}</span>
+            <span style="font-family:'Cinzel',serif;font-size:10px;color:var(--muted);">ANCESTRY</span><span>${s0Data['s0-ancestry']||'—'}</span>
+            <span style="font-family:'Cinzel',serif;font-size:10px;color:var(--muted);">COMMUNITY</span><span>${s0Data['s0-community']||'—'}</span>
+          </div>
+        </div>
+        ${s0Card('WHAT\'S ALREADY DONE', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;">
+          <li>Your class is set on the Character Sheet</li>
+          <li>Any experiences you added are on the sheet</li>
+          <li>Connection & table agreement answers are in your Character Background</li>
+        </ul>`, 'var(--teal)')}
+        ${s0Card('STILL TO DO', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;">
+          <li>Fill in your character name, pronouns on the sheet</li>
+          <li>Set your HP and Stress totals</li>
+          <li>Add your 2 starting domain cards</li>
+          <li>Review your class feature and subclass Foundation</li>
+          <li>Hit <strong>Save</strong></li>
+        </ul>`, 'var(--gold)')}
+        <button id="s0-apply-btn" style="width:100%;margin-top:1rem;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:13px;border-radius:4px;cursor:pointer;">Apply to Sheet & Go →</button>
+      `);
+      // Wire the button after render via post-render hook marker
+    }
+
+
+    default: return '';
+  }
+}
+
+function s0SaveExp() {
+  if (!currentClass) return;
+  const key = saveKey(currentClass);
+  let d = {};
+  try { d = JSON.parse(localStorage.getItem(key)) || {}; } catch(e) {}
+  const exps = [];
+  let i = 0;
+  while (document.getElementById('s0-exp-name-' + i)) {
+    const name = document.getElementById('s0-exp-name-' + i)?.value || '';
+    const bonus = document.getElementById('s0-exp-bonus-' + i)?.value || '+2';
+    exps.push([name, bonus]);
+    i++;
+  }
+  d.exps = exps;
+  localStorage.setItem(key, JSON.stringify(d));
+  // Also sync to live sheet if visible
+  const container = document.getElementById('exp-list');
+  if (container) {
+    container.innerHTML = '';
+    exps.forEach(([n, b]) => addExpRow(container, n, b));
+  }
+}
+
+function s0AddExpRow() {
+  if (!currentClass) { alert('Choose a class first.'); return; }
+  const key = saveKey(currentClass);
+  let d = {};
+  try { d = JSON.parse(localStorage.getItem(key)) || {}; } catch(e) {}
+  d.exps = d.exps || [];
+  d.exps.push(['', '+2']);
+  localStorage.setItem(key, JSON.stringify(d));
+  renderS0();
+}
+
+function s0RemoveExp(idx) {
+  if (!currentClass) return;
+  const key = saveKey(currentClass);
+  let d = {};
+  try { d = JSON.parse(localStorage.getItem(key)) || {}; } catch(e) {}
+  d.exps = d.exps || [];
+  d.exps.splice(idx, 1);
+  localStorage.setItem(key, JSON.stringify(d));
+  renderS0();
+}
+
+
+
+// Key answers by question text slug so they survive re-renders
+function s0SaveCurrentAnswers(prefix) {
+  const list = document.getElementById('s0-' + prefix + '-list');
+  if (!list) return;
+  [...list.children].forEach(block => {
+    const ta = block.querySelector('textarea');
+    if (ta && ta.dataset.qkey) s0Data[ta.dataset.qkey] = ta.value;
+  });
+  saveS0Data();
+}
+
+function s0AddConnQuestion() {
+  const sel = document.getElementById('s0-conn-suggest');
+  if (!sel || !sel.value) return;
+  s0SaveCurrentAnswers('conn');
+  const qs = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : [];
+  if (!qs.includes(sel.value)) qs.push(sel.value);
+  s0Data['s0-conn-qs'] = JSON.stringify(qs);
+  saveS0Data();
+  renderS0();
+}
+
+function s0AddConnCustom() {
+  const input = document.getElementById('s0-conn-custom-input');
+  if (!input || !input.value.trim()) return;
+  s0SaveCurrentAnswers('conn');
+  const qs = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : [];
+  qs.push(input.value.trim());
+  s0Data['s0-conn-qs'] = JSON.stringify(qs);
+  saveS0Data();
+  renderS0();
+}
+
+function s0RemoveConnQuestion(idx) {
+  s0SaveCurrentAnswers('conn');
+  const qs = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : [];
+  qs.splice(idx, 1);
+  s0Data['s0-conn-qs'] = JSON.stringify(qs);
+  saveS0Data();
+  renderS0();
+}
+
+function s0AddGrpQuestion() {
+  const sel = document.getElementById('s0-grp-suggest');
+  if (!sel || !sel.value) return;
+  s0SaveCurrentAnswers('grp');
+  const qs = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : [];
+  if (!qs.includes(sel.value)) qs.push(sel.value);
+  s0Data['s0-grp-qs'] = JSON.stringify(qs);
+  saveS0Data();
+  renderS0();
+}
+
+function s0AddGrpCustom() {
+  const input = document.getElementById('s0-grp-custom-input');
+  if (!input || !input.value.trim()) return;
+  s0SaveCurrentAnswers('grp');
+  const qs = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : [];
+  qs.push(input.value.trim());
+  s0Data['s0-grp-qs'] = JSON.stringify(qs);
+  saveS0Data();
+  renderS0();
+}
+
+function s0RemoveGrpQuestion(idx) {
+  s0SaveCurrentAnswers('grp');
+  const qs = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : [];
+  qs.splice(idx, 1);
+  s0Data['s0-grp-qs'] = JSON.stringify(qs);
+  saveS0Data();
+  renderS0();
+}
+
+function s0SendConnectionsToBackground() {
+  s0SaveCurrentAnswers('conn');
+  const qs = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : [];
+  const entries = qs.map(q => {
+    const key = 'conn:' + s0QKey(q);
+    const a = (s0Data[key] || '').trim();
+    return a ? q + '\n' + a : null;
+  }).filter(Boolean);
+  if (!entries.length) { alert('Fill in at least one answer first.'); return; }
+  const ts = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  appendHistoryEntry('— Party Connections —\n\n' + entries.join('\n\n'), ts);
+  save();
+  alert('Answers sent to your Character Background!');
+}
+
+function s0SendGroupToBackground() {
+  s0SaveCurrentAnswers('grp');
+  const qs = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : [];
+  const entries = qs.map(q => {
+    const key = 'grp:' + s0QKey(q);
+    const a = (s0Data[key] || '').trim();
+    return a ? q + ': ' + a : null;
+  }).filter(Boolean);
+  const notes = (s0Data['s0-extra-notes'] || '').trim();
+  if (notes) entries.push('Additional notes: ' + notes);
+  if (!entries.length) { alert('Fill in at least one answer first.'); return; }
+  const ts = new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+  appendHistoryEntry('— Session 0 Table Agreements —\n\n' + entries.join('\n'), ts);
+  save();
+  alert('Table agreements sent to your Character Background!');
+}
+
+function onConditionChange(checkbox) {
+  if (label) label.classList.toggle('cond-label-active', checkbox.checked);
+  save();
+}
+
+function restoreConditions(d) {
+  const condIds = ['vulnerable','restrained','hidden','stunned','frightened','on-fire','silenced','corroded','poisoned'];
+  condIds.forEach(id => {
+    const el = document.getElementById('cond-' + id);
+    if (el && d['cond-'+id]) {
+      el.checked = true;
+      const label = el.closest('label');
+      if (label) label.classList.add('cond-label-active');
+    }
+  });
+  // Death move checkbox
+  const dm = document.getElementById('death-move-used');
+  if (dm && d['death-move-used']) dm.checked = true;
+}
+
+// ─────────────────────────────────────────────
+// PRAYER DICE (SERAPH)
+// ─────────────────────────────────────────────
+function addPrayerDie(value) {
+  const row = document.getElementById('prayer-dice-row');
+  if (!row) return;
+  const die = document.createElement('div');
+  die.className = 'prayer-die' + (value === 'spent' ? ' spent' : '');
+  die.innerHTML = `<span class="prayer-die-val">${(typeof value === 'number') ? value : 'd4'}</span><div class="prayer-die-rm" onclick="this.closest('.prayer-die').remove();save()">×</div>`;
+  die.addEventListener('click', e => {
+    if (e.target.classList.contains('prayer-die-rm')) return;
+    die.classList.toggle('spent');
+    save();
+  });
+  row.appendChild(die);
+  save();
+}
+
+function clearPrayerDice() {
+  const row = document.getElementById('prayer-dice-row');
+  if (row) row.innerHTML = '';
+  save();
+}
+
+// ─────────────────────────────────────────────
+// DOWNTIME MOVES
+// ─────────────────────────────────────────────
+function clearDowntime() {
+  document.querySelectorAll('.downtime-check').forEach(c => c.checked = false);
+  save();
+}
+
+// ─────────────────────────────────────────────
+// COUNTDOWN TRACKERS
+// ─────────────────────────────────────────────
+function addCountdown(label='', total=8, marked=0) {
+  const list = document.getElementById('countdown-list');
+  if (!list) return;
+  const id = 'cd-' + Date.now();
+  const row = document.createElement('div');
+  row.className = 'countdown-row';
+  row.id = id;
+  row.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+      <input type="text" placeholder="Effect name..." value="${escHtml(label)}" oninput="save()" style="flex:1;font-size:12px;">
+      <input type="number" min="1" max="20" value="${total}" oninput="rebuildCdPips(this);save()" style="width:42px;font-size:12px;text-align:center;" title="Total ticks">
+      <button onclick="this.closest('.countdown-row').remove();save()" style="font-family:'Cinzel',serif;font-size:9px;width:18px;height:18px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;padding:0;line-height:1;">×</button>
+    </div>
+    <div class="countdown-pips"></div>`;
+  list.appendChild(row);
+  buildCdPips(row.querySelector('.countdown-pips'), total, marked);
+  save();
+}
+
+function buildCdPips(container, total, marked) {
+  container.innerHTML = '';
+  for (let i=0;i<total;i++) {
+    const pip = document.createElement('div');
+    pip.className = 'cd-pip' + (i < marked ? ' marked' : '');
+    pip.addEventListener('click', () => { pip.classList.toggle('marked'); save(); });
+    container.appendChild(pip);
+  }
+}
+
+function rebuildCdPips(input) {
+  const row = input.closest('.countdown-row');
+  const pips = row.querySelector('.countdown-pips');
+  const marked = pips.querySelectorAll('.cd-pip.marked').length;
+  buildCdPips(pips, parseInt(input.value)||8, Math.min(marked, parseInt(input.value)||8));
+}
+
+function saveCountdowns() {
+  return [...document.querySelectorAll('.countdown-row')].map(row => ({
+    label: row.querySelector('input[type="text"]')?.value || '',
+    total: parseInt(row.querySelector('input[type="number"]')?.value) || 8,
+    marked: row.querySelectorAll('.cd-pip.marked').length,
+  }));
+}
+
+function restoreCountdowns(arr) {
+  if (!arr) return;
+  arr.forEach(({label, total, marked}) => addCountdown(label, total, marked));
+}
+
+function saveDowntime() {
+  return [...document.querySelectorAll('.downtime-check')].map(c => c.checked);
+}
+
+function restoreDowntime(arr) {
+  if (!arr) return;
+  const checks = document.querySelectorAll('.downtime-check');
+  arr.forEach((val, i) => { if (checks[i]) checks[i].checked = val; });
+}
+
+function savePrayerDice() {
+  const row = document.getElementById('prayer-dice-row');
+  if (!row) return null;
+  return [...row.querySelectorAll('.prayer-die')].map(d => ({
+    spent: d.classList.contains('spent'),
+  }));
+}
+
+function restorePrayerDice(arr) {
+  if (!arr) return;
+  arr.forEach(({spent}) => addPrayerDie(spent ? 'spent' : 'd4'));
+}
+
+function saveCompanion() {
+  const fields = ['companion-name','companion-species','companion-evasion','companion-damage','companion-trait','companion-features'];
+  const d = {};
+  fields.forEach(id => { const el=document.getElementById(id); if(el) d[id]=el.value; });
+  d.companionHp = document.querySelectorAll('#companion-hp .companion-hpbox.filled').length;
+  d.companionHpTotal = document.querySelectorAll('#companion-hp .companion-hpbox').length;
+  return d;
+}
+
+function restoreCompanion(d) {
+  if (!d) return;
+  const fields = ['companion-name','companion-species','companion-evasion','companion-damage','companion-trait','companion-features'];
+  fields.forEach(id => { const el=document.getElementById(id); if(el && d[id]) el.value=d[id]; });
+  if (d.companionHp != null) {
+    makeBoxPips(document.getElementById('companion-hp'), d.companionHpTotal||4, d.companionHp, 'companion-hpbox');
+  }
+}
+
+function renderCompanionHp() {
+  const el = document.getElementById('companion-hp');
+  if (el && !el.children.length) makeBoxPips(el, 4, 0, 'companion-hpbox');
+}
+
 function showSheetTab(tab) {
   document.getElementById('tab-sheet').style.display = tab === 'sheet' ? '' : 'none';
   document.getElementById('tab-notes').style.display = tab === 'notes' ? '' : 'none';
   document.getElementById('tab-cards').style.display = tab === 'cards' ? '' : 'none';
+  document.getElementById('tab-ref').style.display = tab === 'ref' ? '' : 'none';
+  document.getElementById('tab-s0').style.display = tab === 's0' ? '' : 'none';
   document.getElementById('tab-sheet-btn').classList.toggle('active', tab === 'sheet');
   document.getElementById('tab-notes-btn').classList.toggle('active', tab === 'notes');
   document.getElementById('tab-cards-btn').classList.toggle('active', tab === 'cards');
+  document.getElementById('tab-ref-btn').classList.toggle('active', tab === 'ref');
+  document.getElementById('tab-s0-btn').classList.toggle('active', tab === 's0');
   localStorage.setItem('dh2-active-tab', tab);
   if (tab === 'cards') { renderLoadout(); renderCardBrowser(); }
   if (tab === 'sheet') { renderLoadoutQuick(); }
+  if (tab === 'ref') {
+    const picker = document.getElementById('ref-class-picker');
+    if (picker && !picker.value && currentClass) { picker.value = currentClass; renderClassRef(); }
+    renderAncestryRef();
+    renderCommunityRef();
+  }
+  if (tab === 's0') { renderS0Connections(); }
 }
 
 function addManualSessionEntry() {
@@ -1862,16 +3727,6 @@ function toggleBgq() {
   const collapsed = body.style.display === 'none';
   body.style.display = collapsed ? '' : 'none';
   btn.textContent = collapsed ? '▲ COLLAPSE' : '▼ EXPAND';
-}
-
-function submitSessionNote() {
-  const el = document.getElementById('session-notes');
-  const text = el ? el.value.trim() : '';
-  if (!text) { if (el) el.focus(); return; }
-  const ts = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  appendSessionEntry(text, ts);
-  // clear the textarea after submitting
-  if (el) { el.value = ''; save(); }
 }
 
 function submitSessionNote() {
@@ -2082,9 +3937,13 @@ function saveKey(cls) { return 'dh2-sheet-' + (cls||'').toLowerCase(); }
 function save() {
   if (!currentClass) return;
   const d = { class: currentClass };
-  ['f-name','f-pronouns','f-heritage','f-subclass','f-level','f-evasion','t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge','thresh-minor','thresh-major','thresh-severe','w1-name','w1-trait','w1-damage','w1-feature','w2-name','w2-trait','w2-damage','w2-feature','armor-name','armor-thresh','armor-score','armor-feature','gold-h','gold-b','gold-c','session-notes','session-title','domain-notes','misc-notes','appearance'].forEach(id=>{
+  ['f-name','f-pronouns','f-subclass','f-level','f-evasion','t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge','thresh-minor','thresh-major','thresh-severe','w1-name','w1-trait','w1-damage','w1-feature','w2-name','w2-trait','w2-damage','w2-feature','armor-name','armor-thresh','armor-score','armor-feature','gold-h','gold-b','gold-c','session-notes','session-title','domain-notes','misc-notes','appearance','cond-custom','death-move-notes'].forEach(id=>{
     const el=document.getElementById(id); if(el) d[id]=el.value;
   });
+  // save select fields separately
+  const anc = document.getElementById('f-ancestry'); if(anc) d['f-ancestry'] = anc.value;
+  const com = document.getElementById('f-community'); if(com) d['f-community'] = com.value;
+  const sub = document.getElementById('f-subclass'); if(sub) d['f-subclass'] = sub.value;
   for(let i=0;i<3;i++){
     ['bgq','connq'].forEach(p=>{const el=document.getElementById(p+i);if(el)d[p+i]=el.value;});
   }
@@ -2095,10 +3954,23 @@ function save() {
   // session log entries
   d.sessionLog = [...document.querySelectorAll('#session-log .session-entry')].map(e=>({id:e.id,text:e.dataset.text,ts:e.dataset.ts,title:e.dataset.title||''}));
   d.hope = document.querySelectorAll('#hope-pips .hope-pip.filled').length;
+  d.hopeTotal = document.querySelectorAll('#hope-pips .hope-pip').length;
   d.hp = document.querySelectorAll('#hp-boxes .hpbox.filled').length;
+  d.hpTotal = document.querySelectorAll('#hp-boxes .hpbox').length;
   d.stress = document.querySelectorAll('#stress-boxes .stressbox.filled').length;
+  d.stressTotal = document.querySelectorAll('#stress-boxes .stressbox').length;
   d.armor = document.querySelectorAll('#armor-pips .shield-pip.filled').length;
   d.prof = document.querySelectorAll('#prof-dots .prof-dot.filled').length;
+  // conditions
+  ['vulnerable','restrained','hidden','stunned','frightened','on-fire','silenced','corroded','poisoned'].forEach(id => {
+    const el = document.getElementById('cond-'+id); if(el) d['cond-'+id] = el.checked;
+  });
+  const dm = document.getElementById('death-move-used'); if(dm) d['death-move-used'] = dm.checked;
+  // class-specific
+  d.prayerDice = savePrayerDice();
+  d.companion = saveCompanion();
+  // downtime
+  // downtime removed
   for(let t=2;t<=4;t++) for(let o=0;o<9;o++){const el=document.getElementById(`t${t}o${o}`);if(el)d[`t${t}o${o}`]=el.checked;}
   d.exps = [...document.querySelectorAll('#exp-list .exp-row')].map(r=>[r.querySelectorAll('input')[0].value,r.querySelectorAll('input')[1].value]);
   d.inv = [...document.querySelectorAll('#inv-list .inv-line')].map(r=>{const ins=r.querySelectorAll('input');return[ins[0]?.value||'',ins[1]?.value||''];});
@@ -2113,6 +3985,7 @@ function save() {
   // save to per-class key AND a 'last' pointer so we reload the right class on next open
   localStorage.setItem(saveKey(currentClass), JSON.stringify(d));
   localStorage.setItem('dh2-last-class', currentClass);
+  renderSidebar();
 }
 
 function restoreData(d) {
@@ -2127,9 +4000,9 @@ function restoreData(d) {
   // checkboxes
   for(let t=2;t<=4;t++) for(let o=0;o<9;o++){const el=document.getElementById(`t${t}o${o}`);if(el)el.checked=!!d[`t${t}o${o}`];}
   // pips
-  if(d.hope!=null){renderHopePips(document.getElementById('hope-pips'),6,d.hope);}
-  if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'),5,d.hp,'hpbox');
-  if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'),6,d.stress,'stressbox');
+  if(d.hope!=null){renderHopePips(document.getElementById('hope-pips'), d.hopeTotal||6, d.hope);}
+  if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'), d.hpTotal||5, d.hp, 'hpbox');
+  if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'), d.stressTotal||6, d.stress, 'stressbox');
   if(d.armor!=null) makeShieldPips(document.getElementById('armor-pips'),12,d.armor);
   if(d.prof!=null) makeProfDots(document.getElementById('prof-dots'),d.prof);
   // dynamic lists
@@ -2164,6 +4037,16 @@ function restoreData(d) {
     entries.forEach(({text,ts,title,id})=>appendSessionEntry(text,ts,title||''));
     if(sEmpty) sEmpty.style.display = entries.length ? 'none' : '';
   }
+  // render ancestry/community feature bar
+  renderFeatureBar();
+  // conditions
+  restoreConditions(d);
+  // class-specific
+  restorePrayerDice(d.prayerDice);
+  restoreCompanion(d.companion);
+  renderCompanionHp();
+  // downtime
+  // downtime removed
 }
 
 function loadSheet() {
@@ -2186,29 +4069,41 @@ function loadSheet() {
   renderLoadoutQuick();
 }
 
-function switchClass(cls) {
+function switchClass(cls, silent=false) {
   if (!cls) return;
-  if (currentClass && cls === currentClass) return; // already on this class, nothing to do
-  if (currentClass) {
-    const hasData = (() => {
-      try { const d = JSON.parse(localStorage.getItem(saveKey(currentClass))); return d && (d['f-name']||d.exps?.some(e=>e[0])); } catch { return false; }
-    })();
-    if (hasData && !confirm(`Switch to ${cls}? Your ${currentClass} sheet will be saved separately and you can switch back anytime.`)) {
-      document.getElementById('class-picker').value = currentClass;
-      return;
+  if (currentClass && cls === currentClass) return;
+  if (!silent) {
+    if (currentClass) {
+      const hasData = (() => {
+        try { const d = JSON.parse(localStorage.getItem(saveKey(currentClass))); return d && (d['f-name']||d.exps?.some(e=>e[0])); } catch { return false; }
+      })();
+      if (hasData && !confirm(`Switch to ${cls}? Your ${currentClass} sheet will be saved separately and you can switch back anytime.`)) {
+        document.getElementById('class-picker').value = currentClass;
+        return;
+      }
     }
+    // Normal switch: save current and load new
+    if (currentClass) save();
+    currentClass = cls;
+    localStorage.setItem('dh2-last-class', cls);
+    buildPages(cls);
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem(saveKey(cls))); } catch {}
+    restoreData(d);
+    renderSidebar();
+    renderLoadoutQuick();
+  } else {
+    // Silent mode (Session 0): just rebuild the sheet for this class
+    // without saving or creating new character entries
+    currentClass = cls;
+    localStorage.setItem('dh2-last-class', cls);
+    document.getElementById('class-picker').value = cls;
+    buildPages(cls);
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem(saveKey(cls))); } catch {}
+    restoreData(d);
+    // Don't call renderSidebar() — that would show/save a new character entry
   }
-  // Save current class data before switching
-  if (currentClass) save();
-  currentClass = cls;
-  localStorage.setItem('dh2-last-class', cls);
-  buildPages(cls);
-  // Restore any existing data for the new class
-  let d = null;
-  try { d = JSON.parse(localStorage.getItem(saveKey(cls))); } catch {}
-  restoreData(d);
-  renderSidebar();
-  renderLoadoutQuick();
 }
 
 // ─────────────────────────────────────────────
@@ -2278,10 +4173,13 @@ function renderSidebar() {
     const name = data['f-name'] || '(unnamed)';
     const cls = data.class || '';
     const lvl = data['f-level'] ? `Lv ${data['f-level']}` : '';
+    const community = data['f-community'] || '';
+    const ancestry = data['f-ancestry'] || '';
+    const heritage = [community, ancestry].filter(Boolean).join(' ');
     item.innerHTML = `
       <div class="char-item-body" onclick="loadCharacter('${key}')">
         <div class="char-name">${escHtml(name)}</div>
-        <div class="char-meta">${escHtml(cls)}${lvl ? ' · ' + lvl : ''}</div>
+        <div class="char-meta">${escHtml(cls)}${lvl ? ' · ' + lvl : ''}${heritage ? ' · ' + escHtml(heritage) : ''}</div>
       </div>
       <button class="char-del" onclick="deleteCharacter('${key}', event)" title="Delete">×</button>`;
     list.appendChild(item);
@@ -2378,6 +4276,8 @@ renderSidebar();
 const savedTab = localStorage.getItem('dh2-active-tab');
 if (savedTab === 'notes') showSheetTab('notes');
 else if (savedTab === 'cards') showSheetTab('cards');
+else if (savedTab === 'ref') showSheetTab('ref');
+else if (savedTab === 's0') showSheetTab('s0');
 </script>
 </body>
 </html>
