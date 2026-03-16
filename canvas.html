@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GM Canvas — Daggerheart</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080909;--bg2:#0e1012;--bg3:#151719;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.16);
+  --text:#e8e3d8;--muted:#7a7570;
+  --gold:#c9a84c;--gold-dim:#7a6530;--gold-faint:#141008;
+  --red:#c04040;--red-dim:#7a2828;--red-faint:#120808;
+  --teal:#3a8a80;--teal-faint:#081210;
+  --blue:#4a7ab0;--blue-faint:#080f18;
+  --purple:#7a5ab0;--purple-faint:#0e0818;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;height:100vh;overflow:hidden;display:flex;flex-direction:column;user-select:none;}
+
+/* ── TOOLBAR ── */
+.toolbar{height:46px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;z-index:100;}
+.brand{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.16em;color:var(--gold);white-space:nowrap;margin-right:4px;}
+.tb-div{width:1px;height:24px;background:var(--border2);}
+.tb-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:5px 10px;border-radius:4px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:5px;transition:all 0.12s;}
+.tb-btn:hover{color:var(--text);border-color:var(--border2);}
+.tb-btn.active{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
+.color-btn{width:22px;height:22px;border-radius:4px;border:2px solid transparent;cursor:pointer;flex-shrink:0;transition:all 0.1s;}
+.color-btn.active{border-color:var(--text);transform:scale(1.15);}
+.tb-spacer{flex:1;}
+.tb-hint{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;color:var(--muted);}
+
+/* ── CANVAS ── */
+#canvas-wrap{flex:1;position:relative;overflow:hidden;cursor:default;}
+#canvas-wrap.panning{cursor:grab;}
+#canvas-wrap.panning:active{cursor:grabbing;}
+#canvas{position:absolute;top:0;left:0;width:4000px;height:4000px;transform-origin:0 0;}
+
+/* Grid dots background */
+#canvas::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,0.06) 1px,transparent 1px);
+  background-size:32px 32px;
+  pointer-events:none;
+}
+
+/* ── SVG CONNECTIONS ── */
+#connections-svg{position:absolute;top:0;left:0;width:4000px;height:4000px;pointer-events:none;overflow:visible;}
+.conn-line{stroke:rgba(255,255,255,0.15);stroke-width:1.5;fill:none;stroke-dasharray:6 4;pointer-events:stroke;cursor:pointer;}
+.conn-line:hover{stroke:var(--red);stroke-width:2;}
+.conn-line.highlighted{stroke:var(--gold);stroke-width:2;stroke-dasharray:none;}
+
+/* ── NOTES ── */
+.note{position:absolute;min-width:180px;max-width:320px;border-radius:6px;border:1px solid var(--border2);display:flex;flex-direction:column;box-shadow:0 4px 20px rgba(0,0,0,0.5);transition:box-shadow 0.15s;}
+.note:hover{box-shadow:0 6px 28px rgba(0,0,0,0.7);}
+.note.selected{box-shadow:0 0 0 2px var(--gold),0 6px 28px rgba(0,0,0,0.7);}
+.note.connecting-source{box-shadow:0 0 0 2px var(--teal),0 6px 28px rgba(0,0,0,0.7);}
+
+.note-header{padding:6px 8px;display:flex;align-items:center;gap:5px;cursor:move;border-radius:5px 5px 0 0;flex-shrink:0;}
+.note-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:0.1em;flex:1;background:none;border:none;outline:none;color:inherit;cursor:text;}
+.note-title::placeholder{opacity:0.5;}
+.note-del{background:none;border:none;color:inherit;opacity:0.4;cursor:pointer;font-size:14px;line-height:1;padding:0;flex-shrink:0;}
+.note-del:hover{opacity:1;}
+.note-connect-btn{background:none;border:1px solid rgba(255,255,255,0.2);border-radius:3px;color:inherit;opacity:0.5;cursor:pointer;font-size:9px;padding:1px 5px;line-height:1.4;flex-shrink:0;}
+.note-connect-btn:hover{opacity:1;background:rgba(255,255,255,0.1);}
+
+.note-body{padding:6px 8px 8px;flex:1;}
+.note-text{width:100%;font-family:'Crimson Pro',serif;font-size:13px;line-height:1.6;background:none;border:none;outline:none;color:inherit;resize:none;min-height:60px;cursor:text;}
+.note-text::placeholder{opacity:0.4;}
+
+.note-resize{position:absolute;bottom:2px;right:2px;width:10px;height:10px;cursor:se-resize;opacity:0.3;}
+.note-resize:hover{opacity:0.8;}
+
+/* Note color variants */
+.note.c-gold{background:linear-gradient(160deg,#1a1508,#110e04);border-color:var(--gold-dim);}
+.note.c-gold .note-header{background:var(--gold-faint);color:var(--gold);}
+.note.c-gold .note-text{color:#d4c89a;}
+
+.note.c-red{background:linear-gradient(160deg,#160808,#0e0404);border-color:var(--red-dim);}
+.note.c-red .note-header{background:var(--red-faint);color:var(--red);}
+.note.c-red .note-text{color:#d4a0a0;}
+
+.note.c-teal{background:linear-gradient(160deg,#081412,#050e0c);border-color:var(--teal);}
+.note.c-teal .note-header{background:var(--teal-faint);color:var(--teal);}
+.note.c-teal .note-text{color:#a0ccc8;}
+
+.note.c-blue{background:linear-gradient(160deg,#080f18,#050a10);border-color:var(--blue);}
+.note.c-blue .note-header{background:var(--blue-faint);color:var(--blue);}
+.note.c-blue .note-text{color:#a0b8d4;}
+
+.note.c-purple{background:linear-gradient(160deg,#0e0818,#080510);border-color:var(--purple);}
+.note.c-purple .note-header{background:var(--purple-faint);color:var(--purple);}
+.note.c-purple .note-text{color:#b8a0d4;}
+
+.note.c-dark{background:linear-gradient(160deg,#131517,#0a0c0e);border-color:var(--border2);}
+.note.c-dark .note-header{background:var(--bg3);color:var(--muted);}
+.note.c-dark .note-text{color:var(--text);}
+
+/* ── LABELS ── */
+.label{position:absolute;font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.12em;color:var(--muted);border:none;background:none;outline:none;cursor:move;text-transform:uppercase;padding:4px;}
+.label:focus{color:var(--text);}
+
+/* ── CONNECTING LINE PREVIEW ── */
+#conn-preview{position:absolute;top:0;left:0;width:4000px;height:4000px;pointer-events:none;overflow:visible;}
+.preview-line{stroke:var(--teal);stroke-width:1.5;fill:none;stroke-dasharray:8 4;opacity:0.7;}
+
+/* ── CONTEXT MENU ── */
+#ctx-menu{position:fixed;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:4px;z-index:9999;display:none;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,0.6);}
+.ctx-item{font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;color:var(--muted);padding:6px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;}
+.ctx-item:hover{background:var(--bg3);color:var(--text);}
+.ctx-div{height:1px;background:var(--border);margin:3px 0;}
+
+/* ── MINIMAP ── */
+#minimap{position:absolute;bottom:12px;right:12px;width:160px;height:100px;background:rgba(14,16,18,0.85);border:1px solid var(--border2);border-radius:4px;overflow:hidden;pointer-events:none;backdrop-filter:blur(4px);}
+#minimap-viewport{position:absolute;border:1px solid var(--gold-dim);background:rgba(201,168,76,0.05);border-radius:2px;}
+
+/* ── ZOOM INDICATOR ── */
+#zoom-indicator{position:absolute;bottom:14px;left:12px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--muted);background:rgba(14,16,18,0.8);border:1px solid var(--border);padding:4px 8px;border-radius:4px;backdrop-filter:blur(4px);}
+
+/* ── CONNECTING MODE BANNER ── */
+#connect-banner{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--teal);background:var(--teal-faint);border:1px solid var(--teal);padding:6px 16px;border-radius:4px;display:none;z-index:200;}
+</style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="brand">⚔ GM CANVAS</div>
+  <div class="tb-div"></div>
+
+  <!-- Add nodes -->
+  <button class="tb-btn" onclick="addNote()" title="Add a note card">
+    <span>✦</span> Note
+  </button>
+  <button class="tb-btn" onclick="addLabel()" title="Add a section label">
+    <span>T</span> Label
+  </button>
+
+  <div class="tb-div"></div>
+
+  <!-- Colors -->
+  <div style="display:flex;gap:4px;align-items:center;">
+    <div class="color-btn active" id="cb-gold" style="background:#7a6530;" onclick="setColor('gold')" title="Gold — Story/Main"></div>
+    <div class="color-btn" id="cb-red" style="background:#7a2828;" onclick="setColor('red')" title="Red — Danger/Villain"></div>
+    <div class="color-btn" id="cb-teal" style="background:#3a8a80;" onclick="setColor('teal')" title="Teal — NPCs"></div>
+    <div class="color-btn" id="cb-blue" style="background:#4a7ab0;" onclick="setColor('blue')" title="Blue — Locations"></div>
+    <div class="color-btn" id="cb-purple" style="background:#7a5ab0;" onclick="setColor('purple')" title="Purple — Mystery/Lore"></div>
+    <div class="color-btn" id="cb-dark" style="background:#1c1f22;" onclick="setColor('dark')" title="Dark — General"></div>
+  </div>
+
+  <div class="tb-div"></div>
+
+  <!-- Connect mode -->
+  <button class="tb-btn" id="connect-btn" onclick="toggleConnectMode()" title="Connect notes with lines">
+    ⟶ Connect
+  </button>
+  <button class="tb-btn" onclick="clearConnections()" title="Remove all connections">
+    ✕ Clear Lines
+  </button>
+
+  <div class="tb-div"></div>
+
+  <!-- View -->
+  <button class="tb-btn" onclick="resetView()" title="Reset pan and zoom">⌖ Reset View</button>
+  <button class="tb-btn" onclick="clearAll()" title="Clear everything" style="color:var(--red);">⚠ Clear All</button>
+
+  <div class="tb-spacer"></div>
+
+  <div class="tb-hint">Drag canvas to pan · Scroll to zoom · Click header to drag note · Right-click for options</div>
+  <div class="tb-div"></div>
+  <a href="dm.html" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);text-decoration:none;padding:5px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;">← GM Screen</a>
+  <a href="index.html" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);text-decoration:none;padding:5px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;">🏠 Home</a>
+</div>
+
+<!-- CANVAS -->
+<div id="canvas-wrap">
+  <div id="canvas">
+    <!-- SVG for connections -->
+    <svg id="connections-svg">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="rgba(255,255,255,0.2)"/>
+        </marker>
+        <marker id="arrow-gold" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#c9a84c"/>
+        </marker>
+      </defs>
+    </svg>
+    <!-- Connection preview SVG -->
+    <svg id="conn-preview">
+      <line class="preview-line" id="preview-line" x1="0" y1="0" x2="0" y2="0" style="display:none;"/>
+    </svg>
+  </div>
+  <div id="minimap">
+    <div id="minimap-viewport"></div>
+  </div>
+  <div id="zoom-indicator">100%</div>
+  <div id="connect-banner">CONNECT MODE — Click a note to connect it to the source</div>
+</div>
+
+<!-- CONTEXT MENU -->
+<div id="ctx-menu">
+  <div class="ctx-item" onclick="ctxAddNote()">✦ Add Note Here</div>
+  <div class="ctx-item" onclick="ctxAddLabel()">T Add Label Here</div>
+  <div class="ctx-div"></div>
+  <div class="ctx-item" id="ctx-color-gold" onclick="ctxSetColor('gold')" style="color:var(--gold);">● Gold</div>
+  <div class="ctx-item" id="ctx-color-red" onclick="ctxSetColor('red')" style="color:var(--red);">● Red</div>
+  <div class="ctx-item" id="ctx-color-teal" onclick="ctxSetColor('teal')" style="color:var(--teal);">● Teal</div>
+  <div class="ctx-item" id="ctx-color-blue" onclick="ctxSetColor('blue')" style="color:var(--blue);">● Blue</div>
+  <div class="ctx-item" id="ctx-color-purple" onclick="ctxSetColor('purple')" style="color:var(--purple);">● Purple</div>
+  <div class="ctx-item" id="ctx-color-dark" onclick="ctxSetColor('dark')" style="color:var(--muted);">● Dark</div>
+  <div class="ctx-div"></div>
+  <div class="ctx-item" onclick="ctxDelete()" style="color:var(--red);">✕ Delete</div>
+</div>
+
+<script>
+const SAVE_KEY = 'dh2-gm-canvas';
+
+// ── STATE ──
+let nodes = []; // {id, type:'note'|'label', x, y, w, color, title, text}
+let connections = []; // {from, to} by node id
+let pan = {x: 200, y: 200};
+let zoom = 1;
+let currentColor = 'gold';
+let connectMode = false;
+let connectSource = null;
+let nodeIdCounter = 1;
+let ctxTarget = null; // node id for context menu
+let ctxPos = {x:0, y:0};
+
+const canvas = document.getElementById('canvas');
+const wrap = document.getElementById('canvas-wrap');
+const svg = document.getElementById('connections-svg');
+const previewLine = document.getElementById('preview-line');
+
+// ── INIT ──
+function init() {
+  applyTransform();
+  loadData();
+  setupPan();
+  setupZoom();
+  updateMinimap();
+}
+
+// ── TRANSFORM ──
+function applyTransform() {
+  canvas.style.transform = `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`;
+  document.getElementById('zoom-indicator').textContent = Math.round(zoom * 100) + '%';
+  updateMinimap();
+}
+
+function resetView() {
+  pan = {x: 200, y: 200};
+  zoom = 1;
+  applyTransform();
+}
+
+// ── PAN ──
+function setupPan() {
+  let panning = false, startX, startY, startPanX, startPanY;
+  wrap.addEventListener('mousedown', e => {
+    // Only pan if clicking directly on background elements, not on notes/labels
+    const isBackground = e.target === wrap || e.target === canvas || 
+      e.target.id === 'connections-svg' || e.target.id === 'canvas' ||
+      e.target.classList.contains('canvas') ||
+      (e.target.tagName === 'line' || e.target.tagName === 'path' || e.target.tagName === 'svg');
+    if (isBackground) {
+      panning = true;
+      startX = e.clientX; startY = e.clientY;
+      startPanX = pan.x; startPanY = pan.y;
+      wrap.classList.add('panning');
+    }
+  });
+  document.addEventListener('mousemove', e => {
+    if (!panning) return;
+    pan.x = startPanX + (e.clientX - startX);
+    pan.y = startPanY + (e.clientY - startY);
+    applyTransform();
+  });
+  document.addEventListener('mouseup', () => {
+    panning = false;
+    wrap.classList.remove('panning');
+  });
+}
+
+// ── ZOOM ──
+function setupZoom() {
+  wrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = wrap.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    const newZoom = Math.max(0.2, Math.min(3, zoom * delta));
+    // Zoom toward mouse
+    pan.x = mx - (mx - pan.x) * (newZoom / zoom);
+    pan.y = my - (my - pan.y) * (newZoom / zoom);
+    zoom = newZoom;
+    applyTransform();
+  }, {passive: false});
+}
+
+// ── CANVAS COORDS ──
+function clientToCanvas(cx, cy) {
+  const rect = wrap.getBoundingClientRect();
+  return {
+    x: (cx - rect.left - pan.x) / zoom,
+    y: (cy - rect.top - pan.y) / zoom
+  };
+}
+
+// ── NODES ──
+function addNote(cx, cy) {
+  const pos = cx !== undefined ? {x: cx, y: cy} : clientToCanvas(
+    wrap.clientWidth / 2, wrap.clientHeight / 2
+  );
+  const id = 'n' + (nodeIdCounter++);
+  const node = {id, type:'note', x: pos.x - 90, y: pos.y - 50, w: 220, color: currentColor, title:'', text:''};
+  nodes.push(node);
+  renderNode(node);
+  saveData();
+  return node;
+}
+
+function addLabel(cx, cy) {
+  const pos = cx !== undefined ? {x: cx, y: cy} : clientToCanvas(
+    wrap.clientWidth / 2, wrap.clientHeight / 2
+  );
+  const id = 'n' + (nodeIdCounter++);
+  const node = {id, type:'label', x: pos.x, y: pos.y, color: currentColor, title:'Section'};
+  nodes.push(node);
+  renderNode(node);
+  saveData();
+}
+
+function renderNode(node) {
+  if (node.type === 'label') {
+    renderLabel(node);
+    return;
+  }
+  const el = document.createElement('div');
+  el.className = `note c-${node.color}`;
+  el.id = node.id;
+  el.style.left = node.x + 'px';
+  el.style.top = node.y + 'px';
+  el.style.width = (node.w || 220) + 'px';
+
+  el.innerHTML = `
+    <div class="note-header">
+      <input class="note-title" placeholder="Title..." value="${esc(node.title)}"
+        oninput="updateNode('${node.id}','title',this.value)"
+        onmousedown="event.stopPropagation()">
+      <button class="note-connect-btn" onclick="startConnect('${node.id}')" title="Connect to another note">⟶</button>
+      <button class="note-del" onclick="deleteNode('${node.id}')" title="Delete">×</button>
+    </div>
+    <div class="note-body">
+      <textarea class="note-text" placeholder="Write anything..." rows="4"
+        oninput="updateNode('${node.id}','text',this.value);autoResize(this)"
+>${esc(node.text)}</textarea>
+    </div>
+    <div class="note-resize" title="Resize">◢</div>`;
+
+  setupNodeDrag(el, node);
+  setupNodeResize(el, node);
+  setupNodeContext(el, node);
+  canvas.appendChild(el);
+
+  // Setup connect click
+  if (connectMode) {
+    el.addEventListener('click', e => handleConnectClick(node.id, e), {once: false});
+  }
+}
+
+function renderLabel(node) {
+  // Wrapper div handles dragging; inner input handles text editing
+  const el = document.createElement('div');
+  el.className = 'label';
+  el.id = node.id;
+  el.style.left = node.x + 'px';
+  el.style.top = node.y + 'px';
+  el.style.cursor = 'move';
+
+  const inp = document.createElement('input');
+  inp.className = 'label-inp';
+  inp.value = node.title || 'Section';
+  inp.style.cssText = `font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.12em;color:${getColorVal(node.color)};border:none;background:none;outline:none;cursor:text;text-transform:uppercase;pointer-events:auto;width:${Math.max(60, (node.title||'Section').length * 9)}px;`;
+  inp.addEventListener('input', () => {
+    updateNode(node.id, 'title', inp.value);
+    inp.style.width = Math.max(60, inp.value.length * 9) + 'px';
+  });
+  inp.addEventListener('mousedown', e => e.stopPropagation()); // let input receive clicks, div handles drag
+
+  el.appendChild(inp);
+  setupNodeDrag(el, node);
+  setupNodeContext(el, node);
+  canvas.appendChild(el);
+}
+
+function getColorVal(c) {
+  const map = {gold:'#c9a84c',red:'#c04040',teal:'#3a8a80',blue:'#4a7ab0',purple:'#7a5ab0',dark:'#7a7570'};
+  return map[c] || map.dark;
+}
+
+function setupNodeDrag(el, node) {
+  // For notes: drag via header. For labels: drag via the element itself.
+  const dragHandle = (el.classList.contains('label')) ? el : (el.querySelector('.note-header') || el);
+
+  dragHandle.addEventListener('mousedown', e => {
+    // Don't drag when clicking interactive elements
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A') return;
+    if (connectMode) return;
+
+    e.preventDefault();
+    e.stopPropagation(); // Prevent canvas pan from stealing this
+
+    let moved = false;
+    const startClientX = e.clientX;
+    const startClientY = e.clientY;
+    const startNodeX = node.x;
+    const startNodeY = node.y;
+
+    // Bring to front
+    el.style.zIndex = 1000;
+    el.style.cursor = 'grabbing';
+    if (dragHandle !== el) dragHandle.style.cursor = 'grabbing';
+
+    function onMove(e) {
+      moved = true;
+      const dx = (e.clientX - startClientX) / zoom;
+      const dy = (e.clientY - startClientY) / zoom;
+      node.x = startNodeX + dx;
+      node.y = startNodeY + dy;
+      el.style.left = node.x + 'px';
+      el.style.top = node.y + 'px';
+      renderConnections();
+    }
+
+    function onUp() {
+      el.style.zIndex = '';
+      el.style.cursor = '';
+      if (dragHandle !== el) dragHandle.style.cursor = '';
+      if (moved) saveData();
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+}
+
+function setupNodeResize(el, node) {
+  const handle = el.querySelector('.note-resize');
+  if (!handle) return;
+  let resizing = false, startX, startW;
+  handle.addEventListener('mousedown', e => {
+    e.preventDefault(); e.stopPropagation();
+    resizing = true;
+    startX = e.clientX; startW = node.w || 220;
+    const onMove = e => {
+      if (!resizing) return;
+      const dx = (e.clientX - startX) / zoom;
+      node.w = Math.max(160, startW + dx);
+      el.style.width = node.w + 'px';
+      renderConnections();
+    };
+    const onUp = () => { resizing = false; saveData(); document.removeEventListener('mousemove',onMove); document.removeEventListener('mouseup',onUp); };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+}
+
+function setupNodeContext(el, node) {
+  el.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    ctxTarget = node.id;
+    showCtxMenu(e.clientX, e.clientY, true);
+  });
+}
+
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+}
+
+function updateNode(id, key, val) {
+  const node = nodes.find(n => n.id === id);
+  if (node) { node[key] = val; saveData(); }
+}
+
+function deleteNode(id) {
+  nodes = nodes.filter(n => n.id !== id);
+  connections = connections.filter(c => c.from !== id && c.to !== id);
+  const el = document.getElementById(id);
+  if (el) el.remove();
+  renderConnections();
+  saveData();
+}
+
+function setColor(c) {
+  currentColor = c;
+  document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('cb-' + c)?.classList.add('active');
+}
+
+// ── CONNECT MODE ──
+function toggleConnectMode() {
+  connectMode = !connectMode;
+  connectSource = null;
+  const btn = document.getElementById('connect-btn');
+  const banner = document.getElementById('connect-banner');
+  if (connectMode) {
+    btn.classList.add('active');
+    banner.style.display = 'block';
+    previewLine.style.display = 'none';
+  } else {
+    btn.classList.remove('active');
+    banner.style.display = 'none';
+    previewLine.style.display = 'none';
+    document.querySelectorAll('.note').forEach(el => el.classList.remove('connecting-source'));
+  }
+}
+
+function startConnect(id) {
+  if (!connectMode) {
+    connectMode = true;
+    document.getElementById('connect-btn').classList.add('active');
+    document.getElementById('connect-banner').style.display = 'block';
+  }
+  connectSource = id;
+  document.querySelectorAll('.note').forEach(el => el.classList.remove('connecting-source'));
+  document.getElementById(id)?.classList.add('connecting-source');
+}
+
+function handleConnectClick(id, e) {
+  if (!connectMode) return;
+  e.stopPropagation();
+  if (!connectSource) {
+    connectSource = id;
+    document.querySelectorAll('.note').forEach(el => el.classList.remove('connecting-source'));
+    document.getElementById(id)?.classList.add('connecting-source');
+    return;
+  }
+  if (connectSource === id) { connectSource = null; document.querySelectorAll('.note').forEach(el=>el.classList.remove('connecting-source')); return; }
+  // Add connection if not duplicate
+  const exists = connections.find(c => (c.from===connectSource&&c.to===id)||(c.from===id&&c.to===connectSource));
+  if (!exists) {
+    connections.push({from: connectSource, to: id});
+    renderConnections();
+    saveData();
+  }
+  connectSource = null;
+  document.querySelectorAll('.note').forEach(el => el.classList.remove('connecting-source'));
+  previewLine.style.display = 'none';
+}
+
+// Wire up connect clicks on canvas
+canvas.addEventListener('click', e => {
+  const noteEl = e.target.closest('.note');
+  if (connectMode && noteEl) {
+    handleConnectClick(noteEl.id, e);
+  } else if (connectMode && !noteEl) {
+    connectSource = null;
+    document.querySelectorAll('.note').forEach(el => el.classList.remove('connecting-source'));
+  }
+});
+
+// Preview line while in connect mode
+wrap.addEventListener('mousemove', e => {
+  if (!connectMode || !connectSource) { previewLine.style.display = 'none'; return; }
+  const src = document.getElementById(connectSource);
+  if (!src) return;
+  const srcRect = src.getBoundingClientRect();
+  const wRect = wrap.getBoundingClientRect();
+  const sx = (srcRect.left + srcRect.width/2 - wRect.left - pan.x) / zoom;
+  const sy = (srcRect.top + srcRect.height/2 - wRect.top - pan.y) / zoom;
+  const tx = (e.clientX - wRect.left - pan.x) / zoom;
+  const ty = (e.clientY - wRect.top - pan.y) / zoom;
+  previewLine.setAttribute('x1', sx); previewLine.setAttribute('y1', sy);
+  previewLine.setAttribute('x2', tx); previewLine.setAttribute('y2', ty);
+  previewLine.style.display = '';
+});
+
+function clearConnections() {
+  if (confirm('Remove all connection lines?')) {
+    connections = [];
+    renderConnections();
+    saveData();
+  }
+}
+
+// ── RENDER CONNECTIONS ──
+function renderConnections() {
+  // Remove old lines
+  svg.querySelectorAll('.conn-line').forEach(el => el.remove());
+  connections.forEach((conn, i) => {
+    const fromEl = document.getElementById(conn.from);
+    const toEl = document.getElementById(conn.to);
+    if (!fromEl || !toEl) return;
+    const fr = fromEl.getBoundingClientRect();
+    const tr = toEl.getBoundingClientRect();
+    const wRect = wrap.getBoundingClientRect();
+    const x1 = (fr.left + fr.width/2 - wRect.left - pan.x) / zoom;
+    const y1 = (fr.top + fr.height/2 - wRect.top - pan.y) / zoom;
+    const x2 = (tr.left + tr.width/2 - wRect.left - pan.x) / zoom;
+    const y2 = (tr.top + tr.height/2 - wRect.top - pan.y) / zoom;
+    // Cubic bezier for natural curves
+    const cx1 = x1 + (x2-x1)*0.5;
+    const cy1 = y1;
+    const cx2 = x1 + (x2-x1)*0.5;
+    const cy2 = y2;
+    const line = document.createElementNS('http://www.w3.org/2000/svg','path');
+    line.className.baseVal = 'conn-line';
+    line.setAttribute('d', `M${x1},${y1} C${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`);
+    line.setAttribute('marker-end','url(#arrow)');
+    line.addEventListener('click', e => {
+      e.stopPropagation();
+      if (confirm('Remove this connection?')) {
+        connections.splice(i, 1);
+        renderConnections();
+        saveData();
+      }
+    });
+    svg.appendChild(line);
+  });
+}
+
+// ── CONTEXT MENU ──
+function showCtxMenu(x, y, onNode) {
+  const menu = document.getElementById('ctx-menu');
+  const colorItems = menu.querySelectorAll('[id^="ctx-color"]');
+  colorItems.forEach(el => el.style.display = onNode ? '' : 'none');
+  document.querySelectorAll('.ctx-div').forEach((el,i) => {
+    if (i === 1) el.style.display = onNode ? '' : 'none';
+  });
+  document.getElementById('ctx-delete') && (document.getElementById('ctx-delete').style.display = onNode ? '' : 'none');
+  menu.style.left = x + 'px';
+  menu.style.top = y + 'px';
+  menu.style.display = 'block';
+  ctxPos = clientToCanvas(x, y);
+}
+
+document.addEventListener('contextmenu', e => {
+  if (!e.target.closest('.note') && !e.target.closest('.label')) {
+    e.preventDefault();
+    ctxTarget = null;
+    showCtxMenu(e.clientX, e.clientY, false);
+    ctxPos = clientToCanvas(e.clientX, e.clientY);
+  }
+});
+
+document.addEventListener('click', () => {
+  document.getElementById('ctx-menu').style.display = 'none';
+});
+
+function ctxAddNote() { addNote(ctxPos.x, ctxPos.y); }
+function ctxAddLabel() { addLabel(ctxPos.x, ctxPos.y); }
+function ctxSetColor(c) {
+  if (!ctxTarget) return;
+  const node = nodes.find(n => n.id === ctxTarget);
+  if (!node) return;
+  node.color = c;
+  const el = document.getElementById(ctxTarget);
+  if (el && node.type === 'note') {
+    el.className = `note c-${c}`;
+  } else if (el && node.type === 'label') {
+    const inp = el.querySelector('.label-inp');
+    if (inp) inp.style.color = getColorVal(c);
+  }
+  saveData();
+}
+function ctxDelete() {
+  if (ctxTarget) deleteNode(ctxTarget);
+}
+
+function clearAll() {
+  if (confirm('Clear the entire canvas? This cannot be undone.')) {
+    nodes = []; connections = [];
+    canvas.querySelectorAll('.note,.label').forEach(el => el.remove());
+    svg.querySelectorAll('.conn-line').forEach(el => el.remove());
+    nodeIdCounter = 1;
+    saveData();
+  }
+}
+
+// ── MINIMAP ──
+function updateMinimap() {
+  const mini = document.getElementById('minimap');
+  const vp = document.getElementById('minimap-viewport');
+  const scale = mini.clientWidth / 4000;
+  const vpW = wrap.clientWidth / zoom * scale;
+  const vpH = wrap.clientHeight / zoom * scale;
+  const vpX = -pan.x / zoom * scale;
+  const vpY = -pan.y / zoom * scale;
+  vp.style.left = Math.max(0, vpX) + 'px';
+  vp.style.top = Math.max(0, vpY) + 'px';
+  vp.style.width = Math.min(mini.clientWidth, vpW) + 'px';
+  vp.style.height = Math.min(mini.clientHeight, vpH) + 'px';
+}
+
+// ── SAVE / LOAD ──
+function saveData() {
+  const data = {nodes, connections, pan, zoom, nodeIdCounter};
+  localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+}
+
+function loadData() {
+  try {
+    const d = JSON.parse(localStorage.getItem(SAVE_KEY));
+    if (!d) { addWelcomeNotes(); return; }
+    pan = d.pan || {x:200, y:200};
+    zoom = d.zoom || 1;
+    nodeIdCounter = d.nodeIdCounter || 1;
+    nodes = d.nodes || [];
+    connections = d.connections || [];
+    applyTransform();
+    nodes.forEach(n => renderNode(n));
+    setTimeout(() => renderConnections(), 50);
+  } catch(e) {
+    addWelcomeNotes();
+  }
+}
+
+function addWelcomeNotes() {
+  const n1 = {id:'n1', type:'note', x:300, y:200, w:240, color:'gold', title:'Campaign Story', text:'The big picture — what is at stake? Who is the villain? What does the world want?'};
+  const n2 = {id:'n2', type:'note', x:600, y:150, w:220, color:'red', title:'Villain / Big Bad', text:'Motivation:\nPlan:\nLocation:\nWeakness:'};
+  const n3 = {id:'n3', type:'note', x:600, y:360, w:220, color:'teal', title:'Key NPC', text:'Name:\nRole:\nWants:\nKnows:'};
+  const n4 = {id:'n4', type:'note', x:300, y:420, w:240, color:'blue', title:'Current Scene', text:'Where are we? What is the tension? What can happen?'};
+  const n5 = {id:'n5', type:'label', x:260, y:160, color:'dark', title:'STORY'};
+  nodes = [n1,n2,n3,n4,n5];
+  connections = [{from:'n1',to:'n2'},{from:'n1',to:'n3'},{from:'n1',to:'n4'}];
+  nodeIdCounter = 6;
+  nodes.forEach(n => renderNode(n));
+  setTimeout(() => renderConnections(), 50);
+  saveData();
+}
+
+// ── UTILS ──
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+// ── START ──
+init();
+</script>
+</body>
+</html>
