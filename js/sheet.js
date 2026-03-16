@@ -360,7 +360,7 @@ function buildPages(cls) {
         ${['agility','strength','finesse','instinct','presence','knowledge'].map(t=>`
         <div class="trait-block">
           <div class="trait-name">${t.toUpperCase()}</div>
-          <input type="number" class="trait-score" id="t-${t}" value="${c.traits[t]>=0?'+'+c.traits[t]:c.traits[t]}" oninput="save()">
+          <input type="number" class="trait-score" id="t-${t}" value="" oninput="save()">
           <div class="trait-actions">${{agility:'Sprint\nLeap\nManeuver',strength:'Lift\nSmash\nGrapple',finesse:'Control\nHide\nTinker',instinct:'Perceive\nSense\nNavigate',presence:'Charm\nPerform\nDeceive',knowledge:'Recall\nAnalyze\nComprehend'}[t].split('\n').join('<br>')}</div>
         </div>`).join('')}
       </div>
@@ -2140,27 +2140,48 @@ function applyClassDefaults(cls) {
 }
 
 function restoreData(d) {
-  // Always apply class defaults first so traits/hp/stress are never blank
-  applyClassDefaults(currentClass);
+  const traitIds = ['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge'];
+  const cls = CLASSES[currentClass];
+
+  // Check if saved data has any user-entered traits
+  const hasSavedTraits = d && traitIds.some(k => d[k] !== undefined && d[k] !== '');
+
+  if (hasSavedTraits) {
+    // Restore saved traits — fill missing ones from class defaults
+    traitIds.forEach(k => {
+      const el = document.getElementById(k);
+      if (!el) return;
+      const t = k.replace('t-', '');
+      if (d[k] !== undefined && d[k] !== '') {
+        el.value = d[k];
+      } else if (cls) {
+        el.value = cls.traits[t] >= 0 ? '+' + cls.traits[t] : String(cls.traits[t]);
+      }
+    });
+  } else {
+    // No saved traits — use class defaults
+    applyClassDefaults(currentClass);
+  }
+
   if (!d) return;
-  const traitIds = new Set(['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge']);
-  // text fields — only restore non-empty values
-  Object.keys(d).forEach(k=>{
-    if(['class','exps','inv','invWeaps'].includes(k)) return;
-    if(typeof d[k]==='boolean'){const el=document.getElementById(k);if(el)el.checked=d[k];return;}
-    if(typeof d[k]==='number') return;
-    if(typeof d[k]==='string'){
-      if(d[k]==='') return; // never overwrite defaults with empty string
-      const el=document.getElementById(k);if(el)el.value=d[k];
-    }
+
+  // All other text fields
+  Object.keys(d).forEach(k => {
+    if (['class','exps','inv','invWeaps'].includes(k)) return;
+    if (traitIds.includes(k)) return; // already handled above
+    if (typeof d[k] === 'boolean') { const el = document.getElementById(k); if (el) el.checked = d[k]; return; }
+    if (typeof d[k] === 'number') return;
+    if (typeof d[k] === 'string' && d[k] !== '') { const el = document.getElementById(k); if (el) el.value = d[k]; }
   });
+
   // checkboxes
   for(let t=2;t<=4;t++) for(let o=0;o<9;o++){const el=document.getElementById(`t${t}o${o}`);if(el)el.checked=!!d[`t${t}o${o}`];}
   // pips
   if(d.hope!=null){renderHopePips(document.getElementById('hope-pips'), d.hopeTotal||6, d.hope);}
-  const cls = CLASSES[currentClass];
   if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'), d.hpTotal||(cls?.hpStart||5), d.hp, 'hpbox');
+  else if(cls?.hpStart) makeBoxPips(document.getElementById('hp-boxes'), cls.hpStart, 0, 'hpbox');
   if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'), d.stressTotal||(cls?.stressStart||6), d.stress, 'stressbox');
+  else if(cls?.stressStart) makeBoxPips(document.getElementById('stress-boxes'), cls.stressStart, 0, 'stressbox');
   if(d.armor!=null) makeShieldPips(document.getElementById('armor-pips'),12,d.armor);
   if(d.prof!=null) makeProfDots(document.getElementById('prof-dots'),d.prof);
   // dynamic lists
