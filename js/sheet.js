@@ -308,6 +308,15 @@ function buildPages(cls) {
         <div class="class-domains">${c.domains}</div>
         <button onclick="s0GoTo(S0_STEPS.findIndex(s=>s.id==='pick-class'));showSheetTab('s0');" style="margin-top:8px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 8px;border-radius:3px;cursor:pointer;width:100%;">↺ Change Class</button>
       </div>
+      <div class="portrait-slot" onclick="document.getElementById('portrait-upload').click()" title="Click to upload portrait">
+        <img id="portrait-img" src="" style="display:none;">
+        <div class="portrait-placeholder" id="portrait-placeholder">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          PORTRAIT
+        </div>
+        <button class="portrait-remove" onclick="event.stopPropagation();removePortrait()" title="Remove">×</button>
+      </div>
+      <input type="file" id="portrait-upload" accept="image/*" style="display:none" onchange="uploadPortrait(this)">
       <div class="char-fields">
         <div class="char-fields-row1">
           <div><span class="ey">Name</span><input type="text" id="f-name" placeholder="Character name..." oninput="save()"></div>
@@ -2207,8 +2216,55 @@ function loadSheet() {
   try { d = JSON.parse(localStorage.getItem(saveKey(cls))); } catch {}
   if (!d && legacyData && legacyData.class === cls) d = legacyData;
   restoreData(d);
+  loadPortrait();
   renderSidebar();
   renderLoadoutQuick();
+}
+
+function uploadPortrait(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    setPortrait(e.target.result);
+    savePortrait(e.target.result);
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function setPortrait(dataUrl) {
+  const img = document.getElementById('portrait-img');
+  const placeholder = document.getElementById('portrait-placeholder');
+  if (!img || !placeholder) return;
+  if (dataUrl) {
+    img.src = dataUrl;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    img.src = '';
+    img.style.display = 'none';
+    placeholder.style.display = 'flex';
+  }
+}
+
+function savePortrait(dataUrl) {
+  if (!currentClass) return;
+  const key = 'dh2-portrait-' + currentClass.toLowerCase();
+  if (dataUrl) localStorage.setItem(key, dataUrl);
+  else localStorage.removeItem(key);
+}
+
+function loadPortrait() {
+  if (!currentClass) return;
+  const key = 'dh2-portrait-' + currentClass.toLowerCase();
+  const dataUrl = localStorage.getItem(key);
+  setPortrait(dataUrl || '');
+}
+
+function removePortrait() {
+  setPortrait('');
+  savePortrait('');
 }
 
 function prefillSuggestedTraits(cls) {
@@ -2244,6 +2300,7 @@ function switchClass(cls, silent=false) {
     let d = null;
     try { d = JSON.parse(localStorage.getItem(saveKey(cls))); } catch {}
     restoreData(d);
+    loadPortrait();
     renderSidebar();
     renderLoadoutQuick();
   } else {
@@ -2431,6 +2488,14 @@ function exportCharacters() {
   const s0 = localStorage.getItem('dh2-s0-wizard');
   if (s0) data.session0 = JSON.parse(s0);
 
+  // Also export portraits per class
+  data.portraits = {};
+  Object.keys(CLASSES).forEach(cls => {
+    const pk = 'dh2-portrait-' + cls.toLowerCase();
+    const pv = localStorage.getItem(pk);
+    if (pv) data.portraits[cls] = pv;
+  });
+
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2484,6 +2549,11 @@ function importCharacters(input) {
       }
       if (data.session0) {
         localStorage.setItem('dh2-s0-wizard', JSON.stringify(data.session0));
+      }
+      if (data.portraits) {
+        Object.entries(data.portraits).forEach(([cls, dataUrl]) => {
+          localStorage.setItem('dh2-portrait-' + cls.toLowerCase(), dataUrl);
+        });
       }
 
       // Reset file input so the same file can be re-imported if needed
