@@ -2120,7 +2120,7 @@ function restoreData(d) {
     if(typeof d[k]==='boolean'){const el=document.getElementById(k);if(el)el.checked=d[k];return;}
     if(typeof d[k]==='number') return;
     if(typeof d[k]==='string'){
-      if(d[k]==='' && (traitIds.has(k) || !hasTraits)) return; // don't overwrite defaults with empty
+      if(d[k]==='') return; // never overwrite with empty string
       const el=document.getElementById(k);if(el)el.value=d[k];
     }
   });
