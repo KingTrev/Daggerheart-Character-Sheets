@@ -992,7 +992,12 @@ function renderS0() {
       if (s0Data['s0-subclass']) { const el = document.getElementById('f-subclass'); if (el) { el.value = s0Data['s0-subclass']; onSubclassChange(); } }
       if (s0Data['s0-ancestry']) { const el = document.getElementById('f-ancestry'); if (el) { el.value = s0Data['s0-ancestry']; onHeritageChange(); } }
       if (s0Data['s0-community']) { const el = document.getElementById('f-community'); if (el) { el.value = s0Data['s0-community']; onHeritageChange(); } }
-      applyClassDefaults(currentClass);
+      // Apply traits: use S0 entered values, don't fall back to class defaults
+      ['agility','strength','finesse','instinct','presence','knowledge'].forEach(t => {
+        const s0Val = s0Data['s0-trait-' + t];
+        const el = document.getElementById('t-' + t);
+        if (el && s0Val !== undefined && s0Val !== '') el.value = s0Val;
+      });
       // Full save so sidebar picks up class name
       save();
       renderSidebar();
@@ -2108,14 +2113,9 @@ function s0FillSuggestedTraits() {
 function applyClassDefaults(cls) {
   const c = CLASSES[cls];
   if (!c) return;
-  // Traits
-  ['agility','strength','finesse','instinct','presence','knowledge'].forEach(t => {
-    const el = document.getElementById('t-' + t);
-    if (el) el.value = c.traits[t] >= 0 ? '+' + c.traits[t] : String(c.traits[t]);
-  });
   // Evasion
   const ev = document.getElementById('f-evasion');
-  if (ev) ev.value = c.evasionStart;
+  if (ev && !ev.value) ev.value = c.evasionStart;
   // HP and Stress
   if (c.hpStart) makeBoxPips(document.getElementById('hp-boxes'), c.hpStart, 0, 'hpbox');
   if (c.stressStart) makeBoxPips(document.getElementById('stress-boxes'), c.stressStart, 0, 'stressbox');
@@ -2149,24 +2149,15 @@ function restoreData(d) {
   const traitIds = ['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge'];
   const cls = CLASSES[currentClass];
 
-  // Check if saved data has any user-entered traits
-  const hasSavedTraits = d && traitIds.some(k => d[k] !== undefined && d[k] !== '');
+  // Always set HP/stress/evasion from class data first
+  applyClassDefaults(currentClass);
 
-  if (hasSavedTraits) {
-    // Restore saved traits — fill missing ones from class defaults
+  // Restore saved traits only if they exist — otherwise leave blank
+  if (d) {
     traitIds.forEach(k => {
       const el = document.getElementById(k);
-      if (!el) return;
-      const t = k.replace('t-', '');
-      if (d[k] !== undefined && d[k] !== '') {
-        el.value = d[k];
-      } else if (cls) {
-        el.value = cls.traits[t] >= 0 ? '+' + cls.traits[t] : String(cls.traits[t]);
-      }
+      if (el && d[k] !== undefined && d[k] !== '') el.value = d[k];
     });
-  } else {
-    // No saved traits — use class defaults
-    applyClassDefaults(currentClass);
   }
 
   if (!d) return;
@@ -2174,7 +2165,7 @@ function restoreData(d) {
   // All other text fields
   Object.keys(d).forEach(k => {
     if (['class','exps','inv','invWeaps'].includes(k)) return;
-    if (traitIds.includes(k)) return; // already handled above
+    if (traitIds.includes(k)) return; // already handled
     if (typeof d[k] === 'boolean') { const el = document.getElementById(k); if (el) el.checked = d[k]; return; }
     if (typeof d[k] === 'number') return;
     if (typeof d[k] === 'string' && d[k] !== '') { const el = document.getElementById(k); if (el) el.value = d[k]; }
@@ -2185,9 +2176,7 @@ function restoreData(d) {
   // pips
   if(d.hope!=null){renderHopePips(document.getElementById('hope-pips'), d.hopeTotal||6, d.hope);}
   if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'), d.hpTotal||(cls?.hpStart||5), d.hp, 'hpbox');
-  else if(cls?.hpStart) makeBoxPips(document.getElementById('hp-boxes'), cls.hpStart, 0, 'hpbox');
   if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'), d.stressTotal||(cls?.stressStart||6), d.stress, 'stressbox');
-  else if(cls?.stressStart) makeBoxPips(document.getElementById('stress-boxes'), cls.stressStart, 0, 'stressbox');
   if(d.armor!=null) makeShieldPips(document.getElementById('armor-pips'),12,d.armor);
   if(d.prof!=null) makeProfDots(document.getElementById('prof-dots'),d.prof);
   // dynamic lists
