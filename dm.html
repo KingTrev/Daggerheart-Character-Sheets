@@ -14,7 +14,7 @@
   --border:   rgba(255,255,255,0.06);
   --border2:  rgba(255,255,255,0.12);
   --text:     #e8e3d8;
-  --muted:    #7a7570;
+  --muted:    #8a8480;
   --gold:     #c9a84c;
   --gold-dim: #7a6530;
   --gold-faint:#141008;
@@ -23,1177 +23,788 @@
   --red-faint:#120808;
   --teal:     #3a8a80;
   --blue:     #4a7ab0;
-  --blue-faint:#080f18;
-  --radius:   8px;
+  --radius:   6px;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font-size:13px;min-height:100vh;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Crimson Pro', serif;
-  font-size: 15px;
-  min-height: 100vh;
-}
-
-/* ── LOCK SCREEN ── */
-#lock-screen {
-  position: fixed; inset: 0;
-  background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 9999;
-  flex-direction: column;
-  gap: 2rem;
-}
-.lock-mark {
-  width: 64px; height: 64px;
-  background: var(--gold-faint);
-  border: 1px solid var(--gold-dim);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel', serif;
-  font-size: 28px; font-weight: 900;
-  color: var(--gold);
-}
-.lock-title {
-  font-family: 'Cinzel', serif;
-  font-size: 24px; font-weight: 700;
-  color: var(--text);
-  letter-spacing: 0.08em;
-  text-align: center;
-}
-.lock-sub {
-  font-family: 'Crimson Pro', serif;
-  font-size: 14px; color: var(--muted);
-  text-align: center;
-  letter-spacing: 0.04em;
-}
-.lock-form {
-  display: flex; flex-direction: column;
-  gap: 12px; width: 280px;
-}
-.lock-input {
-  font-family: 'Cinzel', serif;
-  font-size: 18px; letter-spacing: 0.3em;
-  text-align: center;
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  padding: 12px 16px;
-  border-radius: var(--radius);
-  outline: none;
-  transition: border-color 0.15s;
-}
-.lock-input:focus { border-color: var(--gold-dim); }
-.lock-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 11px; letter-spacing: 0.12em;
-  background: var(--gold-faint);
-  border: 1px solid var(--gold-dim);
-  color: var(--gold);
-  padding: 12px;
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.lock-btn:hover { background: var(--bg4); }
-.lock-error {
-  font-size: 12px; color: var(--red);
-  text-align: center; min-height: 18px;
-  font-family: 'Cinzel', serif; letter-spacing: 0.06em;
-}
-.lock-hint {
-  font-size: 12px; color: var(--muted);
-  text-align: center; margin-top: -8px;
-}
+/* ── LOCK ── */
+#lock{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;z-index:9999;}
+.lock-icon{width:60px;height:60px;background:var(--gold-faint);border:1px solid var(--gold-dim);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--gold);}
+.lock-title{font-family:'Cinzel',serif;font-size:20px;font-weight:700;letter-spacing:0.08em;color:var(--text);}
+.lock-sub{font-size:13px;color:var(--muted);margin-top:-1rem;}
+.lock-input{font-family:'Cinzel',serif;font-size:16px;letter-spacing:0.3em;text-align:center;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 16px;border-radius:var(--radius);outline:none;width:240px;transition:border-color 0.15s;}
+.lock-input:focus{border-color:var(--gold-dim);}
+.lock-btn{font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:10px 24px;border-radius:var(--radius);cursor:pointer;width:240px;}
+.lock-err{font-size:11px;color:var(--red);min-height:16px;text-align:center;font-family:'Cinzel',serif;}
+.lock-hint{font-size:11px;color:var(--muted);text-align:center;}
 
 /* ── APP ── */
-#app { display: none; }
+#app{display:none;height:100vh;display:none;flex-direction:column;}
 
-/* ── TOP BAR ── */
-.dm-header {
-  height: 52px;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border2);
-  display: flex; align-items: center;
-  padding: 0 1.25rem;
-  gap: 1rem;
-  position: sticky; top: 0; z-index: 100;
-}
-.dm-brand {
-  font-family: 'Cinzel', serif;
-  font-size: 11px; font-weight: 700;
-  letter-spacing: 0.15em;
-  color: var(--gold);
-  white-space: nowrap;
-}
-.dm-brand span { color: var(--muted); font-weight: 400; }
-.dm-header-actions {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 8px;
-}
-.dm-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 9px; letter-spacing: 0.1em;
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  color: var(--muted);
-  padding: 5px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.12s;
-}
-.dm-btn:hover { color: var(--text); border-color: var(--border2); }
-.dm-btn.red { border-color: var(--red-dim); color: var(--red); background: var(--red-faint); }
-.dm-btn.gold { border-color: var(--gold-dim); color: var(--gold); background: var(--gold-faint); }
+/* ── HEADER ── */
+.gm-header{height:44px;background:var(--bg2);border-bottom:1px solid var(--border2);display:flex;align-items:center;padding:0 1rem;gap:1rem;flex-shrink:0;}
+.gm-brand{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:0.16em;color:var(--gold);white-space:nowrap;}
+.gm-header-mid{flex:1;display:flex;align-items:center;gap:1.5rem;}
+.tracker{display:flex;align-items:center;gap:6px;}
+.tracker-lbl{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--muted);}
+.tracker-num{font-family:'Cinzel',serif;font-size:15px;font-weight:700;min-width:20px;text-align:center;}
+.fear-num{color:var(--red);}
+.hope-num{color:var(--gold);}
+.t-pip{width:14px;height:14px;border-radius:50%;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;transition:all 0.1s;}
+.t-pip.fear.on{background:var(--red);border-color:var(--red);}
+.t-pip.hope.on{background:var(--gold);border-color:var(--gold);}
+.adj{width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;line-height:1;}
+.scene-box{flex:1;display:flex;align-items:center;gap:6px;}
+.scene-lbl{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--muted);white-space:nowrap;}
+.scene-in{flex:1;font-family:'Crimson Pro',serif;font-size:13px;background:transparent;border:none;border-bottom:1px solid var(--border);color:var(--text);padding:2px 6px;outline:none;}
+.gm-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:4px 10px;border-radius:3px;cursor:pointer;}
+.gm-btn.gold{border-color:var(--gold-dim);color:var(--gold);background:var(--gold-faint);}
+.gm-btn.red{border-color:var(--red-dim);color:var(--red);background:var(--red-faint);}
 
-/* ── LAYOUT ── */
-.dm-body {
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  grid-template-rows: auto 1fr;
-  height: calc(100vh - 52px);
-  overflow: hidden;
-}
+/* ── MAIN ── */
+.gm-main{flex:1;display:grid;grid-template-columns:1fr 1fr 1fr;overflow:hidden;}
+.panel{display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--border2);}
+.panel:last-child{border-right:none;}
+.panel-hdr{padding:8px 10px;background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;display:flex;align-items:center;gap:8px;}
+.panel-title{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:0.14em;color:var(--gold);}
+.panel-tabs{display:flex;gap:0;margin-left:auto;}
+.ptab{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.08em;padding:3px 8px;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;border-right:none;}
+.ptab:last-child{border-right:1px solid var(--border);}
+.ptab.on{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
+.panel-body{flex:1;overflow-y:auto;padding:8px 10px;}
 
-/* ── FEAR / HOPE BAR ── */
-.table-bar {
-  grid-column: 1 / -1;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border2);
-  display: flex; align-items: center;
-  padding: 10px 1.25rem;
-  gap: 2rem;
-  flex-shrink: 0;
-}
-.table-tracker {
-  display: flex; align-items: center; gap: 10px;
-}
-.tracker-label {
-  font-family: 'Cinzel', serif;
-  font-size: 9px; letter-spacing: 0.14em;
-  color: var(--muted);
-  white-space: nowrap;
-}
-.pip-row { display: flex; gap: 5px; align-items: center; }
-.t-pip {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  border: 1px solid var(--border2);
-  background: var(--bg4);
-  cursor: pointer;
-  transition: all 0.12s;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px;
-}
-.t-pip.filled.fear { background: var(--red); border-color: var(--red); }
-.t-pip.filled.hope { background: var(--gold); border-color: var(--gold); }
-.t-pip:hover { border-color: var(--border2); transform: scale(1.1); }
-.tracker-count {
-  font-family: 'Cinzel', serif;
-  font-size: 16px; font-weight: 700;
-  min-width: 24px; text-align: center;
-}
-.fear-count { color: var(--red); }
-.hope-count { color: var(--gold); }
-.pip-adj {
-  width: 20px; height: 20px;
-  border-radius: 3px;
-  border: 1px solid var(--border2);
-  background: none;
-  color: var(--muted);
-  cursor: pointer;
-  font-size: 13px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.12s;
-}
-.pip-adj:hover { color: var(--text); }
+/* ── REFERENCE BLOCKS ── */
+.ref-section{margin-bottom:10px;}
+.ref-h{font-family:'Cinzel',serif;font-size:8px;font-weight:700;letter-spacing:0.12em;color:var(--gold);border-bottom:1px solid var(--border2);padding-bottom:3px;margin-bottom:5px;}
+.ref-p{font-size:12px;line-height:1.6;color:var(--text);margin-bottom:3px;}
+.ref-p b{color:var(--gold);font-weight:600;}
+.ref-p em{color:var(--muted);font-style:italic;}
+.ref-row{display:flex;gap:6px;margin-bottom:3px;align-items:flex-start;}
+.ref-tag{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.06em;color:var(--muted);background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:1px 5px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.ref-tag.hope{color:var(--gold);border-color:var(--gold-dim);background:var(--gold-faint);}
+.ref-tag.fear{color:var(--red);border-color:var(--red-dim);background:var(--red-faint);}
+.ref-tag.neu{color:var(--teal);border-color:var(--teal);}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:4px;}
+.ref-card{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 7px;}
+.ref-card-title{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.1em;color:var(--gold);margin-bottom:2px;}
+.ref-card-body{font-size:11px;line-height:1.5;color:var(--text);}
+.ref-table{width:100%;border-collapse:collapse;margin-bottom:5px;font-size:11px;}
+.ref-table th{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.08em;color:var(--muted);text-align:left;padding:2px 5px;border-bottom:1px solid var(--border2);}
+.ref-table td{padding:2px 5px;border-bottom:1px solid var(--border);}
+.ref-table tr:last-child td{border-bottom:none;}
+.divider{height:1px;background:var(--border2);margin:8px 0;}
 
-.scene-input {
-  flex: 1;
-  font-family: 'Crimson Pro', serif;
-  font-size: 14px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border);
-  color: var(--text);
-  padding: 2px 8px;
-  outline: none;
-}
-.scene-input::placeholder { color: var(--muted); }
-.scene-label {
-  font-family: 'Cinzel', serif;
-  font-size: 9px; letter-spacing: 0.12em;
-  color: var(--muted);
-  white-space: nowrap;
-}
+/* ── TOOLS PANEL ── */
+.tool-section{margin-bottom:12px;}
+.tool-lbl{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--gold);display:block;margin-bottom:5px;}
+.tool-textarea{width:100%;font-family:'Crimson Pro',serif;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);padding:6px 8px;resize:none;outline:none;line-height:1.5;}
+.tool-textarea:focus{border-color:var(--border2);}
+.clock-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.clock-name-in{flex:1;font-family:'Crimson Pro',serif;font-size:12px;background:var(--bg3);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:3px 6px;outline:none;}
+.clock-pips{display:flex;gap:2px;}
+.cpip{width:13px;height:13px;border-radius:2px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;}
+.cpip.on{background:var(--gold);border-color:var(--gold-dim);}
+.cpip.on.red{background:var(--red);border-color:var(--red-dim);}
+.rm-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0;}
+.rm-btn:hover{color:var(--red);}
+.add-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px dashed var(--border2);color:var(--muted);padding:5px;border-radius:3px;cursor:pointer;width:100%;margin-top:2px;}
+.add-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
+.adv-card{background:var(--bg3);border:1px solid var(--border);border-radius:4px;margin-bottom:6px;overflow:hidden;}
+.adv-top{display:flex;align-items:center;gap:6px;padding:5px 8px;}
+.adv-name{flex:1;font-family:'Cinzel',serif;font-size:10px;font-weight:700;background:none;border:none;color:var(--text);outline:none;}
+.adv-pips{display:flex;gap:2px;flex-wrap:wrap;padding:0 8px 6px;}
+.apip{width:11px;height:11px;border-radius:2px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;}
+.apip.on{background:var(--red);border-color:var(--red-dim);}
+.adv-note{width:calc(100% - 16px);margin:0 8px 6px;font-family:'Crimson Pro',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;color:var(--text);padding:4px 6px;outline:none;resize:none;}
 
-/* ── PLAYER CARDS AREA ── */
-.players-area {
-  overflow-y: auto;
-  padding: 1rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.player-card {
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: border-color 0.15s;
-}
-.player-card:hover { border-color: rgba(255,255,255,0.18); }
-.player-card.spotlight { border-color: var(--gold-dim); box-shadow: 0 0 0 1px var(--gold-dim); }
-
-.pc-header {
-  display: flex; align-items: center;
-  padding: 10px 14px;
-  gap: 12px;
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-}
-.pc-portrait {
-  width: 38px; height: 38px;
-  border-radius: 6px;
-  background: var(--bg4);
-  border: 1px solid var(--border2);
-  overflow: hidden;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel', serif;
-  font-size: 14px; font-weight: 700;
-  color: var(--muted);
-}
-.pc-portrait img { width: 100%; height: 100%; object-fit: cover; }
-.pc-identity { flex: 1; min-width: 0; }
-.pc-name {
-  font-family: 'Cinzel', serif;
-  font-size: 13px; font-weight: 700;
-  color: var(--text);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.pc-class {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px; color: var(--gold);
-  letter-spacing: 0.06em; margin-top: 1px;
-}
-.pc-meta {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px; color: var(--muted);
-  margin-top: 1px;
-}
-.spotlight-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 8px; letter-spacing: 0.08em;
-  padding: 3px 8px;
-  border-radius: 3px;
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  background: none;
-  color: var(--muted);
-  transition: all 0.12s;
-}
-.spotlight-btn:hover, .player-card.spotlight .spotlight-btn {
-  border-color: var(--gold-dim); color: var(--gold); background: var(--gold-faint);
-}
-
-.pc-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-  border-top: 1px solid var(--border);
-}
-.pc-stat {
-  background: var(--bg2);
-  padding: 8px 12px;
-  display: flex; flex-direction: column; gap: 4px;
-}
-.pc-stat-label {
-  font-family: 'Cinzel', serif;
-  font-size: 8px; letter-spacing: 0.1em;
-  color: var(--muted);
-}
-.pc-stat-val {
-  font-family: 'Cinzel', serif;
-  font-size: 13px; font-weight: 700;
-  color: var(--text);
-}
-.pip-mini { display: flex; gap: 3px; flex-wrap: wrap; }
-.pip-m {
-  width: 10px; height: 10px;
-  border-radius: 2px;
-  border: 1px solid var(--border2);
-  background: var(--bg4);
-  cursor: pointer;
-  transition: all 0.1s;
-  flex-shrink: 0;
-}
-.pip-m.hp-f { background: var(--red); border-color: var(--red-dim); }
-.pip-m.stress-f { background: var(--blue); border-color: var(--blue); }
-.pip-m.hope-f { background: var(--gold); border-color: var(--gold-dim); }
-
-.pc-traits {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1px;
-  background: var(--border);
-  border-top: 1px solid var(--border);
-}
-.pc-trait {
-  background: var(--bg2);
-  padding: 6px 4px;
-  text-align: center;
-}
-.pc-trait-name {
-  font-family: 'Cinzel', serif;
-  font-size: 7px; letter-spacing: 0.08em;
-  color: var(--muted);
-  margin-bottom: 2px;
-}
-.pc-trait-val {
-  font-family: 'Cinzel', serif;
-  font-size: 14px; font-weight: 700;
-  color: var(--text);
-}
-.pc-trait-val.pos { color: var(--gold); }
-.pc-trait-val.neg { color: var(--red); }
-
-.pc-cards {
-  padding: 8px 14px;
-  border-top: 1px solid var(--border);
-  display: flex; flex-wrap: wrap; gap: 4px;
-}
-.pc-card-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  padding: 2px 7px;
-  border-radius: 3px;
-  background: var(--bg4);
-  border: 1px solid var(--border2);
-  color: var(--muted);
-}
-.pc-card-tag.used {
-  opacity: 0.35;
-  text-decoration: line-through;
-}
-
-.pc-notes-area {
-  padding: 8px 14px;
-  border-top: 1px solid var(--border);
-  display: none;
-}
-.pc-notes-area.open { display: block; }
-.pc-notes {
-  width: 100%;
-  font-family: 'Crimson Pro', serif;
-  font-size: 13px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  padding: 7px 10px;
-  resize: none;
-  outline: none;
-  line-height: 1.6;
-}
-
-/* Empty state */
-.players-empty {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  height: 100%;
-  gap: 1rem;
-  color: var(--muted);
-  text-align: center;
-}
-.players-empty-title {
-  font-family: 'Cinzel', serif;
-  font-size: 12px; letter-spacing: 0.12em;
-}
-
-/* ── RIGHT PANEL ── */
-.right-panel {
-  background: var(--bg2);
-  border-left: 1px solid var(--border2);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-}
-.panel-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border2);
-  flex-shrink: 0;
-}
-.panel-tab {
-  flex: 1;
-  font-family: 'Cinzel', serif;
-  font-size: 8px; letter-spacing: 0.1em;
-  padding: 10px 4px;
-  text-align: center;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: var(--muted);
-  border-bottom: 2px solid transparent;
-  transition: all 0.12s;
-}
-.panel-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-.panel-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-}
-
-/* ── SESSION NOTES ── */
-.panel-section { margin-bottom: 1.25rem; }
-.panel-label {
-  font-family: 'Cinzel', serif;
-  font-size: 9px; letter-spacing: 0.12em;
-  color: var(--gold);
-  margin-bottom: 6px;
-  display: block;
-}
-.panel-textarea {
-  width: 100%;
-  font-family: 'Crimson Pro', serif;
-  font-size: 13px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  padding: 8px 10px;
-  resize: none;
-  outline: none;
-  line-height: 1.6;
-}
-.panel-textarea:focus { border-color: var(--border2); }
-
-/* ── CLOCKS ── */
-.clock-row {
-  display: flex; align-items: center;
-  gap: 8px; margin-bottom: 8px;
-}
-.clock-name {
-  flex: 1;
-  font-family: 'Crimson Pro', serif;
-  font-size: 13px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text);
-  padding: 5px 8px;
-  outline: none;
-}
-.clock-pips { display: flex; gap: 3px; }
-.clock-pip {
-  width: 16px; height: 16px;
-  border-radius: 3px;
-  border: 1px solid var(--border2);
-  background: var(--bg4);
-  cursor: pointer;
-  transition: all 0.12s;
-}
-.clock-pip.filled { background: var(--gold); border-color: var(--gold-dim); }
-.clock-pip.filled.red { background: var(--red); border-color: var(--red-dim); }
-.clock-rm {
-  background: none; border: none;
-  color: var(--muted); cursor: pointer;
-  font-size: 16px; line-height: 1;
-  padding: 0;
-}
-.clock-rm:hover { color: var(--red); }
-.add-clock-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 9px; letter-spacing: 0.1em;
-  background: none;
-  border: 1px dashed var(--border2);
-  color: var(--muted);
-  padding: 6px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.12s;
-}
-.add-clock-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
-
-/* ── ADVERSARIES ── */
-.adv-card {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-.adv-header {
-  display: flex; align-items: center;
-  padding: 7px 10px;
-  gap: 8px;
-  cursor: pointer;
-}
-.adv-name-input {
-  flex: 1;
-  font-family: 'Cinzel', serif;
-  font-size: 11px; font-weight: 700;
-  background: none; border: none;
-  color: var(--text);
-  outline: none;
-}
-.adv-hp-row {
-  display: flex; align-items: center;
-  gap: 6px;
-  padding: 0 10px 8px;
-}
-.adv-hp-label {
-  font-family: 'Cinzel', serif;
-  font-size: 8px; letter-spacing: 0.1em;
-  color: var(--muted);
-}
-.adv-hp-pips { display: flex; gap: 3px; flex-wrap: wrap; }
-.adv-pip {
-  width: 12px; height: 12px;
-  border-radius: 2px;
-  border: 1px solid var(--border2);
-  background: var(--bg4);
-  cursor: pointer;
-}
-.adv-pip.marked { background: var(--red); border-color: var(--red-dim); }
-.adv-notes-input {
-  width: calc(100% - 20px);
-  margin: 0 10px 8px;
-  font-family: 'Crimson Pro', serif;
-  font-size: 12px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  color: var(--text);
-  padding: 5px 8px;
-  outline: none;
-  resize: none;
-}
-.add-adv-btn {
-  font-family: 'Cinzel', serif;
-  font-size: 9px; letter-spacing: 0.1em;
-  background: none;
-  border: 1px dashed var(--border2);
-  color: var(--muted);
-  padding: 6px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 4px;
-  transition: all 0.12s;
-}
-.add-adv-btn:hover { border-color: var(--red-dim); color: var(--red); }
-
-/* scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+/* ── PLAYER CARDS ── */
+.pc-strip{background:var(--bg2);border-bottom:1px solid var(--border2);flex-shrink:0;overflow-x:auto;white-space:nowrap;padding:6px 10px;display:flex;gap:8px;align-items:stretch;}
+.pc-card{display:inline-flex;flex-direction:column;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:6px 8px;min-width:140px;max-width:160px;cursor:pointer;white-space:normal;flex-shrink:0;transition:border-color 0.15s;vertical-align:top;}
+.pc-card.spotlit{border-color:var(--gold-dim);box-shadow:0 0 0 1px var(--gold-dim);}
+.pc-name{font-family:'Cinzel',serif;font-size:9px;font-weight:700;color:var(--text);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pc-cls{font-family:'JetBrains Mono',monospace;font-size:7px;color:var(--gold);margin-bottom:4px;}
+.pc-pips-row{display:flex;gap:3px;margin-bottom:2px;align-items:center;}
+.pc-pip-lbl{font-family:'Cinzel',serif;font-size:6px;letter-spacing:0.08em;color:var(--muted);width:14px;flex-shrink:0;}
+.mpip{width:9px;height:9px;border-radius:1px;border:1px solid var(--border2);background:var(--bg4);cursor:pointer;flex-shrink:0;}
+.mpip.hp{border-color:var(--red-dim);}
+.mpip.hp.on{background:var(--red);}
+.mpip.st{border-color:var(--blue);}
+.mpip.st.on{background:var(--blue);}
+.mpip.ho{border-color:var(--gold-dim);}
+.mpip.ho.on{background:var(--gold);}
+.pc-traits{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;margin-top:4px;}
+.pc-t{text-align:center;}
+.pc-t-n{font-family:'Cinzel',serif;font-size:5px;color:var(--muted);}
+.pc-t-v{font-family:'Cinzel',serif;font-size:10px;font-weight:700;color:var(--text);}
+.pc-t-v.pos{color:var(--gold);}
+.pc-t-v.neg{color:var(--red);}
+.no-players{padding:8px 10px;font-size:11px;color:var(--muted);font-style:italic;}
+.spotlight-bar{padding:4px 10px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.spot-lbl{font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.1em;color:var(--muted);}
+.spot-name{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);flex:1;}
 </style>
 </head>
 <body>
 
-<!-- ── LOCK SCREEN ── -->
-<div id="lock-screen">
-  <div class="lock-mark">⚔</div>
-  <div>
-    <div class="lock-title">GM Screen</div>
-    <div class="lock-sub">Daggerheart — The Sheet</div>
-  </div>
-  <div class="lock-form">
-    <input type="password" class="lock-input" id="pin-input" placeholder="••••" maxlength="20" onkeydown="if(event.key==='Enter')unlock()">
-    <button class="lock-btn" onclick="unlock()">ENTER THE SANCTUM</button>
-    <div class="lock-error" id="lock-error"></div>
-    <div class="lock-hint">First time? Your PIN will be set on entry.</div>
-  </div>
+<!-- LOCK -->
+<div id="lock">
+  <div class="lock-icon">⚔</div>
+  <div class="lock-title">GM SCREEN</div>
+  <div class="lock-sub">Daggerheart — The Sheet</div>
+  <input type="password" class="lock-input" id="pin" placeholder="••••" maxlength="20" onkeydown="if(event.key==='Enter')unlock()">
+  <button class="lock-btn" onclick="unlock()">ENTER</button>
+  <div class="lock-err" id="lock-err"></div>
+  <div class="lock-hint">First visit: your PIN is set on entry (min 4 chars)</div>
 </div>
 
-<!-- ── APP ── -->
-<div id="app">
+<!-- APP -->
+<div id="app" style="display:none;height:100vh;flex-direction:column;">
 
-  <!-- Header -->
-  <header class="dm-header">
-    <div class="dm-brand">⚔ GM SCREEN <span>/ DAGGERHEART</span></div>
-    <div style="flex:1;"></div>
-    <div class="dm-header-actions">
-      <label class="dm-btn gold" style="cursor:pointer;">
-        ⬆ Load Players
-        <input type="file" id="player-import" accept=".json" style="display:none" onchange="loadPlayers(this)" multiple>
-      </label>
-      <button class="dm-btn" onclick="clearAll()">✕ Clear All</button>
-      <button class="dm-btn" onclick="saveGMData()">Save</button>
-      <button class="dm-btn red" onclick="lockGM()">Lock</button>
+  <!-- HEADER -->
+  <header class="gm-header">
+    <div class="gm-brand">⚔ GM SCREEN</div>
+    <div class="gm-header-mid">
+      <!-- FEAR -->
+      <div class="tracker">
+        <span class="tracker-lbl">FEAR</span>
+        <button class="adj" onclick="adjFear(-1)">−</button>
+        <span class="tracker-num fear-num" id="fear-n">0</span>
+        <button class="adj" onclick="adjFear(1)">+</button>
+        <div id="fear-pips" style="display:flex;gap:2px;"></div>
+      </div>
+      <!-- HOPE -->
+      <div class="tracker">
+        <span class="tracker-lbl">HOPE</span>
+        <button class="adj" onclick="adjHope(-1)">−</button>
+        <span class="tracker-num hope-num" id="hope-n">0</span>
+        <button class="adj" onclick="adjHope(1)">+</button>
+        <div id="hope-pips" style="display:flex;gap:2px;"></div>
+      </div>
+      <!-- SCENE -->
+      <div class="scene-box">
+        <span class="scene-lbl">SCENE</span>
+        <input type="text" class="scene-in" id="scene-in" placeholder="Current scene..." oninput="saveGM()">
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;">
+      <label class="gm-btn gold" style="cursor:pointer;">⬆ Load Players<input type="file" accept=".json" style="display:none" onchange="loadPlayers(this)" multiple></label>
+      <button class="gm-btn" onclick="saveGM()">Save</button>
+      <button class="gm-btn red" onclick="lockGM()">Lock</button>
     </div>
   </header>
 
-  <div class="dm-body">
+  <!-- PLAYER STRIP -->
+  <div id="pc-strip-wrap">
+    <div class="pc-strip" id="pc-strip">
+      <span class="no-players" id="no-players">No players loaded — use ⬆ Load Players above</span>
+    </div>
+    <div class="spotlight-bar">
+      <span class="spot-lbl">SPOTLIGHT</span>
+      <span class="spot-name" id="spot-name">—</span>
+      <button class="gm-btn" onclick="prevSpot()" style="padding:2px 8px;">◀</button>
+      <button class="gm-btn" onclick="nextSpot()" style="padding:2px 8px;">▶</button>
+      <button class="gm-btn" onclick="clearSpot()">Clear</button>
+    </div>
+  </div>
 
-    <!-- Table Bar: Fear, Hope, Scene -->
-    <div class="table-bar">
-      <!-- FEAR -->
-      <div class="table-tracker">
-        <div class="tracker-label">FEAR</div>
-        <button class="pip-adj" onclick="adjustFear(-1)">−</button>
-        <div class="tracker-count fear-count" id="fear-count">0</div>
-        <button class="pip-adj" onclick="adjustFear(1)">+</button>
-        <div class="pip-row" id="fear-pips"></div>
+  <!-- 3-PANEL MAIN -->
+  <div class="gm-main">
+
+    <!-- LEFT: DICE & ROLLS -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <span class="panel-title">DICE & ROLLS</span>
       </div>
+      <div class="panel-body">
 
-      <div style="width:1px;background:var(--border2);height:30px;"></div>
+        <div class="ref-section">
+          <div class="ref-h">ACTION ROLL — STEP BY STEP</div>
+          <div class="ref-p"><b>1.</b> Announce action + trait used</div>
+          <div class="ref-p"><b>2.</b> GM sets Difficulty (or it's stated)</div>
+          <div class="ref-p"><b>3.</b> Roll 2d12 (Hope Die + Fear Die) + Trait</div>
+          <div class="ref-p"><b>4.</b> Compare total to Difficulty</div>
+          <div class="ref-p"><b>5.</b> Determine Hope or Fear result</div>
+        </div>
 
-      <!-- HOPE -->
-      <div class="table-tracker">
-        <div class="tracker-label">HOPE</div>
-        <button class="pip-adj" onclick="adjustHope(-1)">−</button>
-        <div class="tracker-count hope-count" id="hope-count">0</div>
-        <button class="pip-adj" onclick="adjustHope(1)">+</button>
-        <div class="pip-row" id="hope-pips"></div>
-      </div>
+        <div class="ref-section">
+          <div class="ref-h">DUALITY DICE RESULTS</div>
+          <div class="ref-grid">
+            <div class="ref-card">
+              <div class="ref-card-title">SUCCESS WITH HOPE</div>
+              <div class="ref-card-body">Total ≥ Difficulty, Hope Die higher. <b>Succeed + gain 1 Hope.</b></div>
+            </div>
+            <div class="ref-card">
+              <div class="ref-card-title">SUCCESS WITH FEAR</div>
+              <div class="ref-card-body">Total ≥ Difficulty, Fear Die higher. <b>Succeed, GM gains 1 Fear.</b></div>
+            </div>
+            <div class="ref-card">
+              <div class="ref-card-title">FAILURE WITH HOPE</div>
+              <div class="ref-card-body">Total &lt; Difficulty, Hope Die higher. <b>Fail + minor consequence + gain 1 Hope.</b></div>
+            </div>
+            <div class="ref-card">
+              <div class="ref-card-title">FAILURE WITH FEAR</div>
+              <div class="ref-card-body">Total &lt; Difficulty, Fear Die higher. <b>Fail + major consequence, GM gains 1 Fear.</b></div>
+            </div>
+          </div>
+          <div class="ref-p"><b>Critical Success:</b> Matching dice — auto succeed with bonus, gain Hope, clear Stress. Attack = critical damage (add max dice result).</div>
+        </div>
 
-      <div style="width:1px;background:var(--border2);height:30px;"></div>
+        <div class="divider"></div>
 
-      <!-- SCENE -->
-      <div class="table-tracker" style="flex:1;">
-        <div class="tracker-label">SCENE</div>
-        <input type="text" class="scene-input" id="scene-input" placeholder="Current scene or encounter..." oninput="saveGMData()">
-      </div>
+        <div class="ref-section">
+          <div class="ref-h">REACTION ROLL</div>
+          <div class="ref-p">Made in response to an attack or hazard. Works like an action roll but <b>does not generate Hope or Fear</b> and doesn't trigger GM moves. Critical success ignores effects without clearing Stress/gaining Hope.</div>
+        </div>
 
-      <div style="width:1px;background:var(--border2);height:30px;"></div>
+        <div class="ref-section">
+          <div class="ref-h">GROUP ACTION ROLL</div>
+          <div class="ref-p">One PC leads (action roll), others make reaction rolls with appropriate traits. Lead gets <b>+1 per success, −1 per failure</b> on the reaction rolls.</div>
+        </div>
 
-      <!-- TURN ORDER -->
-      <div class="table-tracker">
-        <div class="tracker-label">TURN ORDER</div>
-        <button class="dm-btn" onclick="prevSpotlight()" style="padding:3px 8px;">◀</button>
-        <div id="spotlight-name" style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);min-width:100px;text-align:center;">—</div>
-        <button class="dm-btn" onclick="nextSpotlight()" style="padding:3px 8px;">▶</button>
+        <div class="ref-section">
+          <div class="ref-h">TAG TEAM ROLL</div>
+          <div class="ref-p">Once per session per PC — spend <b>3 Hope</b> to initiate. Both PCs roll separately, choose which result to apply. On Hope: all PCs gain Hope. On Fear: GM gains Fear per PC. Successful attack: both roll damage, add totals.</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ref-section">
+          <div class="ref-h">TRAITS</div>
+          <div class="ref-grid">
+            <div class="ref-card"><div class="ref-card-title">AGILITY</div><div class="ref-card-body">Sprint, Leap, Maneuver</div></div>
+            <div class="ref-card"><div class="ref-card-title">STRENGTH</div><div class="ref-card-body">Lift, Smash, Grapple</div></div>
+            <div class="ref-card"><div class="ref-card-title">FINESSE</div><div class="ref-card-body">Control, Hide, Tinker</div></div>
+            <div class="ref-card"><div class="ref-card-title">INSTINCT</div><div class="ref-card-body">Perceive, Sense, Navigate</div></div>
+            <div class="ref-card"><div class="ref-card-title">PRESENCE</div><div class="ref-card-body">Charm, Perform, Deceive</div></div>
+            <div class="ref-card"><div class="ref-card-title">KNOWLEDGE</div><div class="ref-card-body">Recall, Analyze, Comprehend</div></div>
+          </div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">PROFICIENCY & DAMAGE</div>
+          <div class="ref-p">Proficiency = number of damage dice rolled. <em>Lv 1–4: 1 | Lv 5–7: 2 | Lv 8–10: 3</em></div>
+          <div class="ref-p"><b>Unarmed:</b> [Proficiency]d4 physical damage. Uses Strength or Finesse (GM's choice).</div>
+          <div class="ref-p"><b>Critical damage:</b> Roll damage as normal, then add the <em>maximum possible result</em> of the damage dice to the total.</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">DIFFICULTY BENCHMARKS</div>
+          <table class="ref-table">
+            <tr><th>Difficulty</th><th>Example</th></tr>
+            <tr><td><b>5</b></td><td>Sprint within Close range across easy terrain</td></tr>
+            <tr><td><b>10</b></td><td>Sprint within Far range across open terrain</td></tr>
+            <tr><td><b>15</b></td><td>Sprint within Close range across difficult terrain</td></tr>
+            <tr><td><b>20</b></td><td>Sprint within Close range through hazardous terrain</td></tr>
+            <tr><td><b>25</b></td><td>Sprint within Far range through hazardous terrain</td></tr>
+          </table>
+          <div class="ref-p"><em>Adversary attack rolls use the target's Evasion as difficulty. Other rolls against adversaries use their Difficulty score.</em></div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Players Area -->
-    <div class="players-area" id="players-area">
-      <div class="players-empty" id="players-empty">
-        <div style="font-size:32px;opacity:0.2;">⚔</div>
-        <div class="players-empty-title">NO PLAYERS LOADED</div>
-        <div style="font-size:13px;color:var(--muted);">Load player JSON exports using the button above</div>
-        <label class="dm-btn gold" style="cursor:pointer;margin-top:0.5rem;">
-          ⬆ Load Players
-          <input type="file" accept=".json" style="display:none" onchange="loadPlayers(this)" multiple>
-        </label>
+    <!-- MIDDLE: PLAYER MECHANICS -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <span class="panel-title">PLAYER MECHANICS</span>
+      </div>
+      <div class="panel-body">
+
+        <div class="ref-section">
+          <div class="ref-h">EVASION</div>
+          <div class="ref-p">A PC's ability to avoid attacks. Attack rolls against a PC use their <b>Evasion as the Difficulty.</b> Set by class + modifiers. Adversary attacks use adversary's Difficulty score instead.</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">HIT POINTS & DAMAGE THRESHOLDS</div>
+          <div class="ref-p">Thresholds = armor base + PC level. When damage is dealt:</div>
+          <div class="ref-row"><span class="ref-tag">MINOR</span><span class="ref-p">Below Major threshold → mark <b>1 HP</b></span></div>
+          <div class="ref-row"><span class="ref-tag">MAJOR</span><span class="ref-p">At/above Major, below Severe → mark <b>2 HP</b></span></div>
+          <div class="ref-row"><span class="ref-tag">SEVERE</span><span class="ref-p">At/above Severe threshold → mark <b>3 HP</b></span></div>
+          <div class="ref-p" style="margin-top:4px;"><em>Damage reduced to 0 or below: no HP marked.</em></div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">ARMOR SLOTS</div>
+          <div class="ref-p">Mark 1 Armor Slot to <b>reduce HP marked by 1.</b> Armor Score = base score + bonuses. Cleared during downtime or rest.</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">STRESS</div>
+          <div class="ref-p">Mental/physical/emotional strain. When last Stress is marked: become <b>Vulnerable</b> until at least 1 is cleared. Can't mark Stress when full → mark HP instead. Cleared via downtime.</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ref-section">
+          <div class="ref-h">HELPING AN ALLY</div>
+          <div class="ref-p">Spend 1 Hope to help an ally making an action roll. They gain a <b>+1 bonus</b> to the result of their Hope or Fear Die. Multiple PCs can help the same roll.</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">CONDITIONS</div>
+          <div class="ref-row"><span class="ref-tag">HIDDEN</span><span class="ref-p">Rolls against Hidden have <b>disadvantage.</b> Ends when seen or when you attack.</span></div>
+          <div class="ref-row"><span class="ref-tag">RESTRAINED</span><span class="ref-p"><b>Can't move.</b> Can still take actions from current position.</span></div>
+          <div class="ref-row"><span class="ref-tag">VULNERABLE</span><span class="ref-p">All rolls targeting Vulnerable creature have <b>advantage.</b></span></div>
+          <div class="ref-p" style="margin-top:4px;"><b>Temporary conditions:</b> PC makes a move (usually action roll) to clear. Adversary: GM puts spotlight on them; they describe clearing it (no roll needed, uses their spotlight).</div>
+          <div class="ref-p">Spend 1 Fear to end a temporary effect.</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">COUNTDOWNS</div>
+          <div class="ref-p"><b>Standard:</b> Advances every action roll. Effect triggers at 0.</div>
+          <div class="ref-p"><b>Dynamic:</b> Advances based on roll outcomes.</div>
+          <table class="ref-table">
+            <tr><th>Result</th><th>Progress</th><th>Consequence</th></tr>
+            <tr><td>Failure with Fear</td><td>No advance</td><td>Tick down 3</td></tr>
+            <tr><td>Failure with Hope</td><td>No advance</td><td>Tick down 2</td></tr>
+            <tr><td>Success with Fear</td><td>Tick down 1</td><td>Tick down 1</td></tr>
+            <tr><td>Success with Hope</td><td>Tick down 2</td><td>No advance</td></tr>
+          </table>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">DEATH MOVES</div>
+          <div class="ref-p">When a PC marks their last HP:</div>
+          <div class="ref-row"><span class="ref-tag fear">BLAZE</span><span class="ref-p">Character embraces death. Describe one last heroic act, then cross through the veil.</span></div>
+          <div class="ref-row"><span class="ref-tag neu">AVOID</span><span class="ref-p">Avoid death, face consequences. Roll Hope Die: on a 1, gain a scar (cross a Hope slot). If last Hope slot: journey ends.</span></div>
+          <div class="ref-row"><span class="ref-tag hope">RISK IT</span><span class="ref-p">Roll Duality Dice. Hope higher: survive, clear HP/Stress = Hope Die value. Fear higher: cross through veil. Tie: clear all HP and Stress.</span></div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">DOWNTIME MOVES</div>
+          <div class="ref-p"><b>Short rest</b> (2 moves): Tend to Wounds (clear 1d4+Tier HP), Clear Stress (1d4+Tier), Repair Armor (1d4+Tier slots), Prepare (Hope + advantage), Work on Project. <em>GM gains 1d4 Fear.</em></div>
+          <div class="ref-p"><b>Long rest</b> (2 moves): Tend All Wounds, Clear All Stress, Repair All Armor, Prepare (2 Hope each), Work on Project. <em>GM gains 1d4 + PCs Fear + can advance a long-term countdown.</em></div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">SHOPPING / GOLD</div>
+          <table class="ref-table">
+            <tr><th>Item</th><th>Cost</th></tr>
+            <tr><td>Tier 1 weapon/armor</td><td>1–5 Handfuls</td></tr>
+            <tr><td>Tier 2 weapon/armor</td><td>1–2 Bags</td></tr>
+            <tr><td>Tier 3 weapon/armor</td><td>5–10 Bags</td></tr>
+            <tr><td>Tier 4 weapon/armor</td><td>1–2 Chests</td></tr>
+          </table>
+          <div class="ref-p"><em>10 Handfuls = 1 Bag · 10 Bags = 1 Chest</em></div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Right Panel -->
-    <div class="right-panel">
-      <div class="panel-tabs">
-        <button class="panel-tab active" onclick="switchPanel('notes', this)">NOTES</button>
-        <button class="panel-tab" onclick="switchPanel('clocks', this)">CLOCKS</button>
-        <button class="panel-tab" onclick="switchPanel('adversaries', this)">ADVERSARIES</button>
-      </div>
-
-      <!-- Notes Panel -->
-      <div class="panel-body" id="panel-notes">
-        <div class="panel-section">
-          <span class="panel-label">SESSION NOTES</span>
-          <textarea class="panel-textarea" id="gm-session-notes" rows="8" placeholder="What's happening this session..." oninput="saveGMData()"></textarea>
-        </div>
-        <div class="panel-section">
-          <span class="panel-label">PLOT THREADS</span>
-          <textarea class="panel-textarea" id="gm-plot-notes" rows="5" placeholder="Ongoing threads, foreshadowing, open hooks..." oninput="saveGMData()"></textarea>
-        </div>
-        <div class="panel-section">
-          <span class="panel-label">NPC NOTES</span>
-          <textarea class="panel-textarea" id="gm-npc-notes" rows="5" placeholder="Key NPCs, motivations, locations..." oninput="saveGMData()"></textarea>
-        </div>
-        <div class="panel-section">
-          <span class="panel-label">LOOT / REWARDS</span>
-          <textarea class="panel-textarea" id="gm-loot-notes" rows="3" placeholder="Items to hand out, gold, rewards..." oninput="saveGMData()"></textarea>
+    <!-- RIGHT: GM TOOLS -->
+    <div class="panel">
+      <div class="panel-hdr">
+        <span class="panel-title">GM TOOLS</span>
+        <div class="panel-tabs">
+          <button class="ptab on" onclick="switchRight('ref',this)">REFERENCE</button>
+          <button class="ptab" onclick="switchRight('adv',this)">ADVERSARIES</button>
+          <button class="ptab" onclick="switchRight('notes',this)">NOTES</button>
+          <button class="ptab" onclick="switchRight('clocks',this)">CLOCKS</button>
         </div>
       </div>
 
-      <!-- Clocks Panel -->
-      <div class="panel-body" id="panel-clocks" style="display:none;">
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:1rem;line-height:1.6;">Countdown clocks build tension. When all segments are filled, the threat triggers. Gold = progress toward something good. Red = danger approaching.</div>
-        <div id="clocks-list"></div>
-        <button class="add-clock-btn" onclick="addClock()">+ Add Clock</button>
+      <!-- REFERENCE -->
+      <div class="panel-body" id="rp-ref">
+
+        <div class="ref-section">
+          <div class="ref-h">HOPE — PLAYERS SPEND TO</div>
+          <div class="ref-p">• Add an Experience bonus to a roll</div>
+          <div class="ref-p">• Help an ally (+1 to their die result)</div>
+          <div class="ref-p">• Initiate a Tag Team Roll (3 Hope)</div>
+          <div class="ref-p">• Activate a Hope Feature (usually 3 Hope)</div>
+          <div class="ref-p">• Recall a spent domain card</div>
+          <div class="ref-p"><em>Max 6 Hope per PC. Carries over between sessions.</em></div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">FEAR — GM SPENDS TO</div>
+          <div class="ref-p">• Steal the spotlight &amp; make a GM move (1 Fear)</div>
+          <div class="ref-p">• Make an additional GM move (1 Fear)</div>
+          <div class="ref-p">• Use an adversary's Fear Feature (1 Fear)</div>
+          <div class="ref-p">• Use an environment's Fear Feature (1 Fear)</div>
+          <div class="ref-p">• Add adversary Experience to a roll (1 Fear)</div>
+          <div class="ref-p">• End a temporary condition or effect (1 Fear)</div>
+          <div class="ref-p"><em>Max 12 Fear. Start campaign with 1 Fear per PC. Gain Fear when PCs roll with Fear or rest.</em></div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">GM MOVES — WHEN TO MAKE THEM</div>
+          <div class="ref-p">Make a GM move when a PC <b>rolls with Fear</b> or <b>fails an action roll.</b></div>
+          <div class="ref-row"><span class="ref-tag hope">SUCCESS / HOPE</span><span class="ref-p">Yes, and… Player describes success, gains Hope.</span></div>
+          <div class="ref-row"><span class="ref-tag">SUCCESS / FEAR</span><span class="ref-p">Yes, but… Success + consequence, GM gains Fear.</span></div>
+          <div class="ref-row"><span class="ref-tag neu">FAILURE / HOPE</span><span class="ref-p">No, but… Fail + minor consequence, gain Hope.</span></div>
+          <div class="ref-row"><span class="ref-tag fear">FAILURE / FEAR</span><span class="ref-p">No, and… Fail + major consequence, GM gains Fear.</span></div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">EXAMPLE GM MOVES</div>
+          <div class="ref-p">• Have a PC mark Stress · Separate the party · Introduce a new threat · Reveal an unwelcome truth · Show the collateral damage · Clear an adversary's condition · Spotlight an adversary · Trigger an environment effect · Advance a countdown · Put someone in a tough spot</div>
+          <div class="ref-p" style="margin-top:4px;"><em>Use softer moves on Hope, harder moves on Fear.</em></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ref-section">
+          <div class="ref-h">ADVERSARY TYPES</div>
+          <div class="ref-row"><span class="ref-tag">BRUISER</span><span class="ref-p">High HP, high damage, close range.</span></div>
+          <div class="ref-row"><span class="ref-tag">HORDE</span><span class="ref-p">Many weak enemies sharing an HP pool.</span></div>
+          <div class="ref-row"><span class="ref-tag">LEADER</span><span class="ref-p">Commands and summons other adversaries.</span></div>
+          <div class="ref-row"><span class="ref-tag">RANGED</span><span class="ref-p">Fragile up close, high damage at range.</span></div>
+          <div class="ref-row"><span class="ref-tag">SKULK</span><span class="ref-p">Stealthy, hit-and-run, control.</span></div>
+          <div class="ref-row"><span class="ref-tag">SOCIAL</span><span class="ref-p">Manipulation and pressure.</span></div>
+          <div class="ref-row"><span class="ref-tag">SOLO</span><span class="ref-p">Single powerful enemy, can be spotlighted multiple times.</span></div>
+          <div class="ref-row"><span class="ref-tag">SUPPORT</span><span class="ref-p">Buffs allies and debuffs PCs.</span></div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">BATTLE POINTS (ENCOUNTER BUILDING)</div>
+          <div class="ref-p">Start with <b>[PCs in combat + 2]</b> Battle Points.</div>
+          <div class="ref-p">−2 if using 2+ Solo adversaries · −2 if adding +1d4 to all adversary damage · +1 if choosing adversary from lower tier</div>
+          <table class="ref-table">
+            <tr><th>Type</th><th>Cost</th></tr>
+            <tr><td>Social / Support</td><td>1 point</td></tr>
+            <tr><td>Horde / Ranged / Skulk / Standard</td><td>2 points</td></tr>
+            <tr><td>Leader</td><td>3 points</td></tr>
+            <tr><td>Bruiser</td><td>4 points</td></tr>
+            <tr><td>Solo</td><td>5 points</td></tr>
+          </table>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">ADVERSARY STAT BENCHMARKS</div>
+          <table class="ref-table">
+            <tr><th>Stat</th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th><th>Tier 4</th></tr>
+            <tr><td>Difficulty</td><td>11</td><td>14</td><td>17</td><td>20</td></tr>
+            <tr><td>Damage</td><td>1d6+2–1d12+4</td><td>2d6+3–2d12+4</td><td>3d8+3–3d12+5</td><td>4d8+10–4d12+15</td></tr>
+          </table>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">RANGE SCALE</div>
+          <table class="ref-table">
+            <tr><th>Range</th><th>Map (~5ft sq)</th><th>Movement</th></tr>
+            <tr><td><b>Melee</b></td><td>Same square</td><td>Free (part of action)</td></tr>
+            <tr><td><b>Very Close</b></td><td>1–2 squares</td><td>Free</td></tr>
+            <tr><td><b>Close</b></td><td>3–4 squares</td><td>Free (part of action)</td></tr>
+            <tr><td><b>Far</b></td><td>5–10 squares</td><td>Agility Roll</td></tr>
+            <tr><td><b>Very Far</b></td><td>11–20 squares</td><td>Agility Roll</td></tr>
+            <tr><td><b>Out of Range</b></td><td>Beyond Very Far</td><td>Can't target</td></tr>
+          </table>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">TIERS</div>
+          <div class="ref-p"><b>Tier 1:</b> Level 1 · <b>Tier 2:</b> Levels 2–4 · <b>Tier 3:</b> Levels 5–7 · <b>Tier 4:</b> Levels 8–10</div>
+        </div>
+
+        <div class="ref-section">
+          <div class="ref-h">IMPROVISING ADVERSARIES</div>
+          <div class="ref-p">Give them a name and a Difficulty. Adversaries don't need HP/Stress unless dramatically appropriate. Base moves on their motives. Don't need stat blocks — put spotlight on what they do, show how the world responds. Spend Fear to escalate.</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="ref-section">
+          <div class="ref-h">GM PRINCIPLES</div>
+          <div class="ref-p">• Portray a rich and dangerous world</div>
+          <div class="ref-p">• Fill the world with interesting characters</div>
+          <div class="ref-p">• Play to find out what happens</div>
+          <div class="ref-p">• Address the characters, not the players</div>
+          <div class="ref-p">• Embrace failure as a story tool</div>
+          <div class="ref-p">• Telegraph danger before it strikes</div>
+          <div class="ref-p">• Be a fan of the player characters</div>
+          <div class="ref-p">• Spend Fear — don't hoard it</div>
+          <div class="ref-p">• Make the world feel consequential</div>
+        </div>
+
       </div>
 
-      <!-- Adversaries Panel -->
-      <div class="panel-body" id="panel-adversaries" style="display:none;">
-        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:1rem;line-height:1.6;">Track enemies, their HP, and notes for the current encounter.</div>
-        <div id="adversaries-list"></div>
-        <button class="add-adv-btn" onclick="addAdversary()">+ Add Adversary</button>
+      <!-- ADVERSARIES -->
+      <div class="panel-body" id="rp-adv" style="display:none;">
+        <div id="adv-list"></div>
+        <button class="add-btn" onclick="addAdv()">+ Add Adversary</button>
       </div>
+
+      <!-- NOTES -->
+      <div class="panel-body" id="rp-notes" style="display:none;">
+        <div class="tool-section">
+          <span class="tool-lbl">SESSION NOTES</span>
+          <textarea class="tool-textarea" id="gm-notes" rows="8" placeholder="What's happening..." oninput="saveGM()"></textarea>
+        </div>
+        <div class="tool-section">
+          <span class="tool-lbl">PLOT THREADS</span>
+          <textarea class="tool-textarea" id="gm-plot" rows="5" placeholder="Ongoing threads, hooks..." oninput="saveGM()"></textarea>
+        </div>
+        <div class="tool-section">
+          <span class="tool-lbl">NPC NOTES</span>
+          <textarea class="tool-textarea" id="gm-npcs" rows="5" placeholder="Key NPCs, motivations..." oninput="saveGM()"></textarea>
+        </div>
+        <div class="tool-section">
+          <span class="tool-lbl">LOOT & REWARDS</span>
+          <textarea class="tool-textarea" id="gm-loot" rows="3" placeholder="Items, gold, rewards..." oninput="saveGM()"></textarea>
+        </div>
+      </div>
+
+      <!-- CLOCKS -->
+      <div class="panel-body" id="rp-clocks" style="display:none;">
+        <div style="font-size:11px;color:var(--muted);font-style:italic;margin-bottom:10px;line-height:1.6;">Countdown clocks build tension. Gold = progress. Red = danger approaching.</div>
+        <div id="clock-list"></div>
+        <button class="add-btn" onclick="addClock()">+ Add Clock</button>
+      </div>
+
     </div>
-
-  </div><!-- /dm-body -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <script>
-// ── PIN / LOCK ──
-const DM_PIN_KEY = 'dh2-gm-pin';
-const DM_DATA_KEY = 'dh2-gm-data';
+const PIN_KEY='dh2-gm-pin', DATA_KEY='dh2-gm-data';
+let gm={fear:0,hope:0,scene:'',notes:'',plot:'',npcs:'',loot:'',clocks:[],advs:[],spotIdx:-1,players:[]};
+let players=[];
 
-function unlock() {
-  const val = document.getElementById('pin-input').value.trim();
-  if (!val) { showLockError('Enter a PIN'); return; }
-  const stored = localStorage.getItem(DM_PIN_KEY);
-  if (!stored) {
-    // First time — set the PIN
-    if (val.length < 4) { showLockError('PIN must be at least 4 characters'); return; }
-    localStorage.setItem(DM_PIN_KEY, btoa(val));
+// ── LOCK ──
+function unlock(){
+  const v=document.getElementById('pin').value.trim();
+  if(!v){err('Enter a PIN');return;}
+  const stored=localStorage.getItem(PIN_KEY);
+  if(!stored){
+    if(v.length<4){err('Min 4 characters');return;}
+    localStorage.setItem(PIN_KEY,btoa(v));
     enterApp();
   } else {
-    if (btoa(val) === stored) {
-      enterApp();
-    } else {
-      showLockError('Incorrect PIN');
-      document.getElementById('pin-input').value = '';
-    }
+    if(btoa(v)===stored) enterApp();
+    else{err('Incorrect PIN');document.getElementById('pin').value='';}
   }
 }
-
-function showLockError(msg) {
-  const el = document.getElementById('lock-error');
-  el.textContent = msg;
-  setTimeout(() => el.textContent = '', 2500);
+function err(m){const e=document.getElementById('lock-err');e.textContent=m;setTimeout(()=>e.textContent='',2500);}
+function enterApp(){
+  document.getElementById('lock').style.display='none';
+  const a=document.getElementById('app');
+  a.style.display='flex';
+  loadGM();
+  renderFear();renderHope();
+}
+function lockGM(){
+  document.getElementById('lock').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('pin').value='';
 }
 
-function enterApp() {
-  document.getElementById('lock-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  loadGMData();
-  renderFear();
-  renderHope();
+// ── SAVE / LOAD ──
+function saveGM(){
+  gm.scene=document.getElementById('scene-in').value||'';
+  gm.notes=document.getElementById('gm-notes').value||'';
+  gm.plot=document.getElementById('gm-plot').value||'';
+  gm.npcs=document.getElementById('gm-npcs').value||'';
+  gm.loot=document.getElementById('gm-loot').value||'';
+  gm.clocks=saveClocks();
+  gm.advs=saveAdvs();
+  gm.players=players.map(p=>({...p}));
+  localStorage.setItem(DATA_KEY,JSON.stringify(gm));
+}
+function loadGM(){
+  try{
+    const d=JSON.parse(localStorage.getItem(DATA_KEY));
+    if(!d)return;
+    gm={...gm,...d};
+    document.getElementById('scene-in').value=gm.scene||'';
+    document.getElementById('gm-notes').value=gm.notes||'';
+    document.getElementById('gm-plot').value=gm.plot||'';
+    document.getElementById('gm-npcs').value=gm.npcs||'';
+    document.getElementById('gm-loot').value=gm.loot||'';
+    if(gm.players?.length){players=gm.players;renderPlayers();}
+    if(gm.clocks?.length)renderClocks(gm.clocks);
+    if(gm.advs?.length)renderAdvs(gm.advs);
+  }catch(e){}
 }
 
-function lockGM() {
-  document.getElementById('lock-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('pin-input').value = '';
+// ── FEAR / HOPE ──
+function renderFear(){
+  document.getElementById('fear-n').textContent=gm.fear;
+  const c=document.getElementById('fear-pips');c.innerHTML='';
+  for(let i=0;i<Math.min(gm.fear+2,12);i++){
+    const p=document.createElement('div');
+    p.className='t-pip fear'+(i<gm.fear?' on':'');
+    p.onclick=()=>{gm.fear=i<gm.fear?i:i+1;renderFear();saveGM();};
+    c.appendChild(p);
+  }
 }
-
-// ── GM DATA ──
-let gmData = {
-  fear: 0, hope: 0,
-  scene: '',
-  sessionNotes: '', plotNotes: '', npcNotes: '', lootNotes: '',
-  clocks: [],
-  adversaries: [],
-  spotlightIdx: -1,
-};
-let players = [];
-
-function saveGMData() {
-  gmData.scene = document.getElementById('scene-input')?.value || '';
-  gmData.sessionNotes = document.getElementById('gm-session-notes')?.value || '';
-  gmData.plotNotes = document.getElementById('gm-plot-notes')?.value || '';
-  gmData.npcNotes = document.getElementById('gm-npc-notes')?.value || '';
-  gmData.lootNotes = document.getElementById('gm-loot-notes')?.value || '';
-  gmData.clocks = saveClocks();
-  gmData.adversaries = saveAdversaries();
-  gmData.players = players.map(p => ({ ...p }));
-  localStorage.setItem(DM_DATA_KEY, JSON.stringify(gmData));
+function renderHope(){
+  document.getElementById('hope-n').textContent=gm.hope;
+  const c=document.getElementById('hope-pips');c.innerHTML='';
+  for(let i=0;i<Math.min(gm.hope+2,10);i++){
+    const p=document.createElement('div');
+    p.className='t-pip hope'+(i<gm.hope?' on':'');
+    p.onclick=()=>{gm.hope=i<gm.hope?i:i+1;renderHope();saveGM();};
+    c.appendChild(p);
+  }
 }
+function adjFear(d){gm.fear=Math.max(0,Math.min(12,gm.fear+d));renderFear();saveGM();}
+function adjHope(d){gm.hope=Math.max(0,Math.min(10,gm.hope+d));renderHope();saveGM();}
 
-function loadGMData() {
-  try {
-    const d = JSON.parse(localStorage.getItem(DM_DATA_KEY));
-    if (!d) return;
-    gmData = { ...gmData, ...d };
-    document.getElementById('scene-input').value = gmData.scene || '';
-    document.getElementById('gm-session-notes').value = gmData.sessionNotes || '';
-    document.getElementById('gm-plot-notes').value = gmData.plotNotes || '';
-    document.getElementById('gm-npc-notes').value = gmData.npcNotes || '';
-    document.getElementById('gm-loot-notes').value = gmData.lootNotes || '';
-    if (gmData.players?.length) {
-      players = gmData.players;
-      renderAllPlayers();
-    }
-    if (gmData.clocks?.length) renderClocks(gmData.clocks);
-    if (gmData.adversaries?.length) renderAdversaries(gmData.adversaries);
-  } catch(e) {}
-}
-
-function clearAll() {
-  if (!confirm('Clear all player data and GM notes?')) return;
-  players = [];
-  gmData = { fear: 0, hope: 0, scene: '', sessionNotes: '', plotNotes: '', npcNotes: '', lootNotes: '', clocks: [], adversaries: [], spotlightIdx: -1 };
-  renderFear(); renderHope();
-  document.getElementById('scene-input').value = '';
-  document.getElementById('gm-session-notes').value = '';
-  document.getElementById('gm-plot-notes').value = '';
-  document.getElementById('gm-npc-notes').value = '';
-  document.getElementById('gm-loot-notes').value = '';
-  document.getElementById('clocks-list').innerHTML = '';
-  document.getElementById('adversaries-list').innerHTML = '';
-  renderAllPlayers();
-  saveGMData();
-}
-
-// ── LOAD PLAYERS ──
-function loadPlayers(input) {
-  const files = Array.from(input.files);
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const data = JSON.parse(e.target.result);
-        // Could be a single character or a multi-character export
-        const chars = data.characters || [data];
-        chars.forEach(char => {
-          if (!char.class) return;
-          // Check if player already loaded — update if so
-          const existingIdx = players.findIndex(p => p.class === char.class && p['f-name'] === char['f-name']);
-          const playerObj = buildPlayerObj(char, data);
-          if (existingIdx >= 0) players[existingIdx] = playerObj;
-          else players.push(playerObj);
+// ── PLAYERS ──
+function loadPlayers(input){
+  Array.from(input.files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      try{
+        const data=JSON.parse(e.target.result);
+        const chars=data.characters||[data];
+        chars.forEach(c=>{
+          if(!c.class)return;
+          const idx=players.findIndex(p=>p.class===c.class&&p.name===c['f-name']);
+          const obj={
+            name:c['f-name']||c.class,
+            class:c.class,subclass:c['f-subclass']||'',level:c['f-level']||'1',
+            evasion:c['f-evasion']||'',portrait:data.portraits?.[c.class]||null,
+            traits:{agility:c['t-agility']||'',strength:c['t-strength']||'',finesse:c['t-finesse']||'',instinct:c['t-instinct']||'',presence:c['t-presence']||'',knowledge:c['t-knowledge']||''},
+            hp:c.hp??0,hpTotal:c.hpTotal??5,
+            stress:c.stress??0,stressTotal:c.stressTotal??6,
+            hope:c.hope??0,hopeTotal:c.hopeTotal??6,
+            armor:c.armor??0,spotlit:false,gmNote:''
+          };
+          if(idx>=0)players[idx]={...obj,spotlit:players[idx].spotlit,gmNote:players[idx].gmNote};
+          else players.push(obj);
         });
-        renderAllPlayers();
-        saveGMData();
-      } catch(err) {
-        alert('Could not read file: ' + file.name);
-      }
+        renderPlayers();saveGM();
+      }catch(er){alert('Could not read '+f.name);}
     };
-    reader.readAsText(file);
+    r.readAsText(f);
   });
-  input.value = '';
+  input.value='';
 }
-
-function buildPlayerObj(char, exportData) {
-  const name = char['f-name'] || char.class || 'Unknown';
-  const portrait = exportData?.portraits?.[char.class] || null;
-  // Get active loadout
-  const loadoutKey = 'dh2-loadout-' + (char.class || '').toLowerCase();
-  // Build traits object
-  const traits = {};
-  ['agility','strength','finesse','instinct','presence','knowledge'].forEach(t => {
-    traits[t] = char['t-' + t] || '';
-  });
-  return {
-    name,
-    class: char.class || '',
-    subclass: char['f-subclass'] || '',
-    level: char['f-level'] || '1',
-    ancestry: char['f-ancestry'] || '',
-    community: char['f-community'] || '',
-    pronouns: char['f-pronouns'] || '',
-    evasion: char['f-evasion'] || '',
-    traits,
-    hp: char.hp ?? 0,
-    hpTotal: char.hpTotal ?? 5,
-    stress: char.stress ?? 0,
-    stressTotal: char.stressTotal ?? 6,
-    hope: char.hope ?? 0,
-    hopeTotal: char.hopeTotal ?? 6,
-    armor: char.armor ?? 0,
-    portrait,
-    appearance: char.appearance || '',
-    // GM notes per player
-    gmNotes: '',
-    // loadout from export if available
-    loadout: exportData?.loadouts?.[char.class] || [],
-    spotlit: false,
-  };
+function renderPlayers(){
+  const strip=document.getElementById('pc-strip');
+  const noP=document.getElementById('no-players');
+  strip.querySelectorAll('.pc-card').forEach(e=>e.remove());
+  if(!players.length){noP.style.display='';return;}
+  noP.style.display='none';
+  players.forEach((p,i)=>strip.appendChild(buildPC(p,i)));
+  updateSpot();
 }
-
-// ── RENDER PLAYERS ──
-let spotlightIdx = -1;
-
-function renderAllPlayers() {
-  const area = document.getElementById('players-area');
-  const empty = document.getElementById('players-empty');
-  if (!players.length) {
-    empty.style.display = 'flex';
-    // Remove all player cards
-    area.querySelectorAll('.player-card').forEach(el => el.remove());
-    return;
-  }
-  empty.style.display = 'none';
-  // Remove existing cards and re-render
-  area.querySelectorAll('.player-card').forEach(el => el.remove());
-  players.forEach((p, i) => area.appendChild(buildPlayerCard(p, i)));
-  updateSpotlightDisplay();
-}
-
-function buildPlayerCard(p, idx) {
-  const card = document.createElement('div');
-  card.className = 'player-card' + (p.spotlit ? ' spotlight' : '');
-  card.id = 'pc-' + idx;
-
-  const initials = p.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
-  const portraitHTML = p.portrait
-    ? `<img src="${p.portrait}" alt="">`
-    : initials;
-
-  // Traits
-  const traitOrder = ['agility','strength','finesse','instinct','presence','knowledge'];
-  const traitShort = { agility:'AGI', strength:'STR', finesse:'FIN', instinct:'INS', presence:'PRE', knowledge:'KNO' };
-  const traitsHTML = traitOrder.map(t => {
-    const v = p.traits[t];
-    const cls = !v ? '' : (parseFloat(v) > 0 ? ' pos' : parseFloat(v) < 0 ? ' neg' : '');
-    return `<div class="pc-trait">
-      <div class="pc-trait-name">${traitShort[t]}</div>
-      <div class="pc-trait-val${cls}">${v || '—'}</div>
-    </div>`;
+function buildPC(p,i){
+  const card=document.createElement('div');
+  card.className='pc-card'+(p.spotlit?' spotlit':'');
+  card.id='pc-'+i;
+  const tShort={agility:'AGI',strength:'STR',finesse:'FIN',instinct:'INS',presence:'PRE',knowledge:'KNO'};
+  const hpPips=Array.from({length:p.hpTotal},(_,j)=>`<div class="mpip hp${j<p.hp?' on':''}" onclick="togglePip(${i},'hp',${j})"></div>`).join('');
+  const stPips=Array.from({length:p.stressTotal},(_,j)=>`<div class="mpip st${j<p.stress?' on':''}" onclick="togglePip(${i},'stress',${j})"></div>`).join('');
+  const hoPips=Array.from({length:p.hopeTotal},(_,j)=>`<div class="mpip ho${j<p.hope?' on':''}" onclick="togglePip(${i},'hope',${j})"></div>`).join('');
+  const traitsHtml=Object.entries(tShort).map(([t,s])=>{
+    const v=p.traits[t]||'—';
+    const n=parseFloat(v);
+    const cls=isNaN(n)?'':n>0?' pos':n<0?' neg':'';
+    return `<div class="pc-t"><div class="pc-t-n">${s}</div><div class="pc-t-v${cls}">${v}</div></div>`;
   }).join('');
-
-  // HP pips
-  const hpPips = Array.from({length: p.hpTotal}, (_, i) =>
-    `<div class="pip-m${i < p.hp ? ' hp-f' : ''}" onclick="togglePip(${idx},'hp',${i})"></div>`
-  ).join('');
-  const stressPips = Array.from({length: p.stressTotal}, (_, i) =>
-    `<div class="pip-m${i < p.stress ? ' stress-f' : ''}" onclick="togglePip(${idx},'stress',${i})"></div>`
-  ).join('');
-  const hopePips = Array.from({length: p.hopeTotal}, (_, i) =>
-    `<div class="pip-m${i < p.hope ? ' hope-f' : ''}" onclick="togglePip(${idx},'hope',${i})"></div>`
-  ).join('');
-
-  card.innerHTML = `
-    <div class="pc-header" onclick="toggleNotes(${idx})">
-      <div class="pc-portrait">${portraitHTML}</div>
-      <div class="pc-identity">
-        <div class="pc-name">${escHtml(p.name)}</div>
-        <div class="pc-class">${escHtml(p.class)}${p.subclass ? ' · ' + escHtml(p.subclass) : ''}</div>
-        <div class="pc-meta">Lv ${p.level}${p.ancestry ? ' · ' + escHtml(p.ancestry) : ''}${p.community ? ' · ' + escHtml(p.community) : ''}</div>
-      </div>
-      <button class="spotlight-btn" onclick="event.stopPropagation();toggleSpotlight(${idx})">${p.spotlit ? '★ Spotlight' : '☆ Spotlight'}</button>
-    </div>
-    <div class="pc-stats">
-      <div class="pc-stat">
-        <div class="pc-stat-label">HIT POINTS</div>
-        <div class="pip-mini">${hpPips}</div>
-        <div class="pc-stat-val" style="font-size:10px;color:var(--muted);">${p.hp} / ${p.hpTotal}</div>
-      </div>
-      <div class="pc-stat">
-        <div class="pc-stat-label">STRESS</div>
-        <div class="pip-mini">${stressPips}</div>
-        <div class="pc-stat-val" style="font-size:10px;color:var(--muted);">${p.stress} / ${p.stressTotal}</div>
-      </div>
-      <div class="pc-stat">
-        <div class="pc-stat-label">HOPE</div>
-        <div class="pip-mini">${hopePips}</div>
-        <div class="pc-stat-val" style="font-size:10px;color:var(--muted);">${p.hope} / ${p.hopeTotal}</div>
-      </div>
-      <div class="pc-stat">
-        <div class="pc-stat-label">EVA / ARMOR</div>
-        <div class="pc-stat-val">${p.evasion || '—'} <span style="color:var(--muted);font-size:10px;">/ ${p.armor}</span></div>
-      </div>
-    </div>
-    <div class="pc-traits">${traitsHTML}</div>
-    ${p.loadout?.length ? `<div class="pc-cards">${p.loadout.map(id => `<span class="pc-card-tag">${escHtml(id)}</span>`).join('')}</div>` : ''}
-    <div class="pc-notes-area" id="pc-notes-${idx}">
-      <textarea class="pc-notes" rows="3" placeholder="GM notes for ${escHtml(p.name)}..." oninput="updatePlayerNote(${idx}, this.value)">${escHtml(p.gmNotes || '')}</textarea>
-    </div>
-  `;
+  card.innerHTML=`
+    <div class="pc-name">${esc(p.name)}</div>
+    <div class="pc-cls">${esc(p.class)}${p.level?' Lv'+p.level:''}</div>
+    <div class="pc-pips-row"><span class="pc-pip-lbl">HP</span>${hpPips}</div>
+    <div class="pc-pips-row"><span class="pc-pip-lbl">STR</span>${stPips}</div>
+    <div class="pc-pips-row"><span class="pc-pip-lbl">HOP</span>${hoPips}</div>
+    <div class="pc-traits">${traitsHtml}</div>
+    <div style="display:flex;gap:4px;margin-top:4px;">
+      <button class="gm-btn" style="flex:1;padding:2px 4px;" onclick="toggleSpot(${i})">${p.spotlit?'★':'☆'} Spot</button>
+      <span style="font-family:'Cinzel',serif;font-size:8px;color:var(--muted);display:flex;align-items:center;">EVA ${p.evasion||'—'}</span>
+    </div>`;
   return card;
 }
-
-function toggleNotes(idx) {
-  const el = document.getElementById('pc-notes-' + idx);
-  if (el) el.classList.toggle('open');
+function togglePip(pi,type,idx){
+  const p=players[pi];if(!p)return;
+  const cur=p[type],total=p[type+'Total'];
+  p[type]=idx<cur?idx:idx+1;
+  renderPlayers();saveGM();
+}
+let spotIdx=-1;
+function toggleSpot(i){
+  players.forEach((p,j)=>p.spotlit=j===i&&!p.spotlit);
+  spotIdx=players[i]?.spotlit?i:-1;
+  renderPlayers();saveGM();
+}
+function nextSpot(){
+  if(!players.length)return;
+  spotIdx=(spotIdx+1)%players.length;
+  players.forEach((p,i)=>p.spotlit=i===spotIdx);
+  renderPlayers();updateSpot();saveGM();
+}
+function prevSpot(){
+  if(!players.length)return;
+  spotIdx=(spotIdx-1+players.length)%players.length;
+  players.forEach((p,i)=>p.spotlit=i===spotIdx);
+  renderPlayers();updateSpot();saveGM();
+}
+function clearSpot(){players.forEach(p=>p.spotlit=false);spotIdx=-1;renderPlayers();updateSpot();saveGM();}
+function updateSpot(){
+  const lit=players.find(p=>p.spotlit);
+  document.getElementById('spot-name').textContent=lit?lit.name:'—';
 }
 
-function updatePlayerNote(idx, val) {
-  if (players[idx]) { players[idx].gmNotes = val; saveGMData(); }
-}
-
-function toggleSpotlight(idx) {
-  players.forEach((p, i) => p.spotlit = (i === idx && !p.spotlit));
-  spotlightIdx = players[idx]?.spotlit ? idx : -1;
-  renderAllPlayers();
-  updateSpotlightDisplay();
-  saveGMData();
-}
-
-function updateSpotlightDisplay() {
-  const lit = players.find(p => p.spotlit);
-  document.getElementById('spotlight-name').textContent = lit ? lit.name : '—';
-}
-
-function nextSpotlight() {
-  if (!players.length) return;
-  spotlightIdx = (spotlightIdx + 1) % players.length;
-  players.forEach((p, i) => p.spotlit = i === spotlightIdx);
-  renderAllPlayers();
-  updateSpotlightDisplay();
-  saveGMData();
-}
-
-function prevSpotlight() {
-  if (!players.length) return;
-  spotlightIdx = (spotlightIdx - 1 + players.length) % players.length;
-  players.forEach((p, i) => p.spotlit = i === spotlightIdx);
-  renderAllPlayers();
-  updateSpotlightDisplay();
-  saveGMData();
-}
-
-function togglePip(playerIdx, type, pipIdx) {
-  const p = players[playerIdx];
-  if (!p) return;
-  const curKey = type; // 'hp', 'stress', 'hope'
-  const totalKey = type + 'Total';
-  const cur = p[curKey];
-  // Click filled pip = reduce, click empty = increase
-  if (pipIdx < cur) p[curKey] = pipIdx;
-  else p[curKey] = pipIdx + 1;
-  renderAllPlayers();
-  saveGMData();
-}
-
-// ── FEAR / HOPE TABLE ──
-function renderFear() {
-  const count = document.getElementById('fear-count');
-  if (count) count.textContent = gmData.fear;
-  const pips = document.getElementById('fear-pips');
-  if (!pips) return;
-  pips.innerHTML = '';
-  for (let i = 0; i < 10; i++) {
-    const p = document.createElement('div');
-    p.className = 't-pip fear' + (i < gmData.fear ? ' filled' : '');
-    p.onclick = () => { gmData.fear = i < gmData.fear ? i : i + 1; renderFear(); saveGMData(); };
-    pips.appendChild(p);
-  }
-}
-
-function renderHope() {
-  const count = document.getElementById('hope-count');
-  if (count) count.textContent = gmData.hope;
-  const pips = document.getElementById('hope-pips');
-  if (!pips) return;
-  pips.innerHTML = '';
-  for (let i = 0; i < 10; i++) {
-    const p = document.createElement('div');
-    p.className = 't-pip hope' + (i < gmData.hope ? ' filled' : '');
-    p.onclick = () => { gmData.hope = i < gmData.hope ? i : i + 1; renderHope(); saveGMData(); };
-    pips.appendChild(p);
-  }
-}
-
-function adjustFear(d) { gmData.fear = Math.max(0, Math.min(10, gmData.fear + d)); renderFear(); saveGMData(); }
-function adjustHope(d) { gmData.hope = Math.max(0, Math.min(10, gmData.hope + d)); renderHope(); saveGMData(); }
-
-// ── PANEL TABS ──
-function switchPanel(name, btn) {
-  ['notes','clocks','adversaries'].forEach(n => {
-    document.getElementById('panel-' + n).style.display = n === name ? '' : 'none';
-  });
-  document.querySelectorAll('.panel-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+// ── RIGHT PANEL TABS ──
+function switchRight(name,btn){
+  ['ref','adv','notes','clocks'].forEach(n=>document.getElementById('rp-'+n).style.display=n===name?'':'none');
+  document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
 }
 
 // ── CLOCKS ──
-let clockData = [];
-
-function addClock(name='', total=8, filled=0, isRed=false) {
-  clockData.push({ name, total, filled, isRed });
-  renderClocks(clockData);
-  saveGMData();
-}
-
-function renderClocks(data) {
-  clockData = data;
-  const list = document.getElementById('clocks-list');
-  list.innerHTML = '';
-  data.forEach((c, i) => {
-    const row = document.createElement('div');
-    row.className = 'clock-row';
-    const pips = Array.from({length: c.total}, (_, j) =>
-      `<div class="clock-pip${j < c.filled ? ' filled' + (c.isRed ? ' red' : '') : ''}" onclick="toggleClockPip(${i},${j})"></div>`
-    ).join('');
-    row.innerHTML = `
-      <input class="clock-name" value="${escHtml(c.name)}" placeholder="Clock name..." oninput="updateClockName(${i},this.value)">
-      <select style="font-family:'Cinzel',serif;font-size:9px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:3px;outline:none;" onchange="updateClockSize(${i},this.value)">
+let clocks=[];
+function addClock(name='',total=8,filled=0,red=false){clocks.push({name,total,filled,red});renderClocks(clocks);saveGM();}
+function renderClocks(data){
+  clocks=data;
+  const list=document.getElementById('clock-list');list.innerHTML='';
+  data.forEach((c,i)=>{
+    const row=document.createElement('div');row.className='clock-row';
+    const pips=Array.from({length:c.total},(_,j)=>`<div class="cpip${j<c.filled?(c.red?' on red':' on'):''}" onclick="cpip(${i},${j})"></div>`).join('');
+    row.innerHTML=`
+      <input class="clock-name-in" value="${esc(c.name)}" placeholder="Clock..." oninput="clocks[${i}].name=this.value;saveGM()">
+      <select style="font-family:'Cinzel',serif;font-size:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:2px 4px;border-radius:2px;outline:none;" onchange="clocks[${i}].total=parseInt(this.value);clocks[${i}].filled=Math.min(clocks[${i}].filled,clocks[${i}].total);renderClocks(clocks);saveGM()">
         ${[4,6,8,10,12].map(n=>`<option value="${n}"${n===c.total?' selected':''}>${n}</option>`).join('')}
       </select>
-      <label style="display:flex;align-items:center;gap:3px;font-family:'Cinzel',serif;font-size:8px;color:var(--muted);cursor:pointer;">
-        <input type="checkbox" style="width:auto;" ${c.isRed?'checked':''} onchange="toggleClockColor(${i},this.checked)"> Danger
-      </label>
+      <label style="display:flex;align-items:center;gap:2px;font-size:10px;color:var(--muted);cursor:pointer;"><input type="checkbox"${c.red?' checked':''} onchange="clocks[${i}].red=this.checked;renderClocks(clocks);saveGM()" style="width:auto;"> ⚠</label>
       <div class="clock-pips">${pips}</div>
-      <button class="clock-rm" onclick="removeClock(${i})">×</button>`;
+      <button class="rm-btn" onclick="clocks.splice(${i},1);renderClocks(clocks);saveGM()">×</button>`;
     list.appendChild(row);
   });
 }
-
-function toggleClockPip(ci, pi) {
-  clockData[ci].filled = pi < clockData[ci].filled ? pi : pi + 1;
-  renderClocks(clockData); saveGMData();
-}
-function updateClockName(ci, v) { clockData[ci].name = v; saveGMData(); }
-function updateClockSize(ci, v) { clockData[ci].total = parseInt(v); clockData[ci].filled = Math.min(clockData[ci].filled, clockData[ci].total); renderClocks(clockData); saveGMData(); }
-function toggleClockColor(ci, v) { clockData[ci].isRed = v; renderClocks(clockData); saveGMData(); }
-function removeClock(ci) { clockData.splice(ci, 1); renderClocks(clockData); saveGMData(); }
-function saveClocks() { return clockData; }
+function cpip(ci,pi){clocks[ci].filled=pi<clocks[ci].filled?pi:pi+1;renderClocks(clocks);saveGM();}
+function saveClocks(){return clocks;}
 
 // ── ADVERSARIES ──
-let advData = [];
-
-function addAdversary(name='', hp=5, marked=0, notes='') {
-  advData.push({ name, hp, marked, notes });
-  renderAdversaries(advData);
-  saveGMData();
-}
-
-function renderAdversaries(data) {
-  advData = data;
-  const list = document.getElementById('adversaries-list');
-  list.innerHTML = '';
-  data.forEach((a, i) => {
-    const card = document.createElement('div');
-    card.className = 'adv-card';
-    const pips = Array.from({length: a.hp}, (_, j) =>
-      `<div class="adv-pip${j < a.marked ? ' marked' : ''}" onclick="toggleAdvPip(${i},${j})"></div>`
-    ).join('');
-    card.innerHTML = `
-      <div class="adv-header">
-        <input class="adv-name-input" value="${escHtml(a.name)}" placeholder="Adversary name..." oninput="updateAdvName(${i},this.value)">
-        <label style="font-family:'Cinzel',serif;font-size:8px;color:var(--muted);display:flex;align-items:center;gap:4px;">
-          HP: <input type="number" min="1" max="30" value="${a.hp}" style="width:40px;font-family:'Cinzel',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:2px 5px;border-radius:3px;outline:none;" onchange="updateAdvHp(${i},this.value)">
-        </label>
-        <button class="clock-rm" onclick="removeAdv(${i})">×</button>
+let advs=[];
+function addAdv(name='',hp=5,marked=0,notes=''){advs.push({name,hp,marked,notes});renderAdvs(advs);saveGM();}
+function renderAdvs(data){
+  advs=data;
+  const list=document.getElementById('adv-list');list.innerHTML='';
+  data.forEach((a,i)=>{
+    const card=document.createElement('div');card.className='adv-card';
+    const pips=Array.from({length:a.hp},(_,j)=>`<div class="apip${j<a.marked?' on':''}" onclick="apip(${i},${j})"></div>`).join('');
+    card.innerHTML=`
+      <div class="adv-top">
+        <input class="adv-name" value="${esc(a.name)}" placeholder="Adversary..." oninput="advs[${i}].name=this.value;saveGM()">
+        <label style="font-family:'Cinzel',serif;font-size:7px;color:var(--muted);display:flex;align-items:center;gap:3px;">HP<input type="number" min="1" max="30" value="${a.hp}" style="width:32px;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:1px 4px;border-radius:2px;outline:none;" onchange="advs[${i}].hp=Math.max(1,parseInt(this.value)||1);advs[${i}].marked=Math.min(advs[${i}].marked,advs[${i}].hp);renderAdvs(advs);saveGM()"></label>
+        <button class="rm-btn" onclick="advs.splice(${i},1);renderAdvs(advs);saveGM()">×</button>
       </div>
-      <div class="adv-hp-row">
-        <div class="adv-hp-label">HP</div>
-        <div class="adv-hp-pips">${pips}</div>
-      </div>
-      <textarea class="adv-notes-input" rows="2" placeholder="Notes, abilities, conditions..." oninput="updateAdvNotes(${i},this.value)">${escHtml(a.notes)}</textarea>`;
+      <div class="adv-pips">${pips}</div>
+      <textarea class="adv-note" rows="1" placeholder="Notes..." oninput="advs[${i}].notes=this.value;saveGM()">${esc(a.notes)}</textarea>`;
     list.appendChild(card);
   });
 }
+function apip(ai,pi){advs[ai].marked=pi<advs[ai].marked?pi:pi+1;renderAdvs(advs);saveGM();}
+function saveAdvs(){return advs;}
 
-function toggleAdvPip(ai, pi) {
-  advData[ai].marked = pi < advData[ai].marked ? pi : pi + 1;
-  renderAdversaries(advData); saveGMData();
-}
-function updateAdvName(ai, v) { advData[ai].name = v; saveGMData(); }
-function updateAdvNotes(ai, v) { advData[ai].notes = v; saveGMData(); }
-function updateAdvHp(ai, v) { advData[ai].hp = Math.max(1, parseInt(v)||1); advData[ai].marked = Math.min(advData[ai].marked, advData[ai].hp); renderAdversaries(advData); saveGMData(); }
-function removeAdv(ai) { advData.splice(ai, 1); renderAdversaries(advData); saveGMData(); }
-function saveAdversaries() { return advData; }
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
-// ── UTILS ──
-function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-// ── PIN RESET ──
-// Hold Shift+R for 3 seconds on the lock screen to reset PIN
-let resetTimer = null;
-document.addEventListener('keydown', e => {
-  if (document.getElementById('lock-screen').style.display !== 'none') {
-    if (e.key === 'r' && e.shiftKey) {
-      resetTimer = setTimeout(() => {
-        if (confirm('Reset GM PIN? You will need to set a new one.')) {
-          localStorage.removeItem(DM_PIN_KEY);
-          showLockError('PIN reset. Set a new one.');
-        }
-      }, 2000);
-    }
-  }
+// PIN reset: Shift+R on lock screen for 2s
+let rTimer=null;
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('lock').style.display!=='none'&&e.key==='r'&&e.shiftKey)
+    rTimer=setTimeout(()=>{if(confirm('Reset PIN?')){localStorage.removeItem(PIN_KEY);err('PIN reset. Set a new one.');}},2000);
 });
-document.addEventListener('keyup', () => clearTimeout(resetTimer));
+document.addEventListener('keyup',()=>clearTimeout(rTimer));
 </script>
 </body>
 </html>
