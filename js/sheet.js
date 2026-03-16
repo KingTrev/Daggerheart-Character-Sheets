@@ -1423,11 +1423,18 @@ function s0SyncTrait(traitName, value) {
   // Save to S0 data
   s0Data['s0-trait-' + traitName] = value;
   saveS0Data();
-  // Sync to character sheet input
+  // Sync to character sheet input if it exists
   const sheetEl = document.getElementById('t-' + traitName);
   if (sheetEl) sheetEl.value = value;
-  // Save to character localStorage
-  if (currentClass) save();
+  // Directly patch the character save in localStorage so it survives even if sheet isn't built
+  if (currentClass) {
+    try {
+      const key = saveKey(currentClass);
+      const d = JSON.parse(localStorage.getItem(key)) || {};
+      d['t-' + traitName] = value;
+      localStorage.setItem(key, JSON.stringify(d));
+    } catch(e) {}
+  }
 }
 
 function s0SaveExp() {
@@ -2647,6 +2654,27 @@ function initTheme() {
   const hdrBtn = document.getElementById('theme-btn-hdr');
   if (hdrBtn) hdrBtn.textContent = saved === 'light' ? '☾' : '☀';
 }
+
+// ── MIGRATE: clear stale partial trait saves ──
+(function migrateStaleSaves() {
+  const traitIds = ['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge'];
+  const keys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('dh2-sheet-')) keys.push(k);
+  }
+  keys.forEach(key => {
+    try {
+      const d = JSON.parse(localStorage.getItem(key));
+      if (!d) return;
+      const savedCount = traitIds.filter(k => d[k] !== undefined && d[k] !== '').length;
+      if (savedCount > 0 && savedCount < 6) {
+        traitIds.forEach(k => { delete d[k]; });
+        localStorage.setItem(key, JSON.stringify(d));
+      }
+    } catch(e) {}
+  });
+})();
 
 // ── INIT ──
 initTheme();
