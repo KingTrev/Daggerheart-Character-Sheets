@@ -1248,7 +1248,7 @@ function renderS0Step(id) {
         'Does anyone in the group keep a secret from the others? Do you know what it is?',
         'What\'s something the party does together that feels like a ritual or tradition, even if you\'ve never said it out loud?',
       ];
-      const active = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : suggested.slice(0, 4);
+      const active = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : [];
       return s0Section('Party Connections', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Go around the table and answer these together. Add suggested questions from the dropdown, or write your own. When done, hit <strong>Send to Background</strong>.</p>
 
@@ -1305,7 +1305,7 @@ function renderS0Step(id) {
         'What\'s the food/snack situation at the table?',
         'How do you prefer to end sessions — at a natural beat, on a cliffhanger, or at a set time?',
       ];
-      const active = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : suggested.slice(0, 4);
+      const active = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : [];
       return s0Section('Table Agreements', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are for the whole table — GM included. Add suggested questions or write your own. When done, hit <strong>Send to Background</strong>.</p>
 
