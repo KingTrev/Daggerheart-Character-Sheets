@@ -1,3 +1,6 @@
+// ── canvas-render.js ── drawing, drag, pan, zoom, minimap
+
+// ── RENDER (drawing, drag, pan, zoom) ──
 // ── canvas-render.js ──
 // Rendering: nodes, connections (pure canvas coords), pan/zoom, minimap
 

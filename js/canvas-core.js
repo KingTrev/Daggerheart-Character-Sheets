@@ -1,3 +1,13 @@
+// ── canvas-core.js ── state, save/load, nodes, connections
+
+// DOM globals — defined here so canvas-render.js can use them
+// ── DOM GLOBALS (must be first) ──
+const canvas      = document.getElementById('canvas');
+const wrap        = document.getElementById('canvas-wrap');
+const svg         = document.getElementById('connections-svg');
+const previewLine = document.getElementById('preview-line');
+
+// ── CORE (state, save/load, nodes, connections) ──
 // ── canvas-core.js ──
 // State, save/load, node management, connection management
 
