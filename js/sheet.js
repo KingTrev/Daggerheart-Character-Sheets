@@ -1202,11 +1202,7 @@ function renderS0Step(id) {
           ${liveTraits.map(({name,val})=>`
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
             <input type="number" id="s0-trait-${name}" value="${val}"
-              oninput="
-                s0Data['s0-trait-${name}']=this.value;saveS0Data();
-                var sheet=document.getElementById('t-${name}');if(sheet){sheet.value=this.value;}
-                if(currentClass){var k=saveKey(currentClass);try{var dd=JSON.parse(localStorage.getItem(k))||{};dd['t-${name}']=this.value;localStorage.setItem(k,JSON.stringify(dd));}catch(e){}}
-              "
+              oninput="s0SyncTrait('${name}', this.value)"
               style="width:52px;font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);background:var(--bg2);border:1px solid var(--border2);border-radius:3px;text-align:center;outline:none;padding:4px 0;flex-shrink:0;">
             <div>
               <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--text);">${name.charAt(0).toUpperCase()+name.slice(1)}</div>
@@ -1276,7 +1272,7 @@ function renderS0Step(id) {
         'Does anyone in the group keep a secret from the others? Do you know what it is?',
         'What\'s something the party does together that feels like a ritual or tradition, even if you\'ve never said it out loud?',
       ];
-      const active = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : suggested.slice(0, 4);
+      const active = s0Data['s0-conn-qs'] ? JSON.parse(s0Data['s0-conn-qs']) : [];
       return s0Section('Party Connections', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Go around the table and answer these together. Add suggested questions from the dropdown, or write your own. When done, hit <strong>Send to Background</strong>.</p>
 
@@ -1333,7 +1329,7 @@ function renderS0Step(id) {
         'What\'s the food/snack situation at the table?',
         'How do you prefer to end sessions — at a natural beat, on a cliffhanger, or at a set time?',
       ];
-      const active = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : suggested.slice(0, 4);
+      const active = s0Data['s0-grp-qs'] ? JSON.parse(s0Data['s0-grp-qs']) : [];
       return s0Section('Table Agreements', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are for the whole table — GM included. Add suggested questions or write your own. When done, hit <strong>Send to Background</strong>.</p>
 
@@ -1421,6 +1417,17 @@ function renderS0Step(id) {
 
     default: return '';
   }
+}
+
+function s0SyncTrait(traitName, value) {
+  // Save to S0 data
+  s0Data['s0-trait-' + traitName] = value;
+  saveS0Data();
+  // Sync to character sheet input
+  const sheetEl = document.getElementById('t-' + traitName);
+  if (sheetEl) sheetEl.value = value;
+  // Save to character localStorage
+  if (currentClass) save();
 }
 
 function s0SaveExp() {
