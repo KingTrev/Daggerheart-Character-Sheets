@@ -390,23 +390,34 @@ function renderLoadout() {
 function renderCardBrowser() {
   const container = document.getElementById('card-browser');
   if (!container) return;
-  const showAll = document.getElementById('cards-show-all')?.checked;
+  const search = (document.getElementById('cards-search')?.value || '').toLowerCase().trim();
+  const filterDomain = document.getElementById('cards-filter-domain')?.value || '';
   const filterType = document.getElementById('cards-filter-type')?.value || '';
   const filterLevel = parseInt(document.getElementById('cards-filter-level')?.value || '0');
   const classDomains = getClassDomains(currentClass);
   const loadoutIds = getLoadout();
 
   let cards = DOMAIN_CARDS;
-  if (!showAll && classDomains.length > 0) {
-    cards = cards.filter(c => c.domains.some(d => classDomains.includes(d)));
+
+  // Domain filter
+  if (filterDomain === '__class__') {
+    cards = cards.filter(c => classDomains.length > 0 && c.domains.some(d => classDomains.includes(d)));
+  } else if (filterDomain) {
+    cards = cards.filter(c => c.domains.includes(filterDomain));
   }
+
   if (filterType) cards = cards.filter(c => c.type === filterType);
   if (filterLevel) cards = cards.filter(c => c.level === filterLevel);
+  if (search) cards = cards.filter(c =>
+    c.name.toLowerCase().includes(search) ||
+    c.text.toLowerCase().includes(search) ||
+    c.domains.some(d => d.toLowerCase().includes(search))
+  );
 
   container.innerHTML = '';
 
-  if (!currentClass && !showAll) {
-    container.innerHTML = '<p style="color:var(--muted);font-style:italic;font-size:13px;">Select a class on the Character Sheet tab to see your domain cards, or check "Show all domains" above.</p>';
+  if (!currentClass && !filterDomain && !search) {
+    container.innerHTML = '<p style="color:var(--muted);font-style:italic;font-size:13px;">Select a class on the Character Sheet tab to see your domain cards, or filter by domain above.</p>';
     return;
   }
 
@@ -428,7 +439,7 @@ function renderCardBrowser() {
     hdr.textContent = `Level ${level}`;
     container.appendChild(hdr);
     const grid = document.createElement('div');
-    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;margin-bottom:1rem;';
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0.75rem;margin-bottom:1rem;';
     byLevel[level].forEach(card => {
       grid.appendChild(buildCardEl(card, loadoutIds.includes(card.id), true));
     });
