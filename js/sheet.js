@@ -366,6 +366,18 @@ function buildPages(cls) {
         </div>`).join('')}
       </div>
 
+      <!-- CHARACTER DESCRIPTION -->
+      <div style="margin-top:0.75rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+          <span class="ey">Description</span>
+          <span style="font-family:'Crimson Pro',serif;font-size:11px;color:var(--muted);">${c.descOptions.clothes && `Clothes: ${c.descOptions.clothes}`}</span>
+        </div>
+        <div style="font-family:'Crimson Pro',serif;font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:6px;">
+          <span>${c.descOptions.eyes ? `Eyes like ${c.descOptions.eyes} · ` : ''}${c.descOptions.body ? `Body: ${c.descOptions.body} · ` : ''}${c.descOptions.skin ? `Skin: ${c.descOptions.skin} · ` : ''}${c.descOptions.attitude ? `Attitude like ${c.descOptions.attitude}` : ''}</span>
+        </div>
+        <textarea id="appearance" rows="2" placeholder="Describe your character's appearance..." oninput="save()" style="resize:none;font-size:13px;"></textarea>
+      </div>
+
     </div>
 
     <div class="page-inner" style="padding-top:0.75rem;">
@@ -454,24 +466,7 @@ function buildPages(cls) {
             <div class="cf-body" id="cf-body">${c.featureBody.replace(/\n/g,'<br>')}</div>
           </div>
 
-          <div>
-            ${sh("Conditions","Active status effects on your character. Conditions like Vulnerable, Restrained, or Stunned impose penalties until cleared. The GM or a feature clears them — check the rules for each one.")}
-            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px;">
-              ${['Vulnerable','Restrained','Hidden','Stunned','Frightened','On Fire','Silenced','Corroded','Poisoned'].map(cond=>`
-              <label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:11px;font-family:'Crimson Pro',serif;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 7px;transition:all 0.12s;" id="cond-label-${cond.replace(/\s/g,'-').toLowerCase()}">
-                <input type="checkbox" id="cond-${cond.replace(/\s/g,'-').toLowerCase()}" onchange="onConditionChange(this)" style="width:auto;accent-color:var(--red);"> ${cond}
-              </label>`).join('')}
-            </div>
-            <input type="text" id="cond-custom" placeholder="Custom condition..." oninput="save()" style="font-size:12px;">
-          </div>
 
-          <div>
-            ${sh("Death Move","When you mark your last Hit Point, you make a Death Move — a dramatic moment where you describe what happens. You might survive, sacrifice yourself, or change permanently. Work with your GM.")}
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-family:'Crimson Pro',serif;">
-              <input type="checkbox" id="death-move-used" onchange="save()" style="width:auto;accent-color:var(--red);"> Death move triggered this session
-            </label>
-            <textarea id="death-move-notes" rows="2" placeholder="Describe what happened..." oninput="save()" style="margin-top:5px;resize:none;font-size:12px;"></textarea>
-          </div>
 
           ${cls === 'Seraph' ? `
           <div>
@@ -671,17 +666,7 @@ function buildPages(cls) {
               ${c.suggestedSecondary?`<div><div class="sh">Suggested Secondary Weapon</div><p style="font-size:13px;line-height:1.7;">${c.suggestedSecondary.replace(/\n/g,'<br>')}</p></div>`:''}
               <div><div class="sh">Suggested Armor</div><p style="font-size:13px;line-height:1.7;">${c.suggestedArmor.replace(/\n/g,'<br>')}</p></div>
               <div><div class="sh">Starting Inventory</div><p style="font-size:12px;line-height:1.8;">${c.startingInventory.replace(/\n/g,'<br>')}</p></div>
-              <div>
-                <div class="sh">Character Description</div>
-                <div class="desc-list">
-                  <div><span class="desc-cat">Clothes that are:</span> ${c.descOptions.clothes}</div>
-                  <div><span class="desc-cat">Eyes like:</span> ${c.descOptions.eyes}</div>
-                  <div><span class="desc-cat">Body that's:</span> ${c.descOptions.body}</div>
-                  <div><span class="desc-cat">Skin the color of:</span> ${c.descOptions.skin}</div>
-                  <div><span class="desc-cat">Attitude like:</span> ${c.descOptions.attitude}</div>
-                </div>
-                <textarea id="appearance" rows="3" placeholder="Write your character's description..." oninput="save()" style="margin-top:8px;"></textarea>
-              </div>
+
             </div>
             <div class="p2-mid" style="grid-column:span 2;">
               <div class="tier-box"><div class="tier-header">Tier 2: Levels 2–4</div><div class="tier-intro">At level 2, gain an additional Experience at +2 and gain a +1 bonus to your Proficiency.</div><p style="font-size:10px;font-family:'Cinzel',serif;color:var(--muted);margin-bottom:6px;">Choose two options and mark them.</p>${tierOptions(2)}</div>
@@ -1618,20 +1603,7 @@ function onConditionChange(checkbox) {
   save();
 }
 
-function restoreConditions(d) {
-  const condIds = ['vulnerable','restrained','hidden','stunned','frightened','on-fire','silenced','corroded','poisoned'];
-  condIds.forEach(id => {
-    const el = document.getElementById('cond-' + id);
-    if (el && d['cond-'+id]) {
-      el.checked = true;
-      const label = el.closest('label');
-      if (label) label.classList.add('cond-label-active');
-    }
-  });
-  // Death move checkbox
-  const dm = document.getElementById('death-move-used');
-  if (dm && d['death-move-used']) dm.checked = true;
-}
+
 
 // ─────────────────────────────────────────────
 // PRAYER DICE (SERAPH)
@@ -2043,7 +2015,7 @@ function saveKey(cls) { return 'dh2-sheet-' + (cls||'').toLowerCase(); }
 function save() {
   if (!currentClass) return;
   const d = { class: currentClass };
-  ['f-name','f-pronouns','f-subclass','f-level','f-evasion','t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge','thresh-minor','thresh-major','thresh-severe','w1-name','w1-trait','w1-damage','w1-feature','w2-name','w2-trait','w2-damage','w2-feature','armor-name','armor-thresh','armor-score','armor-feature','gold-h','gold-b','gold-c','session-notes','session-title','domain-notes','misc-notes','appearance','cond-custom','death-move-notes'].forEach(id=>{
+  ['f-name','f-pronouns','f-subclass','f-level','f-evasion','t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge','thresh-minor','thresh-major','thresh-severe','w1-name','w1-trait','w1-damage','w1-feature','w2-name','w2-trait','w2-damage','w2-feature','armor-name','armor-thresh','armor-score','armor-feature','gold-h','gold-b','gold-c','session-notes','session-title','domain-notes','misc-notes','appearance'].forEach(id=>{
     const el=document.getElementById(id); if(el) d[id]=el.value;
   });
   // save select fields separately
@@ -2071,7 +2043,6 @@ function save() {
   ['vulnerable','restrained','hidden','stunned','frightened','on-fire','silenced','corroded','poisoned'].forEach(id => {
     const el = document.getElementById('cond-'+id); if(el) d['cond-'+id] = el.checked;
   });
-  const dm = document.getElementById('death-move-used'); if(dm) d['death-move-used'] = dm.checked;
   // class-specific
   d.prayerDice = savePrayerDice();
   d.companion = saveCompanion();
@@ -2208,8 +2179,6 @@ function restoreData(d) {
   }
   // render ancestry/community feature bar
   renderFeatureBar();
-  // conditions
-  restoreConditions(d);
   // class-specific
   restorePrayerDice(d.prayerDice);
   restoreCompanion(d.companion);
