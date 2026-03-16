@@ -1188,11 +1188,10 @@ function renderS0Step(id) {
         presence:['Charm, Perform, Deceive','Social influence, leadership, performance.'],
         knowledge:['Recall, Analyze, Comprehend','Lore, investigation, magical study.']
       };
-      // Use saved s0 value → else class default
+      // Use saved s0 value only — start blank if not yet filled
       const liveTraits = traitList.map(t => {
         const savedKey = 's0-trait-' + t;
-        const classDefault = clsData ? (clsData.traits[t]>=0?'+'+clsData.traits[t]:String(clsData.traits[t])) : '0';
-        const val = s0Data[savedKey] || classDefault;
+        const val = s0Data[savedKey] !== undefined ? s0Data[savedKey] : '';
         return { name:t, val };
       });
       return s0Section('Your Traits', `
