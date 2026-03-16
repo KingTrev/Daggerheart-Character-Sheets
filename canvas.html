@@ -267,17 +267,10 @@ body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;heig
   </div>
 </div>
 
-<!-- SCRIPTS -->
 <script src="canvas-core.js"></script>
 <script src="canvas-render.js"></script>
 <script>
-// Expose globals needed by render
-const canvas  = document.getElementById('canvas');
-const wrap    = document.getElementById('canvas-wrap');
-const svg     = document.getElementById('connections-svg');
-const previewLine = document.getElementById('preview-line');
-
-// Boot
+// Boot — runs after both files are loaded
 setupPan();
 setupZoom();
 loadData();
