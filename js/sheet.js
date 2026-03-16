@@ -2046,6 +2046,8 @@ function fillSuggestedTraits() {
     const el = document.getElementById('t-' + t);
     if (el) el.value = c.traits[t] >= 0 ? '+' + c.traits[t] : String(c.traits[t]);
   });
+  if (c.hpStart) makeBoxPips(document.getElementById('hp-boxes'), c.hpStart, 0, 'hpbox');
+  if (c.stressStart) makeBoxPips(document.getElementById('stress-boxes'), c.stressStart, 0, 'stressbox');
   save();
 }
 
@@ -2077,6 +2079,9 @@ function applyClassDefaults(cls) {
   // Evasion
   const ev = document.getElementById('f-evasion');
   if (ev) ev.value = c.evasionStart;
+  // HP and Stress
+  if (c.hpStart) makeBoxPips(document.getElementById('hp-boxes'), c.hpStart, 0, 'hpbox');
+  if (c.stressStart) makeBoxPips(document.getElementById('stress-boxes'), c.stressStart, 0, 'stressbox');
   // Suggested thresholds (base values before adding level — player adds level themselves)
   // These are the minor/major/severe breakpoints from the suggested armor
   // Parse from suggestedArmor e.g. "Chainmail Armor — Thresholds 7/15 — Score 4"
