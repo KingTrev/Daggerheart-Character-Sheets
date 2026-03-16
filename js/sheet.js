@@ -329,6 +329,10 @@ function buildPages(cls) {
       <div id="feature-bar" style="display:none;margin-bottom:0.75rem;gap:0.5rem;"></div>
 
       <!-- TRAITS ROW -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);letter-spacing:0.1em;">TRAITS</span>
+        <button onclick="fillSuggestedTraits()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:3px 10px;border-radius:3px;cursor:pointer;">✦ Fill Suggested</button>
+      </div>
       <div class="traits-row" style="margin-bottom:0;">
         ${['agility','strength','finesse','instinct','presence','knowledge'].map(t=>`
         <div class="trait-block">
@@ -1169,7 +1173,7 @@ function renderS0Step(id) {
       });
       return s0Section('Your Traits', `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are your six core stats. ${cls && clsData ? `Your <strong>${cls}</strong> starts with the suggested spread — edit any value and it'll sync to your character sheet.` : 'Choose a class first to see suggested traits.'}</p>
-        ${cls && clsData ? `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.7;">Suggested: <strong>${clsData.suggestedTraits.replace(/\n/g,' · ')}</strong></div>` : ''}
+        ${cls && clsData ? `<div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.7;"><span>Suggested: <strong>${clsData.suggestedTraits.replace(/\n/g,' · ')}</strong></span><button onclick="s0FillSuggestedTraits()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:4px 12px;border-radius:3px;cursor:pointer;white-space:nowrap;margin-left:12px;">✦ Fill</button></div>` : ''}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;">
           ${liveTraits.map(({name,val})=>`
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
@@ -2033,6 +2037,33 @@ function save() {
   localStorage.setItem(saveKey(currentClass), JSON.stringify(d));
   localStorage.setItem('dh2-last-class', currentClass);
   renderSidebar();
+}
+
+function fillSuggestedTraits() {
+  const c = CLASSES[currentClass];
+  if (!c) return;
+  ['agility','strength','finesse','instinct','presence','knowledge'].forEach(t => {
+    const el = document.getElementById('t-' + t);
+    if (el) el.value = c.traits[t] >= 0 ? '+' + c.traits[t] : String(c.traits[t]);
+  });
+  save();
+}
+
+function s0FillSuggestedTraits() {
+  const c = CLASSES[currentClass];
+  if (!c) return;
+  ['agility','strength','finesse','instinct','presence','knowledge'].forEach(t => {
+    const val = c.traits[t] >= 0 ? '+' + c.traits[t] : String(c.traits[t]);
+    // Fill S0 input
+    const s0el = document.getElementById('s0-trait-' + t);
+    if (s0el) { s0el.value = val; s0Data['s0-trait-' + t] = val; }
+    // Sync to character sheet
+    const sheetEl = document.getElementById('t-' + t);
+    if (sheetEl) sheetEl.value = val;
+  });
+  saveS0Data();
+  if (currentClass) save();
+  renderS0();
 }
 
 function applyClassDefaults(cls) {
