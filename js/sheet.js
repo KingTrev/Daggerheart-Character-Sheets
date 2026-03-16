@@ -2113,19 +2113,23 @@ function restoreData(d) {
   // Also apply defaults if this is a fresh character with no traits filled in yet
   const hasTraits = ['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge'].some(k => d[k] !== undefined && d[k] !== '');
   if (!hasTraits) applyClassDefaults(currentClass);
+  const traitIds = new Set(['t-agility','t-strength','t-finesse','t-instinct','t-presence','t-knowledge']);
   // text fields
   Object.keys(d).forEach(k=>{
     if(['class','exps','inv','invWeaps'].includes(k)) return;
     if(typeof d[k]==='boolean'){const el=document.getElementById(k);if(el)el.checked=d[k];return;}
     if(typeof d[k]==='number') return;
-    if(typeof d[k]==='string'){const el=document.getElementById(k);if(el)el.value=d[k];}
+    if(typeof d[k]==='string'){
+      if(d[k]==='' && (traitIds.has(k) || !hasTraits)) return; // don't overwrite defaults with empty
+      const el=document.getElementById(k);if(el)el.value=d[k];
+    }
   });
   // checkboxes
   for(let t=2;t<=4;t++) for(let o=0;o<9;o++){const el=document.getElementById(`t${t}o${o}`);if(el)el.checked=!!d[`t${t}o${o}`];}
   // pips
   if(d.hope!=null){renderHopePips(document.getElementById('hope-pips'), d.hopeTotal||6, d.hope);}
-  if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'), d.hpTotal||5, d.hp, 'hpbox');
-  if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'), d.stressTotal||6, d.stress, 'stressbox');
+  if(d.hp!=null) makeBoxPips(document.getElementById('hp-boxes'), d.hpTotal||(CLASSES[currentClass]?.hpStart||5), d.hp, 'hpbox');
+  if(d.stress!=null) makeBoxPips(document.getElementById('stress-boxes'), d.stressTotal||(CLASSES[currentClass]?.stressStart||6), d.stress, 'stressbox');
   if(d.armor!=null) makeShieldPips(document.getElementById('armor-pips'),12,d.armor);
   if(d.prof!=null) makeProfDots(document.getElementById('prof-dots'),d.prof);
   // dynamic lists
