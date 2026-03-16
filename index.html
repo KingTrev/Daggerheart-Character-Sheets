@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sheet — Daggerheart</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080909;
+  --bg2: #0e1012;
+  --bg3: #151719;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #e8e3d8;
+  --muted: #7a7570;
+  --gold: #c9a84c;
+  --gold-dim: #7a6530;
+  --gold-faint: #141008;
+  --red: #c04040;
+  --red-dim: #7a2828;
+  --red-faint: #120808;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* subtle radial glow behind content */
+body::before {
+  content: '';
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  max-width: 560px;
+  width: 100%;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.brand-mark {
+  width: 72px; height: 72px;
+  background: var(--gold-faint);
+  border: 1px solid var(--gold-dim);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 32px; font-weight: 900;
+  color: var(--gold);
+}
+.brand-name {
+  font-family: 'Cinzel', serif;
+  font-size: 28px; font-weight: 900;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+.brand-sub {
+  font-family: 'Cinzel', serif;
+  font-size: 11px; font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-align: center;
+}
+
+/* Role cards */
+.role-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+.role-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: 12px;
+}
+
+.role-card.player::before {
+  background: radial-gradient(ellipse at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 70%);
+}
+.role-card.dm::before {
+  background: radial-gradient(ellipse at 50% 0%, rgba(192,64,64,0.08) 0%, transparent 70%);
+}
+
+.role-card:hover { transform: translateY(-2px); }
+.role-card.player:hover { border-color: var(--gold-dim); }
+.role-card.dm:hover { border-color: var(--red-dim); }
+.role-card:hover::before { opacity: 1; }
+
+.role-icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.role-card.player .role-icon {
+  background: var(--gold-faint);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+}
+.role-card.dm .role-icon {
+  background: var(--red-faint);
+  border: 1px solid var(--red-dim);
+  color: var(--red);
+}
+
+.role-title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+.role-card.player .role-title { color: var(--gold); }
+.role-card.dm .role-title { color: var(--red); }
+
+.role-desc {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.role-arrow {
+  font-size: 18px;
+  color: var(--border2);
+  transition: color 0.15s;
+  margin-top: auto;
+}
+.role-card.player:hover .role-arrow { color: var(--gold-dim); }
+.role-card.dm:hover .role-arrow { color: var(--red-dim); }
+
+/* Footer */
+.footer {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-align: center;
+}
+</style>
+<script>
+  document.fonts.ready.then(() => { document.body.style.visibility = ''; });
+  setTimeout(() => { document.body.style.visibility = ''; }, 1200);
+</script>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="brand">
+    <div class="brand-mark">S</div>
+    <div class="brand-name">THE SHEET</div>
+    <div class="brand-sub">DAGGERHEART</div>
+  </div>
+
+  <div class="role-cards">
+    <a class="role-card player" href="sheet.html">
+      <div class="role-icon">◈</div>
+      <div class="role-title">PLAYER</div>
+      <div class="role-desc">Create and manage your character, track HP, stress, hope, domain cards and session notes.</div>
+      <div class="role-arrow">→</div>
+    </a>
+    <a class="role-card dm" href="dm.html">
+      <div class="role-icon">⚔</div>
+      <div class="role-title">GAME MASTER</div>
+      <div class="role-desc">Run the campaign. Track Fear, spotlight players, manage adversaries and countdown clocks.</div>
+      <div class="role-arrow">→</div>
+    </a>
+  </div>
+
+  <div class="footer">THE SHEET · DAGGERHEART · UNOFFICIAL FAN TOOL</div>
+
+</div>
+
+</body>
+</html>

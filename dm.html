@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sheet — GM Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #080909;
+  --bg2:      #0e1012;
+  --bg3:      #151719;
+  --bg4:      #1c1f22;
+  --border:   rgba(255,255,255,0.06);
+  --border2:  rgba(255,255,255,0.12);
+  --text:     #e8e3d8;
+  --muted:    #7a7570;
+  --gold:     #c9a84c;
+  --gold-dim: #7a6530;
+  --gold-faint:#141008;
+  --red:      #c04040;
+  --red-dim:  #7a2828;
+  --red-faint:#120808;
+  --teal:     #3a8a80;
+  --blue:     #4a7ab0;
+  --blue-faint:#080f18;
+  --radius:   8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Crimson Pro', serif;
+  font-size: 15px;
+  min-height: 100vh;
+}
+
+/* ── LOCK SCREEN ── */
+#lock-screen {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  flex-direction: column;
+  gap: 2rem;
+}
+.lock-mark {
+  width: 64px; height: 64px;
+  background: var(--gold-faint);
+  border: 1px solid var(--gold-dim);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 28px; font-weight: 900;
+  color: var(--gold);
+}
+.lock-title {
+  font-family: 'Cinzel', serif;
+  font-size: 24px; font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.lock-sub {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px; color: var(--muted);
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.lock-form {
+  display: flex; flex-direction: column;
+  gap: 12px; width: 280px;
+}
+.lock-input {
+  font-family: 'Cinzel', serif;
+  font-size: 18px; letter-spacing: 0.3em;
+  text-align: center;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.lock-input:focus { border-color: var(--gold-dim); }
+.lock-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 11px; letter-spacing: 0.12em;
+  background: var(--gold-faint);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  padding: 12px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.lock-btn:hover { background: var(--bg4); }
+.lock-error {
+  font-size: 12px; color: var(--red);
+  text-align: center; min-height: 18px;
+  font-family: 'Cinzel', serif; letter-spacing: 0.06em;
+}
+.lock-hint {
+  font-size: 12px; color: var(--muted);
+  text-align: center; margin-top: -8px;
+}
+
+/* ── APP ── */
+#app { display: none; }
+
+/* ── TOP BAR ── */
+.dm-header {
+  height: 52px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  display: flex; align-items: center;
+  padding: 0 1.25rem;
+  gap: 1rem;
+  position: sticky; top: 0; z-index: 100;
+}
+.dm-brand {
+  font-family: 'Cinzel', serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.dm-brand span { color: var(--muted); font-weight: 400; }
+.dm-header-actions {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 8px;
+}
+.dm-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 0.1em;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.dm-btn:hover { color: var(--text); border-color: var(--border2); }
+.dm-btn.red { border-color: var(--red-dim); color: var(--red); background: var(--red-faint); }
+.dm-btn.gold { border-color: var(--gold-dim); color: var(--gold); background: var(--gold-faint); }
+
+/* ── LAYOUT ── */
+.dm-body {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  grid-template-rows: auto 1fr;
+  height: calc(100vh - 52px);
+  overflow: hidden;
+}
+
+/* ── FEAR / HOPE BAR ── */
+.table-bar {
+  grid-column: 1 / -1;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  display: flex; align-items: center;
+  padding: 10px 1.25rem;
+  gap: 2rem;
+  flex-shrink: 0;
+}
+.table-tracker {
+  display: flex; align-items: center; gap: 10px;
+}
+.tracker-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 0.14em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.pip-row { display: flex; gap: 5px; align-items: center; }
+.t-pip {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--border2);
+  background: var(--bg4);
+  cursor: pointer;
+  transition: all 0.12s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+}
+.t-pip.filled.fear { background: var(--red); border-color: var(--red); }
+.t-pip.filled.hope { background: var(--gold); border-color: var(--gold); }
+.t-pip:hover { border-color: var(--border2); transform: scale(1.1); }
+.tracker-count {
+  font-family: 'Cinzel', serif;
+  font-size: 16px; font-weight: 700;
+  min-width: 24px; text-align: center;
+}
+.fear-count { color: var(--red); }
+.hope-count { color: var(--gold); }
+.pip-adj {
+  width: 20px; height: 20px;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s;
+}
+.pip-adj:hover { color: var(--text); }
+
+.scene-input {
+  flex: 1;
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  padding: 2px 8px;
+  outline: none;
+}
+.scene-input::placeholder { color: var(--muted); }
+.scene-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 0.12em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── PLAYER CARDS AREA ── */
+.players-area {
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.player-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.player-card:hover { border-color: rgba(255,255,255,0.18); }
+.player-card.spotlight { border-color: var(--gold-dim); box-shadow: 0 0 0 1px var(--gold-dim); }
+
+.pc-header {
+  display: flex; align-items: center;
+  padding: 10px 14px;
+  gap: 12px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.pc-portrait {
+  width: 38px; height: 38px;
+  border-radius: 6px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--muted);
+}
+.pc-portrait img { width: 100%; height: 100%; object-fit: cover; }
+.pc-identity { flex: 1; min-width: 0; }
+.pc-name {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pc-class {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--gold);
+  letter-spacing: 0.06em; margin-top: 1px;
+}
+.pc-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--muted);
+  margin-top: 1px;
+}
+.spotlight-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid var(--border2);
+  background: none;
+  color: var(--muted);
+  transition: all 0.12s;
+}
+.spotlight-btn:hover, .player-card.spotlight .spotlight-btn {
+  border-color: var(--gold-dim); color: var(--gold); background: var(--gold-faint);
+}
+
+.pc-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.pc-stat {
+  background: var(--bg2);
+  padding: 8px 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.pc-stat-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.pc-stat-val {
+  font-family: 'Cinzel', serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--text);
+}
+.pip-mini { display: flex; gap: 3px; flex-wrap: wrap; }
+.pip-m {
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--border2);
+  background: var(--bg4);
+  cursor: pointer;
+  transition: all 0.1s;
+  flex-shrink: 0;
+}
+.pip-m.hp-f { background: var(--red); border-color: var(--red-dim); }
+.pip-m.stress-f { background: var(--blue); border-color: var(--blue); }
+.pip-m.hope-f { background: var(--gold); border-color: var(--gold-dim); }
+
+.pc-traits {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.pc-trait {
+  background: var(--bg2);
+  padding: 6px 4px;
+  text-align: center;
+}
+.pc-trait-name {
+  font-family: 'Cinzel', serif;
+  font-size: 7px; letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.pc-trait-val {
+  font-family: 'Cinzel', serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--text);
+}
+.pc-trait-val.pos { color: var(--gold); }
+.pc-trait-val.neg { color: var(--red); }
+
+.pc-cards {
+  padding: 8px 14px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.pc-card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--bg4);
+  border: 1px solid var(--border2);
+  color: var(--muted);
+}
+.pc-card-tag.used {
+  opacity: 0.35;
+  text-decoration: line-through;
+}
+
+.pc-notes-area {
+  padding: 8px 14px;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.pc-notes-area.open { display: block; }
+.pc-notes {
+  width: 100%;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 7px 10px;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+}
+
+/* Empty state */
+.players-empty {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100%;
+  gap: 1rem;
+  color: var(--muted);
+  text-align: center;
+}
+.players-empty-title {
+  font-family: 'Cinzel', serif;
+  font-size: 12px; letter-spacing: 0.12em;
+}
+
+/* ── RIGHT PANEL ── */
+.right-panel {
+  background: var(--bg2);
+  border-left: 1px solid var(--border2);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.panel-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border2);
+  flex-shrink: 0;
+}
+.panel-tab {
+  flex: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: 0.1em;
+  padding: 10px 4px;
+  text-align: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: all 0.12s;
+}
+.panel-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+/* ── SESSION NOTES ── */
+.panel-section { margin-bottom: 1.25rem; }
+.panel-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 0.12em;
+  color: var(--gold);
+  margin-bottom: 6px;
+  display: block;
+}
+.panel-textarea {
+  width: 100%;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 8px 10px;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+}
+.panel-textarea:focus { border-color: var(--border2); }
+
+/* ── CLOCKS ── */
+.clock-row {
+  display: flex; align-items: center;
+  gap: 8px; margin-bottom: 8px;
+}
+.clock-name {
+  flex: 1;
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  padding: 5px 8px;
+  outline: none;
+}
+.clock-pips { display: flex; gap: 3px; }
+.clock-pip {
+  width: 16px; height: 16px;
+  border-radius: 3px;
+  border: 1px solid var(--border2);
+  background: var(--bg4);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.clock-pip.filled { background: var(--gold); border-color: var(--gold-dim); }
+.clock-pip.filled.red { background: var(--red); border-color: var(--red-dim); }
+.clock-rm {
+  background: none; border: none;
+  color: var(--muted); cursor: pointer;
+  font-size: 16px; line-height: 1;
+  padding: 0;
+}
+.clock-rm:hover { color: var(--red); }
+.add-clock-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 0.1em;
+  background: none;
+  border: 1px dashed var(--border2);
+  color: var(--muted);
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.12s;
+}
+.add-clock-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+
+/* ── ADVERSARIES ── */
+.adv-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.adv-header {
+  display: flex; align-items: center;
+  padding: 7px 10px;
+  gap: 8px;
+  cursor: pointer;
+}
+.adv-name-input {
+  flex: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 11px; font-weight: 700;
+  background: none; border: none;
+  color: var(--text);
+  outline: none;
+}
+.adv-hp-row {
+  display: flex; align-items: center;
+  gap: 6px;
+  padding: 0 10px 8px;
+}
+.adv-hp-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px; letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.adv-hp-pips { display: flex; gap: 3px; flex-wrap: wrap; }
+.adv-pip {
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border2);
+  background: var(--bg4);
+  cursor: pointer;
+}
+.adv-pip.marked { background: var(--red); border-color: var(--red-dim); }
+.adv-notes-input {
+  width: calc(100% - 20px);
+  margin: 0 10px 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 12px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  padding: 5px 8px;
+  outline: none;
+  resize: none;
+}
+.add-adv-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 9px; letter-spacing: 0.1em;
+  background: none;
+  border: 1px dashed var(--border2);
+  color: var(--muted);
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 4px;
+  transition: all 0.12s;
+}
+.add-adv-btn:hover { border-color: var(--red-dim); color: var(--red); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ── LOCK SCREEN ── -->
+<div id="lock-screen">
+  <div class="lock-mark">⚔</div>
+  <div>
+    <div class="lock-title">GM Screen</div>
+    <div class="lock-sub">Daggerheart — The Sheet</div>
+  </div>
+  <div class="lock-form">
+    <input type="password" class="lock-input" id="pin-input" placeholder="••••" maxlength="20" onkeydown="if(event.key==='Enter')unlock()">
+    <button class="lock-btn" onclick="unlock()">ENTER THE SANCTUM</button>
+    <div class="lock-error" id="lock-error"></div>
+    <div class="lock-hint">First time? Your PIN will be set on entry.</div>
+  </div>
+</div>
+
+<!-- ── APP ── -->
+<div id="app">
+
+  <!-- Header -->
+  <header class="dm-header">
+    <div class="dm-brand">⚔ GM SCREEN <span>/ DAGGERHEART</span></div>
+    <div style="flex:1;"></div>
+    <div class="dm-header-actions">
+      <label class="dm-btn gold" style="cursor:pointer;">
+        ⬆ Load Players
+        <input type="file" id="player-import" accept=".json" style="display:none" onchange="loadPlayers(this)" multiple>
+      </label>
+      <button class="dm-btn" onclick="clearAll()">✕ Clear All</button>
+      <button class="dm-btn" onclick="saveGMData()">Save</button>
+      <button class="dm-btn red" onclick="lockGM()">Lock</button>
+    </div>
+  </header>
+
+  <div class="dm-body">
+
+    <!-- Table Bar: Fear, Hope, Scene -->
+    <div class="table-bar">
+      <!-- FEAR -->
+      <div class="table-tracker">
+        <div class="tracker-label">FEAR</div>
+        <button class="pip-adj" onclick="adjustFear(-1)">−</button>
+        <div class="tracker-count fear-count" id="fear-count">0</div>
+        <button class="pip-adj" onclick="adjustFear(1)">+</button>
+        <div class="pip-row" id="fear-pips"></div>
+      </div>
+
+      <div style="width:1px;background:var(--border2);height:30px;"></div>
+
+      <!-- HOPE -->
+      <div class="table-tracker">
+        <div class="tracker-label">HOPE</div>
+        <button class="pip-adj" onclick="adjustHope(-1)">−</button>
+        <div class="tracker-count hope-count" id="hope-count">0</div>
+        <button class="pip-adj" onclick="adjustHope(1)">+</button>
+        <div class="pip-row" id="hope-pips"></div>
+      </div>
+
+      <div style="width:1px;background:var(--border2);height:30px;"></div>
+
+      <!-- SCENE -->
+      <div class="table-tracker" style="flex:1;">
+        <div class="tracker-label">SCENE</div>
+        <input type="text" class="scene-input" id="scene-input" placeholder="Current scene or encounter..." oninput="saveGMData()">
+      </div>
+
+      <div style="width:1px;background:var(--border2);height:30px;"></div>
+
+      <!-- TURN ORDER -->
+      <div class="table-tracker">
+        <div class="tracker-label">TURN ORDER</div>
+        <button class="dm-btn" onclick="prevSpotlight()" style="padding:3px 8px;">◀</button>
+        <div id="spotlight-name" style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold);min-width:100px;text-align:center;">—</div>
+        <button class="dm-btn" onclick="nextSpotlight()" style="padding:3px 8px;">▶</button>
+      </div>
+    </div>
+
+    <!-- Players Area -->
+    <div class="players-area" id="players-area">
+      <div class="players-empty" id="players-empty">
+        <div style="font-size:32px;opacity:0.2;">⚔</div>
+        <div class="players-empty-title">NO PLAYERS LOADED</div>
+        <div style="font-size:13px;color:var(--muted);">Load player JSON exports using the button above</div>
+        <label class="dm-btn gold" style="cursor:pointer;margin-top:0.5rem;">
+          ⬆ Load Players
+          <input type="file" accept=".json" style="display:none" onchange="loadPlayers(this)" multiple>
+        </label>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+      <div class="panel-tabs">
+        <button class="panel-tab active" onclick="switchPanel('notes', this)">NOTES</button>
+        <button class="panel-tab" onclick="switchPanel('clocks', this)">CLOCKS</button>
+        <button class="panel-tab" onclick="switchPanel('adversaries', this)">ADVERSARIES</button>
+      </div>
+
+      <!-- Notes Panel -->
+      <div class="panel-body" id="panel-notes">
+        <div class="panel-section">
+          <span class="panel-label">SESSION NOTES</span>
+          <textarea class="panel-textarea" id="gm-session-notes" rows="8" placeholder="What's happening this session..." oninput="saveGMData()"></textarea>
+        </div>
+        <div class="panel-section">
+          <span class="panel-label">PLOT THREADS</span>
+          <textarea class="panel-textarea" id="gm-plot-notes" rows="5" placeholder="Ongoing threads, foreshadowing, open hooks..." oninput="saveGMData()"></textarea>
+        </div>
+        <div class="panel-section">
+          <span class="panel-label">NPC NOTES</span>
+          <textarea class="panel-textarea" id="gm-npc-notes" rows="5" placeholder="Key NPCs, motivations, locations..." oninput="saveGMData()"></textarea>
+        </div>
+        <div class="panel-section">
+          <span class="panel-label">LOOT / REWARDS</span>
+          <textarea class="panel-textarea" id="gm-loot-notes" rows="3" placeholder="Items to hand out, gold, rewards..." oninput="saveGMData()"></textarea>
+        </div>
+      </div>
+
+      <!-- Clocks Panel -->
+      <div class="panel-body" id="panel-clocks" style="display:none;">
+        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:1rem;line-height:1.6;">Countdown clocks build tension. When all segments are filled, the threat triggers. Gold = progress toward something good. Red = danger approaching.</div>
+        <div id="clocks-list"></div>
+        <button class="add-clock-btn" onclick="addClock()">+ Add Clock</button>
+      </div>
+
+      <!-- Adversaries Panel -->
+      <div class="panel-body" id="panel-adversaries" style="display:none;">
+        <div style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:1rem;line-height:1.6;">Track enemies, their HP, and notes for the current encounter.</div>
+        <div id="adversaries-list"></div>
+        <button class="add-adv-btn" onclick="addAdversary()">+ Add Adversary</button>
+      </div>
+    </div>
+
+  </div><!-- /dm-body -->
+</div><!-- /app -->
+
+<script>
+// ── PIN / LOCK ──
+const DM_PIN_KEY = 'dh2-gm-pin';
+const DM_DATA_KEY = 'dh2-gm-data';
+
+function unlock() {
+  const val = document.getElementById('pin-input').value.trim();
+  if (!val) { showLockError('Enter a PIN'); return; }
+  const stored = localStorage.getItem(DM_PIN_KEY);
+  if (!stored) {
+    // First time — set the PIN
+    if (val.length < 4) { showLockError('PIN must be at least 4 characters'); return; }
+    localStorage.setItem(DM_PIN_KEY, btoa(val));
+    enterApp();
+  } else {
+    if (btoa(val) === stored) {
+      enterApp();
+    } else {
+      showLockError('Incorrect PIN');
+      document.getElementById('pin-input').value = '';
+    }
+  }
+}
+
+function showLockError(msg) {
+  const el = document.getElementById('lock-error');
+  el.textContent = msg;
+  setTimeout(() => el.textContent = '', 2500);
+}
+
+function enterApp() {
+  document.getElementById('lock-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadGMData();
+  renderFear();
+  renderHope();
+}
+
+function lockGM() {
+  document.getElementById('lock-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('pin-input').value = '';
+}
+
+// ── GM DATA ──
+let gmData = {
+  fear: 0, hope: 0,
+  scene: '',
+  sessionNotes: '', plotNotes: '', npcNotes: '', lootNotes: '',
+  clocks: [],
+  adversaries: [],
+  spotlightIdx: -1,
+};
+let players = [];
+
+function saveGMData() {
+  gmData.scene = document.getElementById('scene-input')?.value || '';
+  gmData.sessionNotes = document.getElementById('gm-session-notes')?.value || '';
+  gmData.plotNotes = document.getElementById('gm-plot-notes')?.value || '';
+  gmData.npcNotes = document.getElementById('gm-npc-notes')?.value || '';
+  gmData.lootNotes = document.getElementById('gm-loot-notes')?.value || '';
+  gmData.clocks = saveClocks();
+  gmData.adversaries = saveAdversaries();
+  gmData.players = players.map(p => ({ ...p }));
+  localStorage.setItem(DM_DATA_KEY, JSON.stringify(gmData));
+}
+
+function loadGMData() {
+  try {
+    const d = JSON.parse(localStorage.getItem(DM_DATA_KEY));
+    if (!d) return;
+    gmData = { ...gmData, ...d };
+    document.getElementById('scene-input').value = gmData.scene || '';
+    document.getElementById('gm-session-notes').value = gmData.sessionNotes || '';
+    document.getElementById('gm-plot-notes').value = gmData.plotNotes || '';
+    document.getElementById('gm-npc-notes').value = gmData.npcNotes || '';
+    document.getElementById('gm-loot-notes').value = gmData.lootNotes || '';
+    if (gmData.players?.length) {
+      players = gmData.players;
+      renderAllPlayers();
+    }
+    if (gmData.clocks?.length) renderClocks(gmData.clocks);
+    if (gmData.adversaries?.length) renderAdversaries(gmData.adversaries);
+  } catch(e) {}
+}
+
+function clearAll() {
+  if (!confirm('Clear all player data and GM notes?')) return;
+  players = [];
+  gmData = { fear: 0, hope: 0, scene: '', sessionNotes: '', plotNotes: '', npcNotes: '', lootNotes: '', clocks: [], adversaries: [], spotlightIdx: -1 };
+  renderFear(); renderHope();
+  document.getElementById('scene-input').value = '';
+  document.getElementById('gm-session-notes').value = '';
+  document.getElementById('gm-plot-notes').value = '';
+  document.getElementById('gm-npc-notes').value = '';
+  document.getElementById('gm-loot-notes').value = '';
+  document.getElementById('clocks-list').innerHTML = '';
+  document.getElementById('adversaries-list').innerHTML = '';
+  renderAllPlayers();
+  saveGMData();
+}
+
+// ── LOAD PLAYERS ──
+function loadPlayers(input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        // Could be a single character or a multi-character export
+        const chars = data.characters || [data];
+        chars.forEach(char => {
+          if (!char.class) return;
+          // Check if player already loaded — update if so
+          const existingIdx = players.findIndex(p => p.class === char.class && p['f-name'] === char['f-name']);
+          const playerObj = buildPlayerObj(char, data);
+          if (existingIdx >= 0) players[existingIdx] = playerObj;
+          else players.push(playerObj);
+        });
+        renderAllPlayers();
+        saveGMData();
+      } catch(err) {
+        alert('Could not read file: ' + file.name);
+      }
+    };
+    reader.readAsText(file);
+  });
+  input.value = '';
+}
+
+function buildPlayerObj(char, exportData) {
+  const name = char['f-name'] || char.class || 'Unknown';
+  const portrait = exportData?.portraits?.[char.class] || null;
+  // Get active loadout
+  const loadoutKey = 'dh2-loadout-' + (char.class || '').toLowerCase();
+  // Build traits object
+  const traits = {};
+  ['agility','strength','finesse','instinct','presence','knowledge'].forEach(t => {
+    traits[t] = char['t-' + t] || '';
+  });
+  return {
+    name,
+    class: char.class || '',
+    subclass: char['f-subclass'] || '',
+    level: char['f-level'] || '1',
+    ancestry: char['f-ancestry'] || '',
+    community: char['f-community'] || '',
+    pronouns: char['f-pronouns'] || '',
+    evasion: char['f-evasion'] || '',
+    traits,
+    hp: char.hp ?? 0,
+    hpTotal: char.hpTotal ?? 5,
+    stress: char.stress ?? 0,
+    stressTotal: char.stressTotal ?? 6,
+    hope: char.hope ?? 0,
+    hopeTotal: char.hopeTotal ?? 6,
+    armor: char.armor ?? 0,
+    portrait,
+    appearance: char.appearance || '',
+    // GM notes per player
+    gmNotes: '',
+    // loadout from export if available
+    loadout: exportData?.loadouts?.[char.class] || [],
+    spotlit: false,
+  };
+}
+
+// ── RENDER PLAYERS ──
+let spotlightIdx = -1;
+
+function renderAllPlayers() {
+  const area = document.getElementById('players-area');
+  const empty = document.getElementById('players-empty');
+  if (!players.length) {
+    empty.style.display = 'flex';
+    // Remove all player cards
+    area.querySelectorAll('.player-card').forEach(el => el.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  // Remove existing cards and re-render
+  area.querySelectorAll('.player-card').forEach(el => el.remove());
+  players.forEach((p, i) => area.appendChild(buildPlayerCard(p, i)));
+  updateSpotlightDisplay();
+}
+
+function buildPlayerCard(p, idx) {
+  const card = document.createElement('div');
+  card.className = 'player-card' + (p.spotlit ? ' spotlight' : '');
+  card.id = 'pc-' + idx;
+
+  const initials = p.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+  const portraitHTML = p.portrait
+    ? `<img src="${p.portrait}" alt="">`
+    : initials;
+
+  // Traits
+  const traitOrder = ['agility','strength','finesse','instinct','presence','knowledge'];
+  const traitShort = { agility:'AGI', strength:'STR', finesse:'FIN', instinct:'INS', presence:'PRE', knowledge:'KNO' };
+  const traitsHTML = traitOrder.map(t => {
+    const v = p.traits[t];
+    const cls = !v ? '' : (parseFloat(v) > 0 ? ' pos' : parseFloat(v) < 0 ? ' neg' : '');
+    return `<div class="pc-trait">
+      <div class="pc-trait-name">${traitShort[t]}</div>
+      <div class="pc-trait-val${cls}">${v || '—'}</div>
+    </div>`;
+  }).join('');
+
+  // HP pips
+  const hpPips = Array.from({length: p.hpTotal}, (_, i) =>
+    `<div class="pip-m${i < p.hp ? ' hp-f' : ''}" onclick="togglePip(${idx},'hp',${i})"></div>`
+  ).join('');
+  const stressPips = Array.from({length: p.stressTotal}, (_, i) =>
+    `<div class="pip-m${i < p.stress ? ' stress-f' : ''}" onclick="togglePip(${idx},'stress',${i})"></div>`
+  ).join('');
+  const hopePips = Array.from({length: p.hopeTotal}, (_, i) =>
+    `<div class="pip-m${i < p.hope ? ' hope-f' : ''}" onclick="togglePip(${idx},'hope',${i})"></div>`
+  ).join('');
+
+  card.innerHTML = `
+    <div class="pc-header" onclick="toggleNotes(${idx})">
+      <div class="pc-portrait">${portraitHTML}</div>
+      <div class="pc-identity">
+        <div class="pc-name">${escHtml(p.name)}</div>
+        <div class="pc-class">${escHtml(p.class)}${p.subclass ? ' · ' + escHtml(p.subclass) : ''}</div>
+        <div class="pc-meta">Lv ${p.level}${p.ancestry ? ' · ' + escHtml(p.ancestry) : ''}${p.community ? ' · ' + escHtml(p.community) : ''}</div>
+      </div>
+      <button class="spotlight-btn" onclick="event.stopPropagation();toggleSpotlight(${idx})">${p.spotlit ? '★ Spotlight' : '☆ Spotlight'}</button>
+    </div>
+    <div class="pc-stats">
+      <div class="pc-stat">
+        <div class="pc-stat-label">HIT POINTS</div>
+        <div class="pip-mini">${hpPips}</div>
+        <div class="pc-stat-val" style="font-size:10px;color:var(--muted);">${p.hp} / ${p.hpTotal}</div>
+      </div>
+      <div class="pc-stat">
+        <div class="pc-stat-label">STRESS</div>
+        <div class="pip-mini">${stressPips}</div>
+        <div class="pc-stat-val" style="font-size:10px;color:var(--muted);">${p.stress} / ${p.stressTotal}</div>
+      </div>
+      <div class="pc-stat">
+        <div class="pc-stat-label">HOPE</div>
+        <div class="pip-mini">${hopePips}</div>
+        <div class="pc-stat-val" style="font-size:10px;color:var(--muted);">${p.hope} / ${p.hopeTotal}</div>
+      </div>
+      <div class="pc-stat">
+        <div class="pc-stat-label">EVA / ARMOR</div>
+        <div class="pc-stat-val">${p.evasion || '—'} <span style="color:var(--muted);font-size:10px;">/ ${p.armor}</span></div>
+      </div>
+    </div>
+    <div class="pc-traits">${traitsHTML}</div>
+    ${p.loadout?.length ? `<div class="pc-cards">${p.loadout.map(id => `<span class="pc-card-tag">${escHtml(id)}</span>`).join('')}</div>` : ''}
+    <div class="pc-notes-area" id="pc-notes-${idx}">
+      <textarea class="pc-notes" rows="3" placeholder="GM notes for ${escHtml(p.name)}..." oninput="updatePlayerNote(${idx}, this.value)">${escHtml(p.gmNotes || '')}</textarea>
+    </div>
+  `;
+  return card;
+}
+
+function toggleNotes(idx) {
+  const el = document.getElementById('pc-notes-' + idx);
+  if (el) el.classList.toggle('open');
+}
+
+function updatePlayerNote(idx, val) {
+  if (players[idx]) { players[idx].gmNotes = val; saveGMData(); }
+}
+
+function toggleSpotlight(idx) {
+  players.forEach((p, i) => p.spotlit = (i === idx && !p.spotlit));
+  spotlightIdx = players[idx]?.spotlit ? idx : -1;
+  renderAllPlayers();
+  updateSpotlightDisplay();
+  saveGMData();
+}
+
+function updateSpotlightDisplay() {
+  const lit = players.find(p => p.spotlit);
+  document.getElementById('spotlight-name').textContent = lit ? lit.name : '—';
+}
+
+function nextSpotlight() {
+  if (!players.length) return;
+  spotlightIdx = (spotlightIdx + 1) % players.length;
+  players.forEach((p, i) => p.spotlit = i === spotlightIdx);
+  renderAllPlayers();
+  updateSpotlightDisplay();
+  saveGMData();
+}
+
+function prevSpotlight() {
+  if (!players.length) return;
+  spotlightIdx = (spotlightIdx - 1 + players.length) % players.length;
+  players.forEach((p, i) => p.spotlit = i === spotlightIdx);
+  renderAllPlayers();
+  updateSpotlightDisplay();
+  saveGMData();
+}
+
+function togglePip(playerIdx, type, pipIdx) {
+  const p = players[playerIdx];
+  if (!p) return;
+  const curKey = type; // 'hp', 'stress', 'hope'
+  const totalKey = type + 'Total';
+  const cur = p[curKey];
+  // Click filled pip = reduce, click empty = increase
+  if (pipIdx < cur) p[curKey] = pipIdx;
+  else p[curKey] = pipIdx + 1;
+  renderAllPlayers();
+  saveGMData();
+}
+
+// ── FEAR / HOPE TABLE ──
+function renderFear() {
+  const count = document.getElementById('fear-count');
+  if (count) count.textContent = gmData.fear;
+  const pips = document.getElementById('fear-pips');
+  if (!pips) return;
+  pips.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const p = document.createElement('div');
+    p.className = 't-pip fear' + (i < gmData.fear ? ' filled' : '');
+    p.onclick = () => { gmData.fear = i < gmData.fear ? i : i + 1; renderFear(); saveGMData(); };
+    pips.appendChild(p);
+  }
+}
+
+function renderHope() {
+  const count = document.getElementById('hope-count');
+  if (count) count.textContent = gmData.hope;
+  const pips = document.getElementById('hope-pips');
+  if (!pips) return;
+  pips.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const p = document.createElement('div');
+    p.className = 't-pip hope' + (i < gmData.hope ? ' filled' : '');
+    p.onclick = () => { gmData.hope = i < gmData.hope ? i : i + 1; renderHope(); saveGMData(); };
+    pips.appendChild(p);
+  }
+}
+
+function adjustFear(d) { gmData.fear = Math.max(0, Math.min(10, gmData.fear + d)); renderFear(); saveGMData(); }
+function adjustHope(d) { gmData.hope = Math.max(0, Math.min(10, gmData.hope + d)); renderHope(); saveGMData(); }
+
+// ── PANEL TABS ──
+function switchPanel(name, btn) {
+  ['notes','clocks','adversaries'].forEach(n => {
+    document.getElementById('panel-' + n).style.display = n === name ? '' : 'none';
+  });
+  document.querySelectorAll('.panel-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── CLOCKS ──
+let clockData = [];
+
+function addClock(name='', total=8, filled=0, isRed=false) {
+  clockData.push({ name, total, filled, isRed });
+  renderClocks(clockData);
+  saveGMData();
+}
+
+function renderClocks(data) {
+  clockData = data;
+  const list = document.getElementById('clocks-list');
+  list.innerHTML = '';
+  data.forEach((c, i) => {
+    const row = document.createElement('div');
+    row.className = 'clock-row';
+    const pips = Array.from({length: c.total}, (_, j) =>
+      `<div class="clock-pip${j < c.filled ? ' filled' + (c.isRed ? ' red' : '') : ''}" onclick="toggleClockPip(${i},${j})"></div>`
+    ).join('');
+    row.innerHTML = `
+      <input class="clock-name" value="${escHtml(c.name)}" placeholder="Clock name..." oninput="updateClockName(${i},this.value)">
+      <select style="font-family:'Cinzel',serif;font-size:9px;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:4px 6px;border-radius:3px;outline:none;" onchange="updateClockSize(${i},this.value)">
+        ${[4,6,8,10,12].map(n=>`<option value="${n}"${n===c.total?' selected':''}>${n}</option>`).join('')}
+      </select>
+      <label style="display:flex;align-items:center;gap:3px;font-family:'Cinzel',serif;font-size:8px;color:var(--muted);cursor:pointer;">
+        <input type="checkbox" style="width:auto;" ${c.isRed?'checked':''} onchange="toggleClockColor(${i},this.checked)"> Danger
+      </label>
+      <div class="clock-pips">${pips}</div>
+      <button class="clock-rm" onclick="removeClock(${i})">×</button>`;
+    list.appendChild(row);
+  });
+}
+
+function toggleClockPip(ci, pi) {
+  clockData[ci].filled = pi < clockData[ci].filled ? pi : pi + 1;
+  renderClocks(clockData); saveGMData();
+}
+function updateClockName(ci, v) { clockData[ci].name = v; saveGMData(); }
+function updateClockSize(ci, v) { clockData[ci].total = parseInt(v); clockData[ci].filled = Math.min(clockData[ci].filled, clockData[ci].total); renderClocks(clockData); saveGMData(); }
+function toggleClockColor(ci, v) { clockData[ci].isRed = v; renderClocks(clockData); saveGMData(); }
+function removeClock(ci) { clockData.splice(ci, 1); renderClocks(clockData); saveGMData(); }
+function saveClocks() { return clockData; }
+
+// ── ADVERSARIES ──
+let advData = [];
+
+function addAdversary(name='', hp=5, marked=0, notes='') {
+  advData.push({ name, hp, marked, notes });
+  renderAdversaries(advData);
+  saveGMData();
+}
+
+function renderAdversaries(data) {
+  advData = data;
+  const list = document.getElementById('adversaries-list');
+  list.innerHTML = '';
+  data.forEach((a, i) => {
+    const card = document.createElement('div');
+    card.className = 'adv-card';
+    const pips = Array.from({length: a.hp}, (_, j) =>
+      `<div class="adv-pip${j < a.marked ? ' marked' : ''}" onclick="toggleAdvPip(${i},${j})"></div>`
+    ).join('');
+    card.innerHTML = `
+      <div class="adv-header">
+        <input class="adv-name-input" value="${escHtml(a.name)}" placeholder="Adversary name..." oninput="updateAdvName(${i},this.value)">
+        <label style="font-family:'Cinzel',serif;font-size:8px;color:var(--muted);display:flex;align-items:center;gap:4px;">
+          HP: <input type="number" min="1" max="30" value="${a.hp}" style="width:40px;font-family:'Cinzel',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:2px 5px;border-radius:3px;outline:none;" onchange="updateAdvHp(${i},this.value)">
+        </label>
+        <button class="clock-rm" onclick="removeAdv(${i})">×</button>
+      </div>
+      <div class="adv-hp-row">
+        <div class="adv-hp-label">HP</div>
+        <div class="adv-hp-pips">${pips}</div>
+      </div>
+      <textarea class="adv-notes-input" rows="2" placeholder="Notes, abilities, conditions..." oninput="updateAdvNotes(${i},this.value)">${escHtml(a.notes)}</textarea>`;
+    list.appendChild(card);
+  });
+}
+
+function toggleAdvPip(ai, pi) {
+  advData[ai].marked = pi < advData[ai].marked ? pi : pi + 1;
+  renderAdversaries(advData); saveGMData();
+}
+function updateAdvName(ai, v) { advData[ai].name = v; saveGMData(); }
+function updateAdvNotes(ai, v) { advData[ai].notes = v; saveGMData(); }
+function updateAdvHp(ai, v) { advData[ai].hp = Math.max(1, parseInt(v)||1); advData[ai].marked = Math.min(advData[ai].marked, advData[ai].hp); renderAdversaries(advData); saveGMData(); }
+function removeAdv(ai) { advData.splice(ai, 1); renderAdversaries(advData); saveGMData(); }
+function saveAdversaries() { return advData; }
+
+// ── UTILS ──
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+// ── PIN RESET ──
+// Hold Shift+R for 3 seconds on the lock screen to reset PIN
+let resetTimer = null;
+document.addEventListener('keydown', e => {
+  if (document.getElementById('lock-screen').style.display !== 'none') {
+    if (e.key === 'r' && e.shiftKey) {
+      resetTimer = setTimeout(() => {
+        if (confirm('Reset GM PIN? You will need to set a new one.')) {
+          localStorage.removeItem(DM_PIN_KEY);
+          showLockError('PIN reset. Set a new one.');
+        }
+      }, 2000);
+    }
+  }
+});
+document.addEventListener('keyup', () => clearTimeout(resetTimer));
+</script>
+</body>
+</html>
