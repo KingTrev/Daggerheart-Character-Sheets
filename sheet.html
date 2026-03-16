@@ -726,6 +726,9 @@ html[data-theme="light"] .shield-pip.filled .pip-shape { fill: var(--teal-faint)
 .hope-pip.filled .pip-shape { fill: var(--gold); stroke: var(--gold); }
 .hope-pip:hover { transform: scale(1.15); }
 .hope-pip:hover .pip-shape { stroke: var(--gold); }
+.hope-pip.scar { opacity: 0.3; cursor: not-allowed; }
+.hope-pip.scar .pip-shape { fill: var(--red-faint); stroke: var(--red-dim); }
+.hope-pip.scar:hover { transform: none; }
 
 .prof-row { display: flex; gap: 5px; align-items: center; justify-content: center; margin: 4px 0; }
 .prof-dot {
@@ -1102,6 +1105,7 @@ body { font-size: 15px; }
     </div>
   </div>
   <div class="header-actions">
+    <a class="hbtn" href="index.html" style="text-decoration:none;" title="Back to home">🏠 Home</a>
     <button class="hbtn icon" id="theme-btn-hdr" onclick="toggleTheme()" title="Toggle theme">☀</button>
     <button class="hbtn" onclick="exportCharacters()" title="Export all characters to a file">⬇ Export</button>
     <button class="hbtn" onclick="document.getElementById('import-file-input').click()" title="Import characters from a file">⬆ Import</button>
