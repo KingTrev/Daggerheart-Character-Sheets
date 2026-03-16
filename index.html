@@ -818,8 +818,8 @@ html[data-theme="light"] .card-type-badge.ABILITY { background: #e8f4e8; color: 
 html[data-theme="light"] .card-type-badge.GRIMOIRE { background: #f4e8f4; color: #7a2a7a; border-color: #c9c; }
 .card-level { font-family: 'Cinzel', serif; font-size: 9px; font-weight: 700; color: var(--gold); margin-left: auto; white-space: nowrap; }
 .card-domain-tag { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: var(--muted); white-space: nowrap; }
-.card-name { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; color: var(--text); padding: 8px 10px 4px; letter-spacing: 0.04em; }
-.card-body { font-size: 12px; line-height: 1.6; color: var(--text); padding: 0 10px 8px; flex: 1; }
+.card-name { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; color: var(--text); padding: 10px 12px 5px; letter-spacing: 0.04em; }
+.card-body { font-size: 13.5px; line-height: 1.7; color: var(--text); padding: 0 12px 10px; flex: 1; }
 .card-body strong { font-weight: 700; }
 .card-body em { font-style: italic; }
 .card-actions { padding: 6px 10px; border-top: 1px solid var(--border); display: flex; gap: 6px; }
@@ -1129,7 +1129,7 @@ html[data-theme="light"] .custom-bgq-row { background: var(--bg4) !important; bo
           </div>
           <div class="page-inner">
             <p style="font-size:12px;color:var(--muted);font-style:italic;margin-bottom:0.75rem;">Your active domain cards. Maximum 5. Click a card below to add it, or click × to remove from loadout.</p>
-            <div id="loadout-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.75rem;">
+            <div id="loadout-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0.75rem;">
               <div id="loadout-empty" style="grid-column:1/-1;text-align:center;padding:1.5rem;font-size:13px;color:var(--muted);font-style:italic;">No cards in loadout yet. Browse cards below and click Add to Loadout.</div>
             </div>
           </div>
@@ -1139,24 +1139,34 @@ html[data-theme="light"] .custom-bgq-row { background: var(--bg4) !important; bo
         <div class="page">
           <div class="section-block-header" style="flex-wrap:wrap;gap:0.5rem;">
             <div class="section-block-title">Card Browser</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-              <label style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.08em;color:var(--muted);display:flex;align-items:center;gap:4px;cursor:pointer;">
-                <input type="checkbox" id="cards-show-all" onchange="renderCardBrowser()" style="width:auto;">
-                Show all domains
-              </label>
-              <select id="cards-filter-type" onchange="renderCardBrowser()" style="font-family:'Cinzel',serif;font-size:9px;padding:3px 7px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:3px;">
+          </div>
+          <div class="page-inner" style="padding-top:0.75rem;">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
+              <input type="text" id="cards-search" oninput="renderCardBrowser()" placeholder="Search cards..." style="font-family:'Crimson Pro',serif;font-size:13px;padding:5px 10px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);border-radius:4px;outline:none;flex:1;min-width:160px;">
+              <select id="cards-filter-domain" onchange="renderCardBrowser()" style="font-family:'Cinzel',serif;font-size:9px;padding:5px 8px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);border-radius:4px;outline:none;">
+                <option value="">All Domains</option>
+                <option value="__class__">My Class Only</option>
+                <option value="Arcana">Arcana</option>
+                <option value="Blade">Blade</option>
+                <option value="Bone">Bone</option>
+                <option value="Codex">Codex</option>
+                <option value="Grace">Grace</option>
+                <option value="Midnight">Midnight</option>
+                <option value="Sage">Sage</option>
+                <option value="Splendor">Splendor</option>
+                <option value="Valor">Valor</option>
+              </select>
+              <select id="cards-filter-type" onchange="renderCardBrowser()" style="font-family:'Cinzel',serif;font-size:9px;padding:5px 8px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);border-radius:4px;outline:none;">
                 <option value="">All Types</option>
                 <option value="SPELL">Spell</option>
                 <option value="ABILITY">Ability</option>
                 <option value="GRIMOIRE">Grimoire</option>
               </select>
-              <select id="cards-filter-level" onchange="renderCardBrowser()" style="font-family:'Cinzel',serif;font-size:9px;padding:3px 7px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:3px;">
+              <select id="cards-filter-level" onchange="renderCardBrowser()" style="font-family:'Cinzel',serif;font-size:9px;padding:5px 8px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);border-radius:4px;outline:none;">
                 <option value="">All Levels</option>
                 ${[1,2,3,4,5,6,7,8,9,10].map(l=>`<option value="${l}">Level ${l}</option>`).join('')}
               </select>
             </div>
-          </div>
-          <div class="page-inner" style="padding-top:0.75rem;">
             <div id="card-browser"></div>
           </div>
         </div>
