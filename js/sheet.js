@@ -250,7 +250,8 @@ function onMixedAncestryChange() {
   if (feat1div) {
     const d = a1 && ANCESTRY_DATA[a1];
     if (d && d.features[0]) {
-      feat1div.innerHTML = '<strong>' + d.features[0].name + ':</strong> ' + d.features[0].text;
+      const txt = d.features[0].text.length > 80 ? d.features[0].text.substring(0,80)+'…' : d.features[0].text;
+      feat1div.innerHTML = '<strong>' + d.features[0].name + '</strong> — ' + txt;
       feat1div.style.display = 'block';
     } else {
       feat1div.style.display = 'none';
@@ -260,7 +261,8 @@ function onMixedAncestryChange() {
     const d = a2 && ANCESTRY_DATA[a2];
     if (d) {
       const feat = d.features[1] || d.features[0];
-      feat2div.innerHTML = '<strong>' + feat.name + ':</strong> ' + feat.text;
+      const txt = feat.text.length > 80 ? feat.text.substring(0,80)+'…' : feat.text;
+      feat2div.innerHTML = '<strong>' + feat.name + '</strong> — ' + txt;
       feat2div.style.display = 'block';
     } else {
       feat2div.style.display = 'none';
@@ -409,17 +411,21 @@ function buildPages(cls) {
                 <option value="">Ancestry...</option>
                 ${Object.keys(ANCESTRY_DATA).map(a=>`<option value="${a}">${a}</option>`).join('')}
               </select>
-              <div id="mixed-ancestry-pickers" style="display:none;margin-top:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:8px 10px;">
-                <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--teal);margin-bottom:6px;">MIXED ANCESTRY — CHOOSE TWO</div>
-                <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">First feature from one ancestry, second feature from another.</div>
-                <select id="f-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:5px 8px;border-radius:3px;outline:none;margin-bottom:5px;" onchange="onMixedAncestryChange();save()">
-                  <option value="">— First feature from... —</option>
-                </select>
-                <div id="mixed-feat-1" style="font-size:11px;color:var(--muted);padding:4px 6px;border-left:2px solid var(--teal);margin-bottom:6px;display:none;"></div>
-                <select id="f-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:5px 8px;border-radius:3px;outline:none;margin-bottom:5px;" onchange="onMixedAncestryChange();save()">
-                  <option value="">— Second feature from... —</option>
-                </select>
-                <div id="mixed-feat-2" style="font-size:11px;color:var(--muted);padding:4px 6px;border-left:2px solid var(--gold-dim);display:none;"></div>
+              <div id="mixed-ancestry-pickers" style="display:none;margin-top:4px;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:6px 8px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+                  <div>
+                    <select id="f-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:3px 6px;border-radius:3px;outline:none;" onchange="onMixedAncestryChange();save()">
+                      <option value="">1st feature from...</option>
+                    </select>
+                    <div id="mixed-feat-1" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--teal);margin-top:3px;display:none;line-height:1.4;"></div>
+                  </div>
+                  <div>
+                    <select id="f-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:3px 6px;border-radius:3px;outline:none;" onchange="onMixedAncestryChange();save()">
+                      <option value="">2nd feature from...</option>
+                    </select>
+                    <div id="mixed-feat-2" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--gold-dim);margin-top:3px;display:none;line-height:1.4;"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
