@@ -1443,8 +1443,6 @@ function save() {
   localStorage.setItem('dh2-last-class', currentClass);
   renderSidebar();
   applyHintsPref();
-  // Handle incoming S0 transfer
-  applyS0Transfer();
 }
 
 function fillSuggestedTraits() {
@@ -2072,13 +2070,14 @@ function initTheme() {
 // ── INIT ──
 initTheme();
 loadSheet();
+applyS0Transfer(); // must run after loadSheet
 renderSidebar();
 // restore last active tab
 const savedTab = localStorage.getItem('dh2-active-tab');
 if (savedTab === 'notes') showSheetTab('notes');
 else if (savedTab === 'cards') showSheetTab('cards');
 else if (savedTab === 'ref') showSheetTab('ref');
-else if (savedTab === 's0') showSheetTab('s0');
+// s0 tab removed — S0 is now at s0.html
 
 function newCharViaS0() {
   closeNewCharModal();
