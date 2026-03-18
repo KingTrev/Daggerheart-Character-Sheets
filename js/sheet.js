@@ -468,9 +468,9 @@ function buildPages(cls) {
       <div style="margin-top:0.75rem;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
           <span class="ey">Description</span>
-          <span style="font-family:'Crimson Pro',serif;font-size:11px;color:var(--muted);">${c.descOptions.clothes && `Clothes: ${c.descOptions.clothes}`}</span>
+          <span class="hint-text" style="font-family:'Crimson Pro',serif;font-size:11px;color:var(--muted);">${c.descOptions.clothes && `Clothes: ${c.descOptions.clothes}`}</span>
         </div>
-        <div style="font-family:'Crimson Pro',serif;font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:6px;">
+        <div class="hint-text" style="font-family:'Crimson Pro',serif;font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:6px;">
           <span>${c.descOptions.eyes ? `Eyes like ${c.descOptions.eyes} · ` : ''}${c.descOptions.body ? `Body: ${c.descOptions.body} · ` : ''}${c.descOptions.skin ? `Skin: ${c.descOptions.skin} · ` : ''}${c.descOptions.attitude ? `Attitude like ${c.descOptions.attitude}` : ''}</span>
         </div>
         <textarea id="appearance" rows="2" placeholder="Describe your character's appearance..." oninput="save()" style="resize:none;font-size:13px;"></textarea>
@@ -733,10 +733,10 @@ function buildPages(cls) {
         <div class="page-inner" style="padding-top:0.75rem;">
           <div class="p2-grid">
             <div class="p2-left">
-              <div><div class="sh">Suggested Traits</div><p style="font-size:13px;line-height:1.7;">${c.suggestedTraits.replace(/\n/g,'<br>')}</p></div>
-              <div><div class="sh">Suggested Primary Weapon</div><p style="font-size:13px;line-height:1.7;">${c.suggestedPrimary.replace(/\n/g,'<br>')}</p></div>
-              ${c.suggestedSecondary?`<div><div class="sh">Suggested Secondary Weapon</div><p style="font-size:13px;line-height:1.7;">${c.suggestedSecondary.replace(/\n/g,'<br>')}</p></div>`:''}
-              <div><div class="sh">Suggested Armor</div><p style="font-size:13px;line-height:1.7;">${c.suggestedArmor.replace(/\n/g,'<br>')}</p></div>
+              <div class="hint-text"><div class="sh">Suggested Traits</div><p style="font-size:13px;line-height:1.7;">${c.suggestedTraits.replace(/\n/g,'<br>')}</p></div>
+              <div class="hint-text"><div class="sh">Suggested Primary Weapon</div><p style="font-size:13px;line-height:1.7;">${c.suggestedPrimary.replace(/\n/g,'<br>')}</p></div>
+              ${c.suggestedSecondary?`<div class="hint-text"><div class="sh">Suggested Secondary Weapon</div><p style="font-size:13px;line-height:1.7;">${c.suggestedSecondary.replace(/\n/g,'<br>')}</p></div>`:''}
+              <div class="hint-text"><div class="sh">Suggested Armor</div><p style="font-size:13px;line-height:1.7;">${c.suggestedArmor.replace(/\n/g,'<br>')}</p></div>
               <div><div class="sh">Starting Inventory</div><p style="font-size:12px;line-height:1.8;">${c.startingInventory.replace(/\n/g,'<br>')}</p></div>
 
             </div>
@@ -1028,8 +1028,8 @@ function renderS0() {
           <div style="font-family:'Cinzel',serif;font-size:9px;color:var(--teal);margin-bottom:3px;">CORE FEATURE</div>
           <p style="font-size:13px;font-weight:600;margin-bottom:4px;">${c.featureName}</p>
           <p style="font-size:12px;line-height:1.7;color:var(--muted);">${c.featureBody.replace(/<[^>]*>/g,'').substring(0,300)}...</p>
-          <div style="margin-top:10px;font-family:'Cinzel',serif;font-size:9px;color:var(--teal);">SUGGESTED TRAITS</div>
-          <p style="font-size:12px;margin-top:3px;">${c.suggestedTraits.replace(/\n/g,' · ')}</p>
+          <div style="margin-top:10px;font-family:'Cinzel',serif;font-size:9px;color:var(--teal);" class="hint-text">SUGGESTED TRAITS</div>
+          <p style="font-size:12px;margin-top:3px;" class="hint-text">${c.suggestedTraits.replace(/\n/g,' · ')}</p>
           <div style="margin-top:8px;font-family:'Cinzel',serif;font-size:9px;color:var(--teal);">STARTING EVASION</div>
           <p style="font-size:14px;font-weight:700;color:var(--gold);margin-top:2px;">${c.evasionStart}</p>
         </div>`;
