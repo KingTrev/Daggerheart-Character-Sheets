@@ -1197,6 +1197,308 @@ body { font-size: 15px; }
 /* Portrait placeholder */
 .portrait-placeholder { font-size: 9px; }
 
+
+/* ═══════════════════════════════════════════════
+   UIX ENHANCEMENT LAYER
+   Injected on top of base styles — no HTML changes
+   ═══════════════════════════════════════════════ */
+
+/* ── GRAIN TEXTURE ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+/* ── APP HEADER — subtle glow on brand ── */
+.app-header {
+  background: linear-gradient(180deg, #0c0e10 0%, var(--bg2) 100%);
+  border-bottom-color: rgba(201,168,76,0.15);
+}
+.brand-mark {
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(201,168,76,0.15);
+}
+
+/* ── TAB BAR — refined ── */
+.tab-bar {
+  background: var(--bg2);
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+.tab-btn {
+  transition: color 0.2s, border-color 0.2s;
+  position: relative;
+}
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 50%; right: 50%;
+  height: 2px;
+  background: var(--gold);
+  transition: left 0.2s ease, right 0.2s ease;
+}
+.tab-btn.active::after {
+  left: 12px; right: 12px;
+}
+.tab-btn:not(.active):hover::after {
+  left: 40%; right: 40%;
+  opacity: 0.4;
+}
+
+/* ── CLASS HEADER — more atmosphere ── */
+.class-header {
+  background: linear-gradient(160deg, #0e1012 0%, #080909 100%);
+  border-bottom: 1px solid rgba(201,168,76,0.12);
+  position: relative;
+  overflow: hidden;
+}
+.class-header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.class-name-big {
+  background: linear-gradient(135deg, var(--text) 40%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(201,168,76,0.1));
+}
+.class-domains {
+  letter-spacing: 0.14em;
+}
+
+/* ── HP PIPS — larger, more tactile ── */
+.hpbox {
+  width: 26px !important;
+  height: 24px !important;
+  transition: transform 0.1s ease, filter 0.15s !important;
+}
+.hpbox:hover { transform: scale(1.2) !important; }
+.hpbox.filled { filter: drop-shadow(0 0 4px rgba(192,64,64,0.6)); }
+.hpbox.filled .pip-shape { transition: all 0.15s ease !important; }
+
+/* ── STRESS PIPS ── */
+.stressbox {
+  width: 18px !important;
+  height: 26px !important;
+  transition: transform 0.1s ease !important;
+}
+.stressbox:hover { transform: scale(1.2) !important; }
+.stressbox.filled { filter: drop-shadow(0 0 3px rgba(122,40,40,0.7)); }
+
+/* ── HOPE PIPS — golden glow ── */
+.hope-pip {
+  width: 30px !important;
+  height: 30px !important;
+  transition: transform 0.15s ease !important;
+}
+.hope-pip:hover { transform: scale(1.2) !important; }
+.hope-pip.filled {
+  filter: drop-shadow(0 0 6px rgba(201,168,76,0.7));
+  animation: hope-pulse 2s ease-in-out infinite;
+}
+@keyframes hope-pulse {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(201,168,76,0.6)); }
+  50%       { filter: drop-shadow(0 0 10px rgba(201,168,76,0.9)); }
+}
+
+/* ── ARMOR PIPS (shield) ── */
+.shield-pip {
+  width: 24px !important;
+  height: 28px !important;
+  transition: transform 0.1s !important;
+}
+.shield-pip:hover { transform: scale(1.15) !important; }
+.shield-pip.filled { filter: drop-shadow(0 0 4px rgba(58,138,128,0.6)); }
+
+/* ── FEATURE CARDS ── */
+.feature-card {
+  border-radius: 8px !important;
+  transition: box-shadow 0.2s ease !important;
+  overflow: hidden;
+}
+.feature-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+}
+.feature-card-header {
+  transition: background 0.15s !important;
+}
+.feature-card:not(.collapsed) .feature-card-header {
+  background: linear-gradient(135deg, var(--bg3) 0%, var(--bg4) 100%) !important;
+}
+
+/* ── SECTION BLOCKS ── */
+.section-block {
+  border-radius: 8px !important;
+  overflow: hidden;
+  transition: box-shadow 0.2s !important;
+}
+.section-block:hover {
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3) !important;
+}
+.section-block-header {
+  background: linear-gradient(135deg, var(--bg3) 0%, var(--bg4) 100%) !important;
+}
+
+/* ── DOMAIN CARDS — card flip feel ── */
+.card-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  border-radius: 8px !important;
+}
+.card-item:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
+}
+.card-add-btn, .card-remove-btn {
+  transition: all 0.15s ease !important;
+}
+.card-add-btn:hover {
+  background: var(--gold-faint) !important;
+  border-color: var(--gold-dim) !important;
+  color: var(--gold) !important;
+  transform: scale(1.05);
+}
+.card-remove-btn:hover {
+  background: var(--red-faint) !important;
+  border-color: var(--red-dim) !important;
+  color: var(--red) !important;
+}
+
+/* ── LOADOUT CARDS — glow when equipped ── */
+.lq-card {
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+.lq-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.15) !important;
+}
+
+/* ── TRAIT BLOCKS ── */
+.trait-block {
+  border-radius: 8px !important;
+  transition: box-shadow 0.2s, border-color 0.2s !important;
+}
+.trait-block:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+.trait-value {
+  transition: color 0.15s, text-shadow 0.15s !important;
+}
+
+/* ── INPUTS — subtle glow on focus ── */
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  outline: none !important;
+  box-shadow: 0 1px 0 var(--gold-dim) !important;
+}
+
+/* ── BUTTONS — Save button glow ── */
+#save-btn {
+  transition: all 0.2s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+#save-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.08) 100%);
+  pointer-events: none;
+}
+#save-btn:hover {
+  box-shadow: 0 0 16px rgba(201,168,76,0.3) !important;
+  transform: translateY(-1px);
+}
+
+/* ── SAVE FLASH ── */
+@keyframes save-flash {
+  0%   { box-shadow: 0 0 0 rgba(201,168,76,0); }
+  30%  { box-shadow: 0 0 24px rgba(201,168,76,0.5); }
+  100% { box-shadow: 0 0 0 rgba(201,168,76,0); }
+}
+body.just-saved #save-btn {
+  animation: save-flash 0.8s ease forwards;
+}
+
+/* ── SIDEBAR CHARACTER ITEMS ── */
+.char-item {
+  border-radius: 6px !important;
+  transition: all 0.15s ease !important;
+}
+.char-item:hover {
+  background: var(--bg3) !important;
+  border-color: var(--border2) !important;
+  transform: translateX(2px);
+}
+.char-item.active {
+  border-left: 2px solid var(--gold-dim) !important;
+  padding-left: calc(0.75rem - 1px) !important;
+}
+
+/* ── PORTRAIT SLOT ── */
+.portrait-slot {
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+  overflow: hidden;
+}
+.portrait-slot:hover {
+  border-color: var(--gold-dim) !important;
+  box-shadow: 0 0 16px rgba(201,168,76,0.15) !important;
+}
+
+/* ── MOBILE CHARACTER BAR ── */
+.mob-char-bar {
+  background: linear-gradient(180deg, #0c0e10 0%, var(--bg2) 100%) !important;
+  border-bottom-color: rgba(201,168,76,0.1) !important;
+}
+
+/* ── PAGE TRANSITIONS ── */
+.page {
+  animation: pageIn 0.25s ease;
+}
+@keyframes pageIn {
+  from { opacity: 0.6; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SCROLLBARS ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(201,168,76,0.15);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(201,168,76,0.3);
+}
+
+/* ── LIGHT THEME OVERRIDES ── */
+html[data-theme="light"] .class-header {
+  background: linear-gradient(160deg, #ede9e3 0%, #e6e1da 100%) !important;
+}
+html[data-theme="light"] .class-header::before {
+  background: radial-gradient(ellipse, rgba(122,101,48,0.06) 0%, transparent 70%);
+}
+html[data-theme="light"] .class-name-big {
+  background: linear-gradient(135deg, #1a1814 60%, #7a6530 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+html[data-theme="light"] .tab-bar {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+html[data-theme="light"] .app-header {
+  background: linear-gradient(180deg, #f0ede8 0%, #ede9e3 100%);
+}
+
 </style>
 </head>
 <body>

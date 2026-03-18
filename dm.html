@@ -375,6 +375,139 @@ html[data-theme="light"] {
   .session-title-input{font-size:13px;}
   select,input{font-size:15px;}
 }
+
+/* ═══════════════════════════════
+   DM SCREEN UIX ENHANCEMENT
+   ═══════════════════════════════ */
+
+/* ── GRAIN ── */
+body::after {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:0.5;
+}
+
+/* ── HEADER GLOW ── */
+.hdr {
+  background: linear-gradient(180deg, #0c0e10 0%, var(--bg2) 100%) !important;
+  border-bottom: 1px solid rgba(192,64,64,0.15) !important;
+}
+.hdr-brand { text-shadow: 0 0 20px rgba(192,64,64,0.3); }
+
+/* ── FEAR TRACKER — dramatic red glow ── */
+.fear-tracker .pip.on {
+  box-shadow: 0 0 8px rgba(192,64,64,0.7), inset 0 0 4px rgba(192,64,64,0.3) !important;
+}
+.fear-tracker .pip {
+  transition: all 0.15s ease !important;
+}
+.fear-tracker .pip:hover {
+  transform: scale(1.15) !important;
+  border-color: var(--red) !important;
+}
+
+/* ── HOPE TRACKER — golden glow ── */
+.hope-tracker .pip.on {
+  box-shadow: 0 0 8px rgba(201,168,76,0.6), inset 0 0 4px rgba(201,168,76,0.2) !important;
+}
+.hope-tracker .pip:hover {
+  transform: scale(1.15) !important;
+}
+
+/* ── ACTION TOKENS ── */
+.at-token {
+  transition: all 0.15s ease !important;
+}
+.at-token.on {
+  box-shadow: 0 0 8px rgba(58,138,128,0.6) !important;
+}
+.at-token:hover { transform:scale(1.15) !important; }
+
+/* ── TRACKER PANELS ── */
+.tracker-panel {
+  border-radius: 10px !important;
+  transition: box-shadow 0.2s !important;
+  background: linear-gradient(160deg, var(--bg2) 0%, var(--bg) 100%) !important;
+}
+.tracker-panel:hover {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
+}
+
+/* ── SECTION PANELS ── */
+.panel {
+  border-radius: 10px !important;
+  transition: box-shadow 0.2s !important;
+}
+.panel:hover {
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3) !important;
+}
+.panel-hdr {
+  background: linear-gradient(135deg, var(--bg3) 0%, var(--bg4) 100%) !important;
+}
+
+/* ── CLOCKS ── */
+.clock-seg {
+  transition: all 0.2s ease !important;
+}
+.clock-seg.filled {
+  box-shadow: inset 0 0 8px rgba(201,168,76,0.2) !important;
+}
+.clock-seg:hover {
+  filter: brightness(1.2) !important;
+}
+
+/* ── PLAYER STRIP ── */
+.pc-card {
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+.pc-card:hover {
+  border-color: var(--border2) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+  transform: translateY(-1px);
+}
+.mpip {
+  transition: all 0.12s ease !important;
+}
+.mpip:hover { transform: scale(1.2) !important; }
+.mpip.on { box-shadow: 0 0 4px currentColor !important; }
+
+/* ── SPOTLIGHT BANNER ── */
+.spotlight-banner {
+  background: linear-gradient(135deg, var(--gold-faint), rgba(201,168,76,0.08)) !important;
+  border: 1px solid var(--gold-dim) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 20px rgba(201,168,76,0.1) !important;
+}
+
+/* ── BUTTONS ── */
+.add-btn, .ctrl-btn {
+  transition: all 0.15s ease !important;
+}
+.add-btn:hover {
+  border-color: var(--gold-dim) !important;
+  color: var(--gold) !important;
+  background: var(--gold-faint) !important;
+}
+
+/* ── SESSION NOTES ── */
+.notes-area {
+  transition: border-color 0.15s, box-shadow 0.15s !important;
+}
+.notes-area:focus {
+  border-color: var(--gold-dim) !important;
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.1) !important;
+  outline: none;
+}
+
+/* ── SCROLLBARS ── */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:rgba(201,168,76,0.12); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(201,168,76,0.25); }
+
+/* ── HOME LINK ── */
+.hdr a:hover { color: var(--text) !important; }
 </style>
 </head>
 <body>
