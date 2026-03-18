@@ -307,11 +307,16 @@ body{
 <script>
 // ── BOOT ──
 document.addEventListener('DOMContentLoaded', () => {
+  // If coming from "New Character", start completely fresh
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('fresh') === '1') {
+    localStorage.removeItem('dh2-s0-wizard');
+    // Clean URL without reload
+    history.replaceState({}, '', 's0.html');
+  }
+
   loadS0Data();
   renderS0();
-
-  // s0ApplyAndGo wires the final "Apply to Sheet" button
-  window.s0ApplyAndGo = s0ApplyAndGo;
 });
 
 function s0Restart() {
