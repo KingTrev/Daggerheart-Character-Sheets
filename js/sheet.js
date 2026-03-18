@@ -392,6 +392,7 @@ function buildPages(cls) {
         <div class="class-domains">${c.domains}</div>
         <button onclick="showChangeClassModal()" style="margin-top:8px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 8px;border-radius:3px;cursor:pointer;width:100%;">↺ Change Class</button>
       </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;">
       <div class="portrait-slot" onclick="document.getElementById('portrait-upload').click()" title="Click to upload portrait">
         <img id="portrait-img" src="" style="display:none;">
         <div class="portrait-placeholder" id="portrait-placeholder">
@@ -444,6 +445,7 @@ function buildPages(cls) {
           <div class="char-level-field"><span class="ey">Level</span><input type="number" id="f-level" min="1" max="10" placeholder="1" oninput="save()"></div>
         </div>
       </div>
+      </div><!-- /portrait+fields row -->
     </div>
     <div class="page-inner">
 
