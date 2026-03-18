@@ -1139,21 +1139,8 @@ body { font-size: 15px; }
 
     <div class="nav-divider" id="nav-class-divider" style="display:none;"></div>
     <div class="nav-section" id="nav-class-section" style="display:none;">
-      <div class="nav-section-label">Class</div>
-      <div style="padding: 0 0.75rem 0.75rem;">
-        <select class="class-select" id="class-picker" onchange="switchClass(this.value)" style="width:100%;">
-          <option value="">— Choose —</option>
-          <option value="Bard">Bard</option>
-          <option value="Druid">Druid</option>
-          <option value="Guardian">Guardian</option>
-          <option value="Ranger">Ranger</option>
-          <option value="Rogue">Rogue</option>
-          <option value="Seraph">Seraph</option>
-          <option value="Sorcerer">Sorcerer</option>
-          <option value="Warrior">Warrior</option>
-          <option value="Wizard">Wizard</option>
-        </select>
-      </div>
+      <!-- class-picker hidden input kept for JS compatibility -->
+      <input type="hidden" id="class-picker">
     </div>
 
     <div class="nav-divider"></div>
