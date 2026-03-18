@@ -1008,6 +1008,7 @@ body.hints-off input[data-hint]::placeholder { color: transparent !important; }
 /* ═══════════════════════════════
    RESPONSIVE
 ═══════════════════════════════ */
+/* ── TABLET (≤900px) ── */
 @media (max-width: 900px) {
   .app-nav { display: none; }
   .mob-char-bar { display: block; }
@@ -1021,22 +1022,111 @@ body.hints-off input[data-hint]::placeholder { color: transparent !important; }
   .pages { padding: 0.75rem; }
 }
 
+/* ── MOBILE (≤600px) ── */
 @media (max-width: 600px) {
-  .app-header { gap: 4px; }
-  .header-actions .hbtn:not(.primary):not(#theme-btn-hdr) { display: none; }
-  .p1-grid { grid-template-columns: 1fr !important; }
+
+  /* Header — keep only essential buttons */
+  .app-header { gap: 4px; padding: 0 8px; height: 48px; }
+  .header-actions .hbtn:not(.primary):not(#theme-btn-hdr):not(#hints-btn) { display: none; }
+  .hbtn { min-height: 36px; padding: 0 10px; font-size: 10px; }
+  .hbtn.primary { padding: 0 14px; }
+
+  /* Mobile char bar — taller tap targets */
+  .mob-char-bar-inner { min-height: 50px; }
+  .mob-char-btn { padding: 0 16px; min-height: 50px; font-size: 10px; }
+  .mob-new-btn { padding: 0 16px; min-height: 50px; font-size: 10px; }
+
+  /* Tab bar — bigger and easier to tap */
+  .tab-bar { height: 48px; }
+  .tab-btn { height: 48px; font-size: 9px; padding: 0 14px; gap: 5px; }
+
+  /* Pages */
+  .pages { padding: 0; }
+  .page-inner { padding: 0.75rem 0.875rem; }
+
+  /* Page 1 — fully single column */
+  .p1-grid { grid-template-columns: 1fr !important; gap: 0.75rem; }
   .p1-right { grid-column: span 1; }
-  .traits-row { grid-template-columns: repeat(2,1fr) !important; }
-  .p2-grid { grid-template-columns: 1fr !important; }
+
+  /* Character header fields */
+  .char-fields-row1 { grid-template-columns: 1fr; gap: 6px; }
+  .char-fields-row2 { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .char-level-field { grid-column: span 1; width: auto; }
+
+  /* Portrait smaller on mobile */
+  .portrait-wrap { width: 80px !important; height: 80px !important; flex-shrink: 0; }
+
+  /* Heritage / subclass row */
+  .hdr-heritage-row { grid-template-columns: 1fr !important; gap: 6px; }
+
+  /* Mixed ancestry pickers side by side still fine at 1fr 1fr */
+
+  /* Traits — 2 per row on mobile */
+  .traits-row { grid-template-columns: repeat(2,1fr) !important; gap: 6px; }
+
+  /* HP / Stress / Hope pips — bigger tap targets */
+  .hpbox, .stressbox, .companion-hpbox {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .shield-pip svg { width: 28px !important; height: 28px !important; }
+  .pip-row { gap: 5px !important; flex-wrap: wrap; }
+
+  /* Hope pips */
+  .hope-pip { width: 26px !important; height: 26px !important; }
+
+  /* Weapons — single column */
   .weapon-fields { grid-template-columns: 1fr !important; }
-  .thresh-row { grid-template-columns: 1fr 1fr 1fr; }
+  .weapon-section { padding: 0.5rem 0.6rem; }
+
+  /* Threshold row */
+  .thresh-row { grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+  .thresh-box { padding: 6px 4px; }
+  .thresh-num { font-size: 16px; }
+
+  /* Gold row */
   .gold-row { grid-template-columns: 1fr 1fr 1fr; }
-  .char-fields-row1 { grid-template-columns: 1fr 1fr; }
-  .char-fields-row2 { grid-template-columns: 1fr 1fr; }
-  .char-level-field { grid-column: span 2; width: auto; }
-  .pages { padding: 0.5rem; }
-  .page-inner { padding: 0.75rem; }
-  .tab-btn { font-size: 8px; padding: 0 0.75rem; }
+
+  /* Page 2 — single column */
+  .p2-grid { grid-template-columns: 1fr !important; gap: 0.75rem; }
+
+  /* Experiences */
+  .exp-row { gap: 6px; }
+  .exp-row input { font-size: 14px; }
+
+  /* Domain cards — single column */
+  .cards-grid { grid-template-columns: 1fr !important; }
+  .card-item { padding: 10px; }
+
+  /* Feature bar */
+  .feature-bar { grid-template-columns: 1fr !important; gap: 8px; }
+
+  /* Section titles */
+  .section-block-title { font-size: 11px; }
+
+  /* Inventory rows */
+  .inv-row { flex-wrap: wrap; gap: 4px; }
+  .inv-row input[style*="width:46px"] { width: 56px !important; }
+
+  /* S0 wizard */
+  #tab-s0 { padding: 0; }
+  #s0-wizard { padding: 0.75rem !important; }
+
+  /* Modals */
+  #new-char-modal > div,
+  #change-class-modal > div,
+  #pick-class-modal > div { padding: 1.25rem; width: 95% !important; max-width: none !important; }
+
+  /* GM notes / session notes bigger textarea */
+  #session-notes, #domain-notes, #misc-notes { font-size: 15px; }
+
+  /* Bigger inputs overall */
+  input[type="text"], input[type="number"], textarea, select {
+    font-size: 15px !important;
+  }
+  /* But keep small labels small */
+  .ey { font-size: 10px; }
+  .weapon-label { font-size: 10px; }
 }
 /* ── READABILITY OVERRIDES ── */
 /* Bump base font size */
