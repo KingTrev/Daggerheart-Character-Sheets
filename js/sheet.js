@@ -483,6 +483,13 @@ function buildPages(cls) {
         <button class="portrait-remove" onclick="event.stopPropagation();removePortrait()" title="Remove">×</button>
       </div>
       <input type="file" id="portrait-upload" accept="image/*" style="display:none" onchange="uploadPortrait(this)">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;">
+        <button onclick="event.stopPropagation();togglePortraitUrlInput()" title="Load portrait from URL"
+          style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.08em;background:none;border:1px solid var(--border);color:var(--dim);padding:2px 6px;border-radius:3px;cursor:pointer;white-space:nowrap;" id="portrait-url-btn">🔗 URL</button>
+        <input type="text" id="portrait-url-input" placeholder="Paste image URL…"
+          style="display:none;width:72px;font-size:9px;background:var(--bg3);border:1px solid var(--border2);border-radius:3px;padding:3px 5px;color:var(--muted);outline:none;"
+          onchange="loadPortraitFromUrl(this.value)" onblur="loadPortraitFromUrl(this.value)">
+      </div>
       <div class="char-fields">
         <div class="char-fields-row1">
           <div><span class="ey">Name</span><input type="text" id="f-name" placeholder="Character name..." oninput="save()"></div>
@@ -523,7 +530,14 @@ function buildPages(cls) {
               ${(SUBCLASSES[cls]?.subclasses||[]).map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}
             </select>
           </div>
-          <div class="char-level-field"><span class="ey">Level</span><input type="number" id="f-level" min="1" max="10" placeholder="1" oninput="save()"></div>
+          <div class="char-level-field">
+            <span class="ey">Level</span>
+            <div style="display:flex;gap:4px;align-items:center;">
+              <input type="number" id="f-level" min="1" max="10" placeholder="1" oninput="save()" style="flex:1;">
+              <button onclick="showLevelUpGuide()" title="Level Up Guide"
+                style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.06em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:3px 6px;border-radius:3px;cursor:pointer;white-space:nowrap;flex-shrink:0;">▲ UP</button>
+            </div>
+          </div>
         </div>
       </div>
       </div><!-- /portrait+fields row -->
@@ -1124,14 +1138,16 @@ function showSheetTab(tab) {
   document.getElementById('tab-notes').style.display = tab === 'notes' ? '' : 'none';
   document.getElementById('tab-cards').style.display = tab === 'cards' ? '' : 'none';
   document.getElementById('tab-ref').style.display = tab === 'ref' ? '' : 'none';
-  document.getElementById('tab-s0').style.display = tab === 's0' ? '' : 'none';
+  document.getElementById('tab-dice').style.display = tab === 'dice' ? '' : 'none';
+  document.getElementById('tab-rest').style.display = tab === 'rest' ? '' : 'none';
+  const s0El = document.getElementById('tab-s0'); if (s0El) s0El.style.display = 'none';
   // Tab bar buttons (removed from DOM, guard against null)
-  ['sheet','notes','cards','ref'].forEach(t => {
+  ['sheet','notes','cards','ref','dice','rest'].forEach(t => {
     const btn = document.getElementById('tab-' + t + '-btn');
     if (btn) btn.classList.toggle('active', t === tab);
   });
   // Left nav items
-  ['sheet','notes','cards','ref'].forEach(t => {
+  ['sheet','notes','cards','ref','dice','rest'].forEach(t => {
     const el = document.getElementById('nav-' + t);
     if (el) el.classList.toggle('active', t === tab);
   });
@@ -1141,6 +1157,9 @@ function showSheetTab(tab) {
   const classDivider = document.getElementById('nav-class-divider');
   if (classSection) classSection.style.display = tab === 'sheet' ? '' : 'none';
   if (classDivider) classDivider.style.display = tab === 'sheet' ? '' : 'none';
+  if (tab === 'rest') {
+    renderThreshDisplay();
+  }
   if (tab === 'cards') {
     const domainFilter = document.getElementById('cards-filter-domain');
     if (domainFilter && domainFilter.value === '' && currentClass) domainFilter.value = '__class__';
@@ -2104,4 +2123,473 @@ function newCharViaS0() {
 
 function s0FillSuggestedTraits() {
   // No-op stub kept for compatibility
+}
+
+
+// ═══════════════════════════════════════════════
+// DICE ROLLER
+// ═══════════════════════════════════════════════
+
+let diceAdvantage = 'none';
+let pendingRestResults = null;
+
+function setAdvantage(mode) {
+  diceAdvantage = mode;
+  ['none','hope','fear'].forEach(m => {
+    const btn = document.getElementById('adv-' + m);
+    if (!btn) return;
+    const active = m === mode;
+    btn.style.background = active ? (m === 'hope' ? 'var(--gold-faint)' : m === 'fear' ? 'var(--red-faint)' : 'var(--bg4)') : 'var(--bg3)';
+    btn.style.borderColor = active ? (m === 'hope' ? 'var(--gold-dim)' : m === 'fear' ? 'var(--red-dim)' : 'var(--gold-dim)') : 'var(--border2)';
+    btn.style.color = active ? (m === 'hope' ? 'var(--gold)' : m === 'fear' ? 'var(--red)' : 'var(--gold)') : 'var(--muted)';
+  });
+}
+
+function d12() { return Math.floor(Math.random() * 12) + 1; }
+
+function rollHopeFear() {
+  const traitMod = parseInt(document.getElementById('dice-trait-mod')?.value || 0);
+  const extraMod = parseInt(document.getElementById('dice-extra-mod')?.value || 0);
+
+  let hopeRoll = d12();
+  let fearRoll = d12();
+
+  // Advantage/disadvantage
+  if (diceAdvantage === 'hope') {
+    const extra = d12();
+    // Keep best two of three if we had extra hope, but we only have two dice
+    // Extra hope die: reroll hope and keep the higher
+    hopeRoll = Math.max(hopeRoll, extra);
+  } else if (diceAdvantage === 'fear') {
+    const extra = d12();
+    fearRoll = Math.max(fearRoll, extra);
+  }
+
+  const isCrit = hopeRoll === fearRoll;
+  const hopeHigher = hopeRoll >= fearRoll;
+  const higher = Math.max(hopeRoll, fearRoll);
+  const total = higher + traitMod + extraMod;
+
+  // Animate dice
+  const hopeDie = document.getElementById('hope-die-val');
+  const fearDie = document.getElementById('fear-die-val');
+  const hopeBox = document.getElementById('hope-die-display');
+  const fearBox = document.getElementById('fear-die-display');
+  if (hopeDie) hopeDie.textContent = hopeRoll;
+  if (fearDie) fearDie.textContent = fearRoll;
+
+  // Highlight winning die
+  if (hopeBox) hopeBox.style.borderColor = isCrit ? 'var(--teal)' : hopeHigher ? 'var(--gold)' : 'rgba(201,168,76,0.2)';
+  if (fearBox) fearBox.style.borderColor = isCrit ? 'var(--teal)' : !hopeHigher ? 'var(--red)' : 'rgba(192,64,64,0.2)';
+
+  // Determine result type
+  let resultLabel, resultDesc, bannerBg, labelColor;
+  if (isCrit) {
+    resultLabel = '✦ CRITICAL SUCCESS';
+    resultDesc = 'Both dice match — automatic success regardless of Difficulty. Gain 1 Hope, clear 1 Stress. On attacks: max damage dice + roll.';
+    bannerBg = 'var(--teal-faint)';
+    labelColor = 'var(--teal)';
+  } else if (hopeHigher) {
+    resultLabel = '✦ ROLL WITH HOPE';
+    resultDesc = 'Hope Die is higher. If you meet the Difficulty, you succeed and gain 1 Hope. If you fail, you still gain 1 Hope.';
+    bannerBg = 'var(--gold-faint)';
+    labelColor = 'var(--gold)';
+  } else {
+    resultLabel = '✦ ROLL WITH FEAR';
+    resultDesc = 'Fear Die is higher. If you meet the Difficulty, you succeed but the GM gains 1 Fear. If you fail, the GM gains 1 Fear.';
+    bannerBg = 'var(--red-faint)';
+    labelColor = 'var(--red)';
+  }
+
+  const banner = document.getElementById('dice-result-banner');
+  const label = document.getElementById('dice-result-label');
+  const desc = document.getElementById('dice-result-desc');
+  const totalRow = document.getElementById('dice-total-row');
+  const totalEl = document.getElementById('dice-total');
+
+  if (banner) {
+    banner.style.display = '';
+    banner.style.background = bannerBg;
+    banner.style.border = '1px solid ' + labelColor.replace(')', '-dim)').replace('var(--teal-dim)', 'var(--teal-dim)');
+  }
+  if (label) { label.textContent = resultLabel; label.style.color = labelColor; }
+  if (desc) desc.textContent = resultDesc;
+  if (totalRow) totalRow.style.display = '';
+  if (totalEl) totalEl.textContent = total + (traitMod !== 0 || extraMod !== 0 ? ' (' + higher + (traitMod >= 0 ? '+' : '') + (traitMod + extraMod) + ')' : '');
+
+  // Add to history
+  addRollHistory(resultLabel, hopeRoll, fearRoll, total, isCrit);
+}
+
+function addRollHistory(type, hope, fear, total, crit) {
+  const hist = document.getElementById('roll-history');
+  if (!hist) return;
+  const entry = document.createElement('div');
+  const color = crit ? 'var(--teal)' : hope >= fear ? 'var(--gold)' : 'var(--red)';
+  entry.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;font-size:12px;';
+  entry.innerHTML = '<span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:' + color + ';flex-shrink:0;">' + (crit ? 'CRIT' : hope >= fear ? 'HOPE' : 'FEAR') + '</span>' +
+    '<span style="color:var(--muted);font-size:10px;">H:' + hope + ' F:' + fear + '</span>' +
+    '<span style="flex:1;color:var(--text);font-weight:700;">= ' + total + '</span>' +
+    '<span style="font-size:10px;color:var(--dim);">' + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) + '</span>';
+  hist.insertBefore(entry, hist.firstChild);
+  // Keep max 10
+  while (hist.children.length > 10) hist.removeChild(hist.lastChild);
+}
+
+function rollDamage(sides) {
+  const roll = Math.floor(Math.random() * sides) + 1;
+  const el = document.getElementById('damage-result');
+  if (el) {
+    el.textContent = roll + ' / ' + sides;
+    el.style.animation = 'none';
+    el.offsetHeight; // reflow
+    el.style.animation = 'diceRoll 0.3s ease';
+  }
+}
+
+// ═══════════════════════════════════════════════
+// REST CALCULATOR
+// ═══════════════════════════════════════════════
+
+let currentRestType = null;
+let restMovesSelected = [];
+let restMoveResults = {};
+
+const REST_MOVES = {
+  tendWounds:  { label: 'Tend Wounds',   desc: 'Clear 1d4 + Tier HP (you or an ally)', icon: '❤' },
+  clearStress: { label: 'Clear Stress',  desc: 'Clear 1d4 + Tier Stress',              icon: '◇' },
+  repairArmor: { label: 'Repair Armor',  desc: 'Clear 1d4 + Tier Armor Slots',         icon: '⬡' },
+  prepare:     { label: 'Prepare',       desc: 'Gain 1 Hope (2 Hope with allies)',      icon: '✦' },
+  workProject: { label: 'Work on Project', desc: 'Long rest only — advance a project',  icon: '⚙', longOnly: true },
+};
+
+function getTier() {
+  const lvl = parseInt(document.getElementById('f-level')?.value || 1);
+  if (lvl >= 9) return 4;
+  if (lvl >= 7) return 3;
+  if (lvl >= 4) return 2;
+  return 1;
+}
+
+function startRest(type) {
+  currentRestType = type;
+  restMovesSelected = [];
+  restMoveResults = {};
+  const panel = document.getElementById('rest-moves-panel');
+  const label = document.getElementById('rest-moves-label');
+  const results = document.getElementById('rest-results');
+  if (panel) panel.style.display = '';
+  if (results) results.style.display = 'none';
+  if (label) label.textContent = type === 'short'
+    ? 'CHOOSE 2 DOWNTIME MOVES (SHORT REST)'
+    : 'CHOOSE YOUR DOWNTIME MOVES (LONG REST)';
+
+  renderRestMoves(type);
+}
+
+function renderRestMoves(type) {
+  const list = document.getElementById('rest-moves-list');
+  if (!list) return;
+  list.innerHTML = '';
+  const tier = getTier();
+
+  Object.entries(REST_MOVES).forEach(([key, move]) => {
+    if (move.longOnly && type === 'short') return;
+    const div = document.createElement('div');
+    const selected = restMovesSelected.includes(key);
+    div.style.cssText = 'padding:12px 14px;background:var(--bg2);border:1px solid ' + (selected ? 'var(--teal-dim)' : 'var(--border2)') + ';border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all 0.15s;';
+    div.innerHTML = '<span style="font-size:18px;flex-shrink:0;">' + move.icon + '</span>' +
+      '<div style="flex:1;">' +
+        '<div style="font-family:\'Cinzel\',serif;font-size:10px;font-weight:700;letter-spacing:0.08em;color:' + (selected ? 'var(--teal)' : 'var(--text)') + ';">' + move.label + '</div>' +
+        '<div style="font-size:12px;color:var(--muted);margin-top:2px;">' + move.desc.replace('Tier', 'Tier ' + tier) + '</div>' +
+      '</div>' +
+      (selected ? '<span style="color:var(--teal);font-size:18px;">✓</span>' : '');
+    div.onclick = () => toggleRestMove(key, type);
+    list.appendChild(div);
+  });
+}
+
+function toggleRestMove(key, type) {
+  const maxMoves = type === 'short' ? 2 : 99;
+  const idx = restMovesSelected.indexOf(key);
+  if (idx >= 0) {
+    restMovesSelected.splice(idx, 1);
+  } else {
+    if (type === 'short' && restMovesSelected.length >= 2) {
+      restMovesSelected.shift();
+    }
+    restMovesSelected.push(key);
+  }
+  renderRestMoves(type);
+  if (restMovesSelected.length > 0) rollRestMoves();
+}
+
+function rollRestMoves() {
+  const tier = getTier();
+  const results = [];
+  restMoveResults = {};
+
+  restMovesSelected.forEach(key => {
+    const move = REST_MOVES[key];
+    if (key === 'tendWounds') {
+      const roll = Math.floor(Math.random() * 4) + 1 + tier;
+      restMoveResults.hp = (restMoveResults.hp || 0) + roll;
+      results.push('<strong>' + move.label + ':</strong> Clear ' + roll + ' HP');
+    } else if (key === 'clearStress') {
+      const roll = Math.floor(Math.random() * 4) + 1 + tier;
+      restMoveResults.stress = (restMoveResults.stress || 0) + roll;
+      results.push('<strong>' + move.label + ':</strong> Clear ' + roll + ' Stress');
+    } else if (key === 'repairArmor') {
+      const roll = Math.floor(Math.random() * 4) + 1 + tier;
+      restMoveResults.armor = (restMoveResults.armor || 0) + roll;
+      results.push('<strong>' + move.label + ':</strong> Clear ' + roll + ' Armor Slots');
+    } else if (key === 'prepare') {
+      restMoveResults.hope = (restMoveResults.hope || 0) + 1;
+      results.push('<strong>' + move.label + ':</strong> Gain 1 Hope (add 1 more if with allies)');
+    } else if (key === 'workProject') {
+      results.push('<strong>' + move.label + ':</strong> Advance your project by 1 step');
+    }
+  });
+
+  if (currentRestType === 'long') {
+    restMoveResults.fullRest = true;
+    results.unshift('<strong>Full Recovery:</strong> Clear ALL HP, Stress, and Armor Slots');
+  }
+
+  const panel = document.getElementById('rest-results');
+  const list = document.getElementById('rest-results-list');
+  if (panel) panel.style.display = '';
+  if (list) list.innerHTML = results.join('<br>');
+}
+
+function applyRestResults() {
+  if (!currentClass) return;
+
+  if (restMoveResults.fullRest) {
+    // Clear all HP
+    document.querySelectorAll('.hpbox.filled').forEach(el => { el.classList.remove('filled'); });
+    document.querySelectorAll('.stressbox.filled').forEach(el => { el.classList.remove('filled'); });
+    document.querySelectorAll('.shield-pip.filled').forEach(el => { el.classList.remove('filled'); });
+  } else {
+    // Clear specific HP
+    if (restMoveResults.hp) {
+      const filled = Array.from(document.querySelectorAll('.hpbox.filled'));
+      filled.slice(-Math.min(restMoveResults.hp, filled.length)).forEach(el => el.classList.remove('filled'));
+    }
+    // Clear stress
+    if (restMoveResults.stress) {
+      const filled = Array.from(document.querySelectorAll('.stressbox.filled'));
+      filled.slice(-Math.min(restMoveResults.stress, filled.length)).forEach(el => el.classList.remove('filled'));
+    }
+    // Clear armor
+    if (restMoveResults.armor) {
+      const filled = Array.from(document.querySelectorAll('.shield-pip.filled'));
+      filled.slice(-Math.min(restMoveResults.armor, filled.length)).forEach(el => el.classList.remove('filled'));
+    }
+  }
+
+  // Gain hope
+  if (restMoveResults.hope) {
+    const empty = Array.from(document.querySelectorAll('.hope-pip:not(.filled):not(.scar)'));
+    empty.slice(0, restMoveResults.hope).forEach(el => el.classList.add('filled'));
+  }
+
+  save();
+  const panel = document.getElementById('rest-results');
+  if (panel) {
+    panel.style.borderColor = 'var(--teal-dim)';
+    const applyBtn = panel.querySelector('button');
+    if (applyBtn) { applyBtn.textContent = '✓ Applied!'; applyBtn.disabled = true; }
+  }
+  setTimeout(() => showSheetTab('sheet'), 1200);
+}
+
+// ═══════════════════════════════════════════════
+// DAMAGE CALCULATOR
+// ═══════════════════════════════════════════════
+
+let pendingDamageHP = 0;
+
+function renderThreshDisplay() {
+  const container = document.getElementById('thresh-display');
+  if (!container) return;
+  const level = parseInt(document.getElementById('f-level')?.value || 1);
+  const minor = parseInt(document.getElementById('thresh-minor')?.value || 0) + level;
+  const major = parseInt(document.getElementById('thresh-major')?.value || 0) + level;
+  const severe = parseInt(document.getElementById('thresh-severe')?.value || 0) + level;
+
+  container.innerHTML = ['Minor','Major','Severe'].map((label, i) => {
+    const val = [minor, major, severe][i];
+    const color = ['var(--teal)','var(--gold)','var(--red)'][i];
+    return '<div style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:10px;text-align:center;">' +
+      '<div style="font-family:\'Cinzel\',serif;font-size:8px;letter-spacing:0.1em;color:' + color + ';margin-bottom:4px;">' + label.toUpperCase() + '</div>' +
+      '<div style="font-family:\'JetBrains Mono\',monospace;font-size:20px;font-weight:700;color:var(--text);">' + (val || '—') + '</div>' +
+      '<div style="font-size:10px;color:var(--muted);margin-top:2px;">1 HP</div>' +
+      '</div>';
+  }).join('');
+}
+
+function calcDamage() {
+  const dmg = parseInt(document.getElementById('dmg-input')?.value || 0);
+  const hasArmor = document.getElementById('dmg-has-armor')?.checked;
+  const level = parseInt(document.getElementById('f-level')?.value || 1);
+  let minor = parseInt(document.getElementById('thresh-minor')?.value || 0) + level;
+  let major = parseInt(document.getElementById('thresh-major')?.value || 0) + level;
+  let severe = parseInt(document.getElementById('thresh-severe')?.value || 0) + level;
+
+  const result = document.getElementById('dmg-result');
+  const label = document.getElementById('dmg-result-label');
+  const hpText = document.getElementById('dmg-result-hp');
+  if (!result || !label || !hpText || !dmg) { if (result) result.style.display = 'none'; return; }
+
+  let effectiveDmg = dmg;
+  let armorNote = '';
+  if (hasArmor) {
+    // Armor reduces severity by 1 threshold
+    if (dmg >= severe) {
+      effectiveDmg = major + 1; // reduces severe to major
+      armorNote = ' (Armor reduced Severe → Major)';
+    } else if (dmg >= major) {
+      effectiveDmg = minor + 1; // reduces major to minor
+      armorNote = ' (Armor reduced Major → Minor)';
+    } else if (dmg >= minor) {
+      effectiveDmg = minor - 1; // reduces minor to nothing
+      armorNote = ' (Armor reduced Minor → No damage)';
+    }
+  }
+
+  let resultLabel, hpMarked, color, bg;
+  if (effectiveDmg <= 0 || (hasArmor && dmg < minor)) {
+    resultLabel = 'NO DAMAGE'; hpMarked = 0; color = 'var(--teal)'; bg = 'var(--teal-faint)';
+  } else if (effectiveDmg < minor) {
+    resultLabel = 'NO DAMAGE'; hpMarked = 0; color = 'var(--teal)'; bg = 'var(--teal-faint)';
+  } else if (effectiveDmg < major) {
+    resultLabel = 'MINOR HIT'; hpMarked = 1; color = 'var(--teal)'; bg = 'var(--teal-faint)';
+  } else if (effectiveDmg < severe) {
+    resultLabel = 'MAJOR HIT'; hpMarked = 2; color = 'var(--gold)'; bg = 'var(--gold-faint)';
+  } else {
+    resultLabel = 'SEVERE HIT'; hpMarked = 3; color = 'var(--red)'; bg = 'var(--red-faint)';
+  }
+
+  pendingDamageHP = hpMarked;
+  result.style.display = '';
+  result.style.background = bg;
+  result.style.border = '1px solid ' + color.replace(')', '-dim)').replace('-dim-dim)', '-dim)');
+  label.style.color = color;
+  label.textContent = resultLabel;
+  hpText.textContent = hpMarked === 0 ? 'No HP marked' + armorNote : 'Mark ' + hpMarked + ' HP' + armorNote;
+  const applyBtn = document.getElementById('dmg-apply-btn');
+  if (applyBtn) { applyBtn.style.display = hpMarked > 0 ? '' : 'none'; applyBtn.textContent = 'Mark ' + hpMarked + ' HP on Sheet'; applyBtn.disabled = false; }
+}
+
+function applyDamage() {
+  if (!pendingDamageHP) return;
+  const empty = Array.from(document.querySelectorAll('.hpbox:not(.filled)'));
+  empty.slice(0, pendingDamageHP).forEach(el => el.classList.add('filled'));
+  save();
+  const btn = document.getElementById('dmg-apply-btn');
+  if (btn) { btn.textContent = '✓ Applied!'; btn.disabled = true; }
+  setTimeout(() => showSheetTab('sheet'), 800);
+}
+
+// Wire renderThreshDisplay when rest tab opens
+const _origShowTab = showSheetTab;
+
+
+// ═══════════════════════════════════════════════
+// PORTRAIT URL LOADER
+// ═══════════════════════════════════════════════
+
+function togglePortraitUrlInput() {
+  const inp = document.getElementById('portrait-url-input');
+  if (!inp) return;
+  inp.style.display = inp.style.display === 'none' ? '' : 'none';
+  if (inp.style.display !== 'none') inp.focus();
+}
+
+function loadPortraitFromUrl(url) {
+  if (!url || !url.trim()) return;
+  url = url.trim();
+  const img = document.getElementById('portrait-img');
+  const placeholder = document.getElementById('portrait-placeholder');
+  if (!img) return;
+  img.onload = () => {
+    img.style.display = '';
+    if (placeholder) placeholder.style.display = 'none';
+    // Save as data URL via canvas
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+      canvas.getContext('2d').drawImage(img, 0, 0);
+      const data = canvas.toDataURL('image/jpeg', 0.85);
+      if (currentClass) localStorage.setItem('dh2-portrait-' + currentClass.toLowerCase(), data);
+    } catch(e) {
+      // Cross-origin — store the URL directly instead
+      if (currentClass) localStorage.setItem('dh2-portrait-' + currentClass.toLowerCase(), url);
+    }
+    save();
+  };
+  img.onerror = () => alert('Could not load image from that URL. Try a direct image link ending in .jpg, .png etc.');
+  img.crossOrigin = 'anonymous';
+  img.src = url;
+}
+
+// ═══════════════════════════════════════════════
+// LEVEL UP GUIDE
+// ═══════════════════════════════════════════════
+
+function showLevelUpGuide() {
+  const cls = currentClass;
+  if (!cls) { alert('Load a character first.'); return; }
+  const level = parseInt(document.getElementById('f-level')?.value || 1);
+  const nextLevel = level + 1;
+  if (nextLevel > 10) { alert('Already at max level!'); return; }
+
+  const c = CLASSES[cls];
+  if (!c) return;
+
+  // Level up changes per level (standard Daggerheart progression)
+  const changes = [];
+  changes.push('• Your <strong>damage thresholds increase</strong> by 1 each (add your new level to all thresholds)');
+  changes.push('• You may <strong>increase one trait</strong> by 1');
+  if (nextLevel === 2) changes.push('• Choose a new <strong>domain card</strong> from one of your domains');
+  if (nextLevel === 3) changes.push('• Choose a new <strong>domain card</strong> from one of your domains');
+  if (nextLevel === 4) changes.push('• Choose a new <strong>domain card</strong> and <strong>increase your proficiency</strong>');
+  if (nextLevel === 5) {
+    changes.push('• Your class feature upgrades — re-read <strong>' + c.featureName + '</strong>');
+    changes.push('• Choose a new <strong>domain card</strong>');
+  }
+  if (nextLevel % 2 === 0 && nextLevel <= 8) changes.push('• Choose a new <strong>domain card</strong>');
+  if (nextLevel === 7) changes.push('• Choose a new <strong>subclass upgrade</strong>');
+  if (nextLevel === 9 || nextLevel === 10) changes.push('• Major milestone — check your campaign frame for specifics');
+
+  const modal = document.createElement('div');
+  modal.id = 'levelup-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;padding:1rem;';
+  modal.innerHTML = '<div style="background:var(--bg2);border:1px solid var(--gold-dim);border-radius:10px;padding:2rem;max-width:440px;width:100%;box-shadow:0 0 40px rgba(201,168,76,0.1);">' +
+    '<div style="font-family:\'Cinzel\',serif;font-size:10px;letter-spacing:0.15em;color:var(--gold);margin-bottom:8px;">LEVEL UP</div>' +
+    '<div style="font-family:\'Cinzel\',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:4px;">' + cls + ' → Level ' + nextLevel + '</div>' +
+    '<div style="font-size:13px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6;font-style:italic;">Here\'s what changes when you reach level ' + nextLevel + '.</div>' +
+    '<div style="font-size:13px;line-height:2;color:var(--text);margin-bottom:1.5rem;">' + changes.join('<br>') + '</div>' +
+    '<div style="display:flex;gap:8px;">' +
+      '<button onclick="applyLevelUp(' + nextLevel + ')" style="flex:2;font-family:\'Cinzel\',serif;font-size:10px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:11px;border-radius:5px;cursor:pointer;">Level Up to ' + nextLevel + ' →</button>' +
+      '<button onclick="document.getElementById(\'levelup-modal\').remove()" style="flex:1;font-family:\'Cinzel\',serif;font-size:10px;background:none;border:1px solid var(--border2);color:var(--muted);padding:11px;border-radius:5px;cursor:pointer;">Cancel</button>' +
+    '</div>' +
+    '</div>';
+  document.body.appendChild(modal);
+  modal.onclick = e => { if (e.target === modal) modal.remove(); };
+}
+
+function applyLevelUp(newLevel) {
+  const lvlEl = document.getElementById('f-level');
+  if (lvlEl) lvlEl.value = newLevel;
+  document.getElementById('levelup-modal')?.remove();
+  save();
+  renderThreshDisplay();
+  // Show sheet tab and flash
+  showSheetTab('sheet');
+  setTimeout(() => {
+    const lvl = document.getElementById('f-level');
+    if (lvl) { lvl.style.color = 'var(--gold)'; setTimeout(() => lvl.style.color = '', 1500); }
+  }, 100);
 }
