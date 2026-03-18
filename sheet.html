@@ -989,6 +989,11 @@ html[data-theme="light"] .custom-bgq-row { background: var(--bg4) !important; bo
 /* ═══════════════════════════════
    PRINT
 ═══════════════════════════════ */
+/* ── HINTS TOGGLE ── */
+body.hints-off .hint-text { display: none !important; }
+body.hints-off input[data-hint]::placeholder { color: transparent !important; }
+#hints-btn.off { opacity: 0.45; }
+
 @media print {
   .app-nav, .mob-char-bar, .app-header { display: none; }
   .app-main { height: auto; overflow: visible; }
