@@ -1110,6 +1110,7 @@ body { font-size: 15px; }
     <button class="hbtn" onclick="exportCharacters()" title="Export all characters to a file">⬇ Export</button>
     <button class="hbtn" onclick="document.getElementById('import-file-input').click()" title="Import characters from a file">⬆ Import</button>
     <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importCharacters(this)">
+    <button class="hbtn" id="hints-btn" onclick="toggleHints()" title="Toggle class suggestions and placeholder hints">✦ Hints</button>
     <button class="hbtn" onclick="window.print()">Print</button>
     <button class="hbtn primary" id="save-btn" onclick="saveSheet()">Save</button>
   </div>
