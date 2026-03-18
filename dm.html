@@ -287,6 +287,31 @@ body{display:flex;flex-direction:column;font-family:'Crimson Pro',serif;color:va
 }
 .notes-area::placeholder{color:var(--dim);}
 
+/* Session log */
+.session-toolbar{display:flex;gap:5px;margin-bottom:8px;align-items:center;}
+.session-select{
+  flex:1;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.06em;
+  background:var(--bg3);border:1px solid var(--border2);color:var(--text);
+  padding:4px 8px;border-radius:4px;outline:none;
+}
+.session-btn{
+  font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.08em;
+  background:var(--bg3);border:1px solid var(--border2);color:var(--muted);
+  padding:4px 8px;border-radius:4px;cursor:pointer;white-space:nowrap;
+}
+.session-btn:hover{color:var(--text);}
+.session-btn.new{color:var(--teal);border-color:var(--teal-dim);}
+.session-btn.new:hover{background:var(--teal-faint);}
+.session-btn.del{color:var(--red-dim);}
+.session-btn.del:hover{color:var(--red);}
+.session-title-input{
+  width:100%;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;
+  background:none;border:none;border-bottom:1px solid var(--border2);
+  color:var(--text);padding:3px 0 5px;outline:none;margin-bottom:8px;
+}
+.session-title-input::placeholder{color:var(--dim);}
+.session-date{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);margin-bottom:8px;}
+
 /* Notes section in right panel - scrollable */
 .right-scroll{flex:1;overflow-y:auto;}
 
@@ -459,7 +484,14 @@ html[data-theme="light"] {
           <span class="panel-hdr-arrow">▶</span>
         </div>
         <div class="panel-body">
-          <textarea class="notes-area" id="session-notes" placeholder="Scene name, key NPCs, clocks, secrets..."></textarea>
+          <div class="session-toolbar">
+            <select class="session-select" id="session-select"></select>
+            <button class="session-btn new" id="new-session-btn">+ New</button>
+            <button class="session-btn del" id="del-session-btn">✕</button>
+          </div>
+          <input class="session-title-input" id="session-title-input" type="text" placeholder="Session title...">
+          <div class="session-date" id="session-date"></div>
+          <textarea class="notes-area" id="session-notes" placeholder="Scene name, key NPCs, clocks, secrets, what happened..."></textarea>
         </div>
       </div>
 
@@ -582,7 +614,8 @@ let players = [];
 let clocks = [];
 let spotIdx = -1;
 let bpPlayers = 4;
-let notes = '';
+let sessions = []; // [{id, title, date, notes}]
+let currentSessionId = null;
 let theme = 'dark';
 
 // ── INIT ──
@@ -594,7 +627,8 @@ function init() {
   renderPlayers();
   renderClocks();
   renderBP();
-  document.getElementById('session-notes').value = notes;
+  renderSessionSelect();
+  loadCurrentSession();
   applyTheme();
   wireEvents();
 }
@@ -632,7 +666,41 @@ function wireEvents() {
   document.getElementById('bp-pc-minus').addEventListener('click', () => { bpPlayers = Math.max(1, bpPlayers - 1); renderBP(); save(); });
 
   // Notes
-  document.getElementById('session-notes').addEventListener('input', function() { notes = this.value; save(); });
+  document.getElementById('session-notes').addEventListener('input', function() {
+    const s = getCurrentSession();
+    if (s) { s.notes = this.value; save(); }
+  });
+  document.getElementById('session-title-input').addEventListener('input', function() {
+    const s = getCurrentSession();
+    if (s) { s.title = this.value; renderSessionSelect(); save(); }
+  });
+  document.getElementById('session-select').addEventListener('change', function() {
+    currentSessionId = this.value;
+    loadCurrentSession(); save();
+  });
+  document.getElementById('new-session-btn').addEventListener('click', () => {
+    const id = 's' + Date.now();
+    const now = new Date();
+    sessions.push({
+      id, title: 'Session ' + (sessions.length + 1),
+      date: now.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}),
+      notes: ''
+    });
+    currentSessionId = id;
+    renderSessionSelect();
+    loadCurrentSession();
+    save();
+    document.getElementById('session-title-input').focus();
+  });
+  document.getElementById('del-session-btn').addEventListener('click', () => {
+    if (sessions.length <= 1) return;
+    if (!confirm('Delete this session\'s notes?')) return;
+    sessions = sessions.filter(s => s.id !== currentSessionId);
+    currentSessionId = sessions[sessions.length - 1].id;
+    renderSessionSelect();
+    loadCurrentSession();
+    save();
+  });
 
   // Theme
   document.getElementById('theme-btn').addEventListener('click', () => {
@@ -892,9 +960,37 @@ function togglePanel(id) {
   panel.classList.toggle('open');
 }
 
+// ── SESSION HELPERS ──
+function getCurrentSession() {
+  return sessions.find(s => s.id === currentSessionId) || null;
+}
+
+function renderSessionSelect() {
+  const sel = document.getElementById('session-select');
+  sel.innerHTML = sessions.map(s =>
+    `<option value="${s.id}"${s.id === currentSessionId ? ' selected' : ''}>${s.title}</option>`
+  ).join('');
+}
+
+function loadCurrentSession() {
+  const s = getCurrentSession();
+  const notesEl = document.getElementById('session-notes');
+  const titleEl = document.getElementById('session-title-input');
+  const dateEl  = document.getElementById('session-date');
+  if (s) {
+    notesEl.value = s.notes || '';
+    titleEl.value = s.title || '';
+    dateEl.textContent = s.date || '';
+  } else {
+    notesEl.value = '';
+    titleEl.value = '';
+    dateEl.textContent = '';
+  }
+}
+
 // ── SAVE / LOAD ──
 function save() {
-  localStorage.setItem(SAVE_KEY, JSON.stringify({ fear, hope, actionTokens, players, clocks, spotIdx, bpPlayers, notes, theme }));
+  localStorage.setItem(SAVE_KEY, JSON.stringify({ fear, hope, actionTokens, players, clocks, spotIdx, bpPlayers, sessions, currentSessionId, theme }));
 }
 
 function load() {
@@ -908,7 +1004,13 @@ function load() {
     clocks = d.clocks || [];
     spotIdx = d.spotIdx ?? -1;
     bpPlayers = d.bpPlayers ?? 4;
-    notes = d.notes || '';
+    sessions = d.sessions || [];
+    currentSessionId = d.currentSessionId || null;
+    // Migrate old single notes field
+    if (!sessions.length) {
+      sessions = [{ id: 's1', title: 'Session 1', date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}), notes: d.notes || '' }];
+      currentSessionId = 's1';
+    }
     theme = d.theme || 'dark';
   } catch(e) {}
 }
