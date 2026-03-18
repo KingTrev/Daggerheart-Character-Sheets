@@ -555,14 +555,8 @@ function renderS0Step(id) {
 
 
     case 'experiences': {
-      // Read current experiences from localStorage for this class
-      let exps = [];
-      if (currentClass) {
-        try {
-          const d = JSON.parse(localStorage.getItem(saveKey(currentClass))) || {};
-          exps = d.exps || [];
-        } catch(e) {}
-      }
+      // Read experiences from s0Data
+      let exps = s0Data['s0-exps'] || [];
       // Ensure at least 2 rows
       while (exps.length < 2) exps.push(['', '+2']);
 
@@ -756,22 +750,11 @@ function s0SyncTrait(traitName, value) {
   // Sync to sheet input
   const sheetEl = document.getElementById('t-' + traitName);
   if (sheetEl) sheetEl.value = value;
-  // Persist to character save directly
-  if (currentClass) {
-    try {
-      const key = saveKey(currentClass);
-      const d = JSON.parse(localStorage.getItem(key)) || {};
-      d['t-' + traitName] = value;
-      localStorage.setItem(key, JSON.stringify(d));
-    } catch(e) {}
-  }
+  // Save to s0Data for transfer to sheet
+  saveS0Data();
 }
 
 function s0SaveExp() {
-  if (!currentClass) return;
-  const key = saveKey(currentClass);
-  let d = {};
-  try { d = JSON.parse(localStorage.getItem(key)) || {}; } catch(e) {}
   const exps = [];
   let i = 0;
   while (document.getElementById('s0-exp-name-' + i)) {
@@ -780,32 +763,23 @@ function s0SaveExp() {
     exps.push([name, bonus]);
     i++;
   }
-  d.exps = exps;
-  localStorage.setItem(key, JSON.stringify(d));
-  // Also sync to live sheet if visible
-  // Experiences stored in s0Data, rendered by renderS0Step('experiences')
-  renderS0();
+  s0Data['s0-exps'] = exps;
+  saveS0Data();
 }
 
 function s0AddExpRow() {
-  if (!currentClass) { alert('Choose a class first.'); return; }
-  const key = saveKey(currentClass);
-  let d = {};
-  try { d = JSON.parse(localStorage.getItem(key)) || {}; } catch(e) {}
-  d.exps = d.exps || [];
-  d.exps.push(['', '+2']);
-  localStorage.setItem(key, JSON.stringify(d));
+  s0SaveExp(); // save current values first
+  s0Data['s0-exps'] = s0Data['s0-exps'] || [];
+  s0Data['s0-exps'].push(['', '+2']);
+  saveS0Data();
   renderS0();
 }
 
 function s0RemoveExp(idx) {
-  if (!currentClass) return;
-  const key = saveKey(currentClass);
-  let d = {};
-  try { d = JSON.parse(localStorage.getItem(key)) || {}; } catch(e) {}
-  d.exps = d.exps || [];
-  d.exps.splice(idx, 1);
-  localStorage.setItem(key, JSON.stringify(d));
+  s0SaveExp(); // save current first
+  s0Data['s0-exps'] = s0Data['s0-exps'] || [];
+  s0Data['s0-exps'].splice(idx, 1);
+  saveS0Data();
   renderS0();
 }
 

@@ -2003,7 +2003,14 @@ function saveSheet() {
   save();
   renderSidebar();
   const btn = document.getElementById('save-btn');
-  if (btn) { btn.textContent = 'Saved ✓'; setTimeout(() => btn.textContent = 'Save', 1500); }
+  if (btn) {
+    btn.textContent = 'Saved ✓';
+    document.body.classList.add('just-saved');
+    setTimeout(() => {
+      btn.textContent = 'Save';
+      document.body.classList.remove('just-saved');
+    }, 1500);
+  }
 }
 
 let _autoSaveTimer = null;
