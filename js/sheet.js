@@ -813,6 +813,26 @@ function saveS0Data() {
 
 function saveS0() { saveS0Data(); }
 
+
+function s0GoToDomainCards() {
+  showSheetTab('cards');
+  // Small delay to let the tab render, then inject the return button
+  setTimeout(() => {
+    if (document.getElementById('s0-return-btn')) return;
+    const b = document.createElement('button');
+    b.id = 's0-return-btn';
+    b.textContent = '← Return to Session 0';
+    b.style.cssText = [
+      'position:fixed','bottom:20px','right:20px','z-index:9999',
+      "font-family:'Cinzel',serif",'font-size:10px','letter-spacing:0.1em',
+      'background:#141008','border:1px solid #7a6530','color:#c9a84c',
+      'padding:10px 18px','border-radius:6px','cursor:pointer',
+      'box-shadow:0 4px 12px rgba(0,0,0,0.5)'
+    ].join(';');
+    b.onclick = () => { b.remove(); showSheetTab('s0'); };
+    document.body.appendChild(b);
+  }, 150);
+}
 function s0Go(dir) {
   s0Step = Math.max(0, Math.min(S0_STEPS.length - 1, s0Step + dir));
   saveS0Data();
@@ -1242,7 +1262,7 @@ function renderS0Step(id) {
 
         ${s0Card('DOMAIN CARDS', `
           <p style="font-size:13px;line-height:1.75;margin-bottom:8px;">At level 1 you start with <strong>2 domain cards</strong>. Browse and add cards from your class's domains${cls && clsData ? ` — <strong>${clsData.domains}</strong>` : ''}.</p>
-          <button onclick="showSheetTab('cards');setTimeout(()=>{const btn=document.getElementById('s0-return-btn');if(!btn){const b=document.createElement('button');b.id='s0-return-btn';b.textContent='← Return to Session 0';b.style.cssText='position:fixed;bottom:20px;right:20px;z-index:9999;font-family:Cinzel,serif;font-size:10px;letter-spacing:0.1em;background:#141008;border:1px solid #7a6530;color:#c9a84c;padding:10px 18px;border-radius:6px;cursor:pointer;';b.onclick=()=>{b.remove();showSheetTab('s0');};document.body.appendChild(b);}},100)" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 16px;border-radius:4px;cursor:pointer;">Browse Domain Cards →</button>
+          <button onclick="s0GoToDomainCards()" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 16px;border-radius:4px;cursor:pointer;">Browse Domain Cards →</button>
         `, 'var(--gold)')}
       `);
     }
