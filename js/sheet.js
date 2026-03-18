@@ -360,7 +360,7 @@ function buildPages(cls) {
       <div class="class-name-block">
         <div class="class-name-big">${cls.toUpperCase()}</div>
         <div class="class-domains">${c.domains}</div>
-        <button onclick="s0GoTo(S0_STEPS.findIndex(s=>s.id==='pick-class'));showSheetTab('s0');" style="margin-top:8px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 8px;border-radius:3px;cursor:pointer;width:100%;">↺ Change Class</button>
+        <button onclick="showChangeClassModal()" style="margin-top:8px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 8px;border-radius:3px;cursor:pointer;width:100%;">↺ Change Class</button>
       </div>
       <div class="portrait-slot" onclick="document.getElementById('portrait-upload').click()" title="Click to upload portrait">
         <img id="portrait-img" src="" style="display:none;">
@@ -2380,6 +2380,40 @@ function prefillSuggestedTraits(cls) {
   // No-op: traits are never auto-filled
 }
 
+
+function showChangeClassModal() {
+  // Build a simple inline modal for class selection
+  const existing = document.getElementById('change-class-modal');
+  if (existing) { existing.style.display = 'flex'; return; }
+
+  const modal = document.createElement('div');
+  modal.id = 'change-class-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:9999;';
+
+  const classes = Object.keys(CLASSES);
+  modal.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+      <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:0.16em;color:var(--gold);margin-bottom:6px;">CHANGE CLASS</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Pick a new class. Your current sheet will be saved and you can switch back anytime from the character list.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;">
+        ${classes.map(c => `
+          <button onclick="confirmChangeClass('${c}')" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:10px;border-radius:5px;cursor:pointer;text-align:left;transition:all 0.12s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold-dim)';" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)';">
+            ${c}
+          </button>`).join('')}
+      </div>
+      <button onclick="document.getElementById('change-class-modal').style.display='none'" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:none;border:1px solid var(--border2);color:var(--muted);padding:8px 20px;border-radius:4px;cursor:pointer;width:100%;">Cancel</button>
+    </div>`;
+
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+}
+
+function confirmChangeClass(cls) {
+  document.getElementById('change-class-modal').style.display = 'none';
+  if (cls === currentClass) return;
+  switchClass(cls);
+}
+
 function switchClass(cls, silent=false) {
   if (!cls) return;
   if (currentClass && cls === currentClass) return;
@@ -2503,7 +2537,7 @@ function loadCharacter(key) {
   try {
     const d = JSON.parse(localStorage.getItem(key));
     if (!d || !d.class || !CLASSES[d.class]) return;
-    if (currentClass && currentClass !== d.class) save(); // save current before switching
+    if (currentClass && currentClass !== d.class) save();
     currentClass = d.class;
     localStorage.setItem('dh2-last-class', d.class);
     document.getElementById('class-picker').value = d.class;
@@ -2511,6 +2545,8 @@ function loadCharacter(key) {
     restoreData(d);
     renderSidebar();
     renderLoadoutQuick();
+    // Always switch to sheet tab so the new character is visible
+    showSheetTab('sheet');
   } catch(e) { console.error(e); }
 }
 
@@ -2556,11 +2592,44 @@ function newCharViaS0() {
 
 function newCharDirect() {
   closeNewCharModal();
+  // Show class picker — on pick, create fresh sheet for that class
+  showPickClassModal();
+}
+
+function showPickClassModal() {
+  const existing = document.getElementById('pick-class-modal');
+  if (existing) { existing.style.display = 'flex'; return; }
+
+  const modal = document.createElement('div');
+  modal.id = 'pick-class-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;z-index:9999;';
+
+  const classes = Object.keys(CLASSES);
+  modal.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+      <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:0.16em;color:var(--gold);margin-bottom:6px;">CHOOSE YOUR CLASS</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Pick a class to start building your character.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;">
+        ${classes.map(c => `
+          <button onclick="pickClassAndStart('${c}')" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:10px;border-radius:5px;cursor:pointer;text-align:left;transition:all 0.12s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold-dim)';" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)';">
+            ${c}
+          </button>`).join('')}
+      </div>
+      <button onclick="document.getElementById('pick-class-modal').style.display='none'" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:none;border:1px solid var(--border2);color:var(--muted);padding:8px 20px;border-radius:4px;cursor:pointer;width:100%;">Cancel</button>
+    </div>`;
+
+  document.body.appendChild(modal);
+  modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+}
+
+function pickClassAndStart(cls) {
+  document.getElementById('pick-class-modal').style.display = 'none';
   if (currentClass) save();
-  currentClass = '';
-  localStorage.removeItem('dh2-last-class');
-  document.getElementById('class-picker').value = '';
-  document.getElementById('pages').innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:1.5rem;"><div style="font-family:\'Cinzel\',serif;font-size:13px;letter-spacing:0.15em;color:var(--muted);">NO CHARACTER LOADED</div><button onclick="newCharacter()" style="font-family:\'Cinzel\',serif;font-size:12px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:14px 32px;border-radius:6px;cursor:pointer;">+ New Character</button></div>';
+  currentClass = cls;
+  localStorage.setItem('dh2-last-class', cls);
+  document.getElementById('class-picker').value = cls;
+  buildPages(cls);
+  restoreData(null); // fresh sheet
   renderSidebar();
   showSheetTab('sheet');
 }
