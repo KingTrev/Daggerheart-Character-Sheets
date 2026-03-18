@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 0 — Daggerheart</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080909;--bg2:#0d0f10;--bg3:#131517;--bg4:#191c1e;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#e8e3d8;--muted:#6a6560;--dim:#3a3835;
+  --gold:#c9a84c;--gold-dim:#7a6530;--gold-faint:#110e04;
+  --red:#c04040;--red-dim:#7a2828;--red-faint:#120606;
+  --teal:#3a8a80;--teal-dim:#2a6560;--teal-faint:#060e0c;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{height:100%;}
+body{
+  min-height:100%;background:var(--bg);color:var(--text);
+  font-family:'Crimson Pro',serif;
+  display:flex;flex-direction:column;
+}
+
+/* ── HEADER ── */
+.s0-header{
+  height:52px;background:var(--bg2);border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0;
+  position:sticky;top:0;z-index:100;
+}
+.s0-brand{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:0.18em;color:var(--gold);}
+.s0-header-div{width:1px;height:22px;background:var(--border2);}
+.s0-step-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.14em;color:var(--muted);}
+.s0-spacer{flex:1;}
+.s0-restart-btn{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;
+  background:none;border:1px solid var(--border2);color:var(--muted);
+  padding:4px 10px;border-radius:20px;cursor:pointer;
+}
+.s0-restart-btn:hover{color:var(--text);}
+.s0-home-link{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;
+  color:var(--muted);text-decoration:none;padding:4px 10px;
+  border:1px solid var(--border2);border-radius:20px;
+}
+.s0-home-link:hover{color:var(--text);}
+
+/* ── PROGRESS BAR ── */
+.s0-progress{
+  height:3px;background:var(--border);flex-shrink:0;
+}
+.s0-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));
+  transition:width 0.4s ease;
+}
+
+/* ── MAIN ── */
+.s0-main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:2rem 1rem 4rem;
+}
+
+.s0-wizard{
+  width:100%;
+  max-width:680px;
+}
+
+/* ── STEP CONTENT ── */
+.s0-section{
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:10px;overflow:hidden;margin-bottom:1.5rem;
+}
+.s0-section-hdr{
+  background:var(--bg3);border-bottom:1px solid var(--border);
+  padding:14px 18px;
+  display:flex;align-items:center;gap:10px;
+}
+.s0-section-icon{font-size:16px;flex-shrink:0;}
+.s0-section-title{
+  font-family:'Cinzel',serif;font-size:13px;font-weight:700;
+  letter-spacing:0.08em;color:var(--gold);
+}
+.s0-section-body{padding:18px;}
+
+/* ── CARD ── */
+.s0-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-left:3px solid var(--border2);
+  border-radius:0 6px 6px 0;
+  padding:12px 14px;margin-bottom:10px;
+}
+.s0-card-title{
+  font-family:'Cinzel',serif;font-size:9px;font-weight:700;
+  letter-spacing:0.12em;margin-bottom:5px;
+}
+
+/* ── NAV BUTTONS ── */
+.s0-nav{
+  display:flex;gap:10px;margin-top:0.5rem;
+}
+.s0-back-btn{
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;
+  background:none;border:1px solid var(--border2);color:var(--muted);
+  padding:12px 20px;border-radius:6px;cursor:pointer;flex:1;
+}
+.s0-back-btn:hover{color:var(--text);}
+.s0-next-btn{
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;
+  background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);
+  padding:12px 24px;border-radius:6px;cursor:pointer;flex:2;
+}
+.s0-next-btn:hover{background:var(--bg4);}
+.s0-finish-btn{
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;
+  background:var(--teal-faint);border:1px solid var(--teal-dim);color:var(--teal);
+  padding:14px;border-radius:6px;cursor:pointer;width:100%;margin-top:0.5rem;
+}
+.s0-finish-btn:hover{background:var(--bg4);}
+
+/* ── CLASS CARDS ── */
+.class-cards-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;
+}
+.class-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px;cursor:pointer;
+  transition:all 0.15s;
+}
+.class-card:hover{border-color:var(--border2);background:var(--bg4);}
+.class-card.selected{border-color:var(--gold-dim);background:var(--gold-faint);}
+.class-card-name{
+  font-family:'Cinzel',serif;font-size:11px;font-weight:700;
+  letter-spacing:0.08em;color:var(--text);margin-bottom:3px;
+}
+.class-card.selected .class-card-name{color:var(--gold);}
+.class-card-domains{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;
+  color:var(--muted);
+}
+
+/* ── SUBCLASS CARDS ── */
+.subclass-cards{display:flex;flex-direction:column;gap:10px;}
+.subclass-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;cursor:pointer;transition:all 0.15s;
+}
+.subclass-card:hover{border-color:var(--border2);}
+.subclass-card.selected{border-color:var(--teal-dim);}
+.subclass-card-hdr{
+  padding:10px 14px;background:var(--bg4);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.subclass-card-name{
+  font-family:'Cinzel',serif;font-size:11px;font-weight:700;
+  letter-spacing:0.06em;color:var(--text);
+}
+.subclass-card.selected .subclass-card-name{color:var(--teal);}
+.subclass-card-spellcast{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--gold);
+}
+.subclass-card-body{padding:10px 14px;}
+.subclass-feat{
+  background:var(--bg2);border:1px solid var(--border);
+  border-left:2px solid var(--teal-dim);
+  border-radius:0 4px 4px 0;padding:8px 10px;margin-bottom:6px;
+}
+.subclass-feat-label{
+  font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.1em;
+  color:var(--teal);margin-bottom:3px;
+}
+.subclass-feat-text{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* ── ANCESTRY GRID ── */
+.ancestry-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:0.75rem;
+}
+.anc-card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;padding:8px 10px;cursor:pointer;transition:all 0.15s;
+}
+.anc-card:hover{border-color:var(--border2);}
+.anc-card.selected{border-color:var(--teal-dim);background:var(--teal-faint);}
+.anc-card-name{
+  font-family:'Cinzel',serif;font-size:10px;font-weight:700;
+  letter-spacing:0.06em;color:var(--text);margin-bottom:2px;
+}
+.anc-card.selected .anc-card-name{color:var(--teal);}
+.anc-card-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+
+/* ── SELECT ── */
+.s0-select{
+  width:100%;font-family:'Cinzel',serif;font-size:13px;
+  background:var(--bg3);border:1px solid var(--gold-dim);color:var(--text);
+  padding:10px 12px;border-radius:6px;outline:none;
+  margin-bottom:0.75rem;
+}
+
+/* ── TRAIT INPUTS ── */
+.traits-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.trait-input-block{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;padding:10px 12px;
+}
+.trait-input-label{
+  font-family:'Cinzel',serif;font-size:9px;font-weight:700;
+  letter-spacing:0.12em;color:var(--muted);margin-bottom:6px;display:block;
+}
+.trait-input{
+  width:100%;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:500;
+  background:none;border:none;border-bottom:1px solid var(--border2);
+  color:var(--gold);outline:none;padding:2px 0;text-align:center;
+}
+.trait-actions-list{
+  font-size:11px;color:var(--dim);margin-top:4px;line-height:1.5;text-align:center;
+}
+
+/* ── EXP ROWS ── */
+.exp-row{
+  display:flex;gap:8px;align-items:center;margin-bottom:8px;
+}
+.exp-name-input{
+  flex:1;font-family:'Crimson Pro',serif;font-size:14px;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:4px;padding:7px 10px;color:var(--text);outline:none;
+}
+.exp-bonus-input{
+  width:60px;font-family:'JetBrains Mono',monospace;font-size:13px;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:4px;padding:7px 8px;color:var(--gold);outline:none;text-align:center;
+}
+.exp-rm-btn{
+  background:none;border:none;color:var(--dim);font-size:16px;
+  cursor:pointer;padding:0;line-height:1;
+}
+.exp-rm-btn:hover{color:var(--red);}
+
+/* ── STAT ARRAY BADGES ── */
+.stat-array{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;}
+.stat-badge{
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:4px;padding:4px 10px;color:var(--muted);
+}
+.stat-badge.pos{color:var(--teal);border-color:var(--teal-dim);}
+.stat-badge.neg{color:var(--red);border-color:var(--red-dim);}
+
+/* ── SUMMARY TABLE ── */
+.summary-grid{
+  display:grid;grid-template-columns:auto 1fr;gap:6px 14px;
+  font-size:13px;line-height:1.9;
+}
+.summary-label{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--muted);
+}
+.summary-val{font-weight:600;color:var(--text);}
+
+/* Tip wrap */
+.tip-wrap{position:relative;display:inline-flex;align-items:center;gap:4px;}
+.tip-btn{background:none;border:1px solid var(--border2);border-radius:50%;width:14px;height:14px;font-size:8px;color:var(--muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;line-height:1;}
+.tip-popover{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--muted);width:240px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.tip-popover.open{display:block;}
+.sh{font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:0.12em;color:var(--muted);margin-bottom:4px;}
+
+/* Mobile */
+@media(max-width:600px){
+  .class-cards-grid{grid-template-columns:1fr;}
+  .ancestry-grid{grid-template-columns:1fr;}
+  .traits-grid{grid-template-columns:1fr;}
+  .s0-main{padding:1rem 0.75rem 3rem;}
+  .s0-header{padding:0 12px;}
+}
+</style>
+</head>
+<body>
+
+<div class="s0-header">
+  <span class="s0-brand">⚔ SESSION 0</span>
+  <div class="s0-header-div"></div>
+  <span class="s0-step-label" id="s0-step-label">STEP 1</span>
+  <div class="s0-spacer"></div>
+  <button class="s0-restart-btn" onclick="s0Restart()">↺ Restart</button>
+  <a class="s0-home-link" href="index.html">🏠 Home</a>
+</div>
+
+<div class="s0-progress">
+  <div class="s0-progress-fill" id="s0-progress-fill" style="width:0%"></div>
+</div>
+
+<div class="s0-main">
+  <div class="s0-wizard" id="s0-wizard"></div>
+</div>
+
+<!-- Data files -->
+<script src="data/classes.js"></script>
+<script src="data/subclasses.js"></script>
+<script src="data/ancestries.js"></script>
+<script src="data/cards.js"></script>
+
+<!-- S0 logic -->
+<script src="js/s0.js"></script>
+
+<script>
+// ── BOOT ──
+document.addEventListener('DOMContentLoaded', () => {
+  loadS0Data();
+  renderS0();
+
+  // s0ApplyAndGo wires the final "Apply to Sheet" button
+  window.s0ApplyAndGo = s0ApplyAndGo;
+});
+
+function s0Restart() {
+  if (!confirm('Start Session 0 over from the beginning?')) return;
+  s0Data = {}; s0Step = 0;
+  localStorage.removeItem(S0_SAVE_KEY);
+  renderS0();
+}
+</script>
+</body>
+</html>
