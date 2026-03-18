@@ -1,6 +1,12 @@
 // ── ANCESTRY & COMMUNITY DATA ──
 
 const ANCESTRY_DATA = {
+  'Mixed Ancestry': {
+    description: 'Take the first feature of one ancestry and the second feature of another.',
+    features: [
+      { name: 'Mixed Heritage', text: 'Choose two ancestries. Take the first (top) feature from one and the second (bottom) feature from the other. Record both ancestries in your Heritage field.' }
+    ]
+  },
   Clank: {
     description: 'Clanks are sentient mechanical beings built from a variety of materials, including metal, wood, and stone.',
     features: [
@@ -75,7 +81,7 @@ const ANCESTRY_DATA = {
     description: 'Goblins are small humanoids easily recognizable by their large eyes and massive membranous ears.',
     features: [
       { name: 'Surefooted', text: 'You ignore disadvantage on Agility Rolls.' },
-      { name: 'Danger Sense', text: 'Once per rest, mark a Stress to force a reaction against you or an ally within Very Close range.' },
+      { name: 'Danger Sense', text: 'Once per rest, mark a Stress to force an adversary to reroll an attack against you or an ally within Very Close range.' },
     ]
   },
   Halfling: {
