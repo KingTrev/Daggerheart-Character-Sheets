@@ -244,30 +244,7 @@ function onMixedAncestryChange() {
   // Save selections
   if (a1) localStorage.setItem('dh2-mixed-a1-' + (currentClass||''), a1);
   if (a2) localStorage.setItem('dh2-mixed-a2-' + (currentClass||''), a2);
-  const feat1div = document.getElementById('mixed-feat-1');
-  const feat2div = document.getElementById('mixed-feat-2');
 
-  if (feat1div) {
-    const d = a1 && ANCESTRY_DATA[a1];
-    if (d && d.features[0]) {
-      const txt = d.features[0].text.length > 80 ? d.features[0].text.substring(0,80)+'…' : d.features[0].text;
-      feat1div.innerHTML = '<strong>' + d.features[0].name + '</strong> — ' + txt;
-      feat1div.style.display = 'block';
-    } else {
-      feat1div.style.display = 'none';
-    }
-  }
-  if (feat2div) {
-    const d = a2 && ANCESTRY_DATA[a2];
-    if (d) {
-      const feat = d.features[1] || d.features[0];
-      const txt = feat.text.length > 80 ? feat.text.substring(0,80)+'…' : feat.text;
-      feat2div.innerHTML = '<strong>' + feat.name + '</strong> — ' + txt;
-      feat2div.style.display = 'block';
-    } else {
-      feat2div.style.display = 'none';
-    }
-  }
   // Update the feature bar to show the chosen features
   renderMixedAncestryFeatures(a1, a2);
 }
@@ -417,13 +394,11 @@ function buildPages(cls) {
                     <select id="f-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:3px 6px;border-radius:3px;outline:none;" onchange="onMixedAncestryChange();save()">
                       <option value="">1st feature from...</option>
                     </select>
-                    <div id="mixed-feat-1" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--teal);margin-top:3px;display:none;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
                   </div>
                   <div>
                     <select id="f-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:3px 6px;border-radius:3px;outline:none;" onchange="onMixedAncestryChange();save()">
                       <option value="">2nd feature from...</option>
                     </select>
-                    <div id="mixed-feat-2" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--gold-dim);margin-top:3px;display:none;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
                   </div>
                 </div>
               </div>
