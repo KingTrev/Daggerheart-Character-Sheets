@@ -1129,8 +1129,6 @@ body.hints-off input[data-hint]::placeholder { color: transparent !important; }
   .inv-row input[style*="width:46px"] { width: 56px !important; }
 
   /* S0 wizard */
-  #tab-s0 { padding: 0; }
-  #s0-wizard { padding: 0.75rem !important; }
 
   /* Modals */
   #new-char-modal > div,
@@ -1387,10 +1385,7 @@ body { font-size: 15px; }
       </div>
     </div>
 
-    <!-- SESSION 0 TAB -->
-    <div id="tab-s0" style="display:none;">
-      <div id="s0-wizard" style="max-width:680px;margin:0 auto;padding:1rem;"></div>
-    </div>
+<!-- S0 moved to s0.html -->
 
     <!-- CLASS REFERENCE TAB -->
     <div id="tab-ref" style="display:none;">
@@ -1458,10 +1453,10 @@ body { font-size: 15px; }
     <div style="font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:0.5rem;">New Character</div>
     <p style="font-family:'Crimson Pro',serif;font-size:14px;color:var(--muted);margin-bottom:1.75rem;line-height:1.6;">How would you like to create your character?</p>
     <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="newCharViaS0()" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:14px 20px;border-radius:6px;cursor:pointer;text-align:left;">
+      <a href="s0.html" onclick="closeNewCharModal();if(currentClass)save();" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:14px 20px;border-radius:6px;cursor:pointer;text-align:left;text-decoration:none;display:block;">
         <div style="font-weight:700;margin-bottom:3px;">✦ Session 0 Walkthrough</div>
         <div style="font-family:'Crimson Pro',serif;font-size:12px;color:var(--muted);font-weight:400;letter-spacing:0;">Guided step-by-step character creation with party questions and background prompts.</div>
-      </button>
+      </a>
       <button onclick="newCharDirect()" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.08em;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:14px 20px;border-radius:6px;cursor:pointer;text-align:left;">
         <div style="font-weight:700;margin-bottom:3px;">◈ Jump to Character Sheet</div>
         <div style="font-family:'Crimson Pro',serif;font-size:12px;color:var(--muted);font-weight:400;letter-spacing:0;">Pick a class and fill out your sheet directly.</div>
