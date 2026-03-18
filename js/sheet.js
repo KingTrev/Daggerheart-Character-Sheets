@@ -814,6 +814,34 @@ function saveS0Data() {
 function saveS0() { saveS0Data(); }
 
 
+
+function updateMixedAncestryPreview() {
+  const a1val = s0Data['s0-mixed-a1'];
+  const a2val = s0Data['s0-mixed-a2'];
+  const prev1 = document.getElementById('mixed-prev-1');
+  const prev2 = document.getElementById('mixed-prev-2');
+
+  if (prev1) {
+    const d = a1val && ANCESTRY_DATA[a1val];
+    if (d && d.features[0]) {
+      prev1.innerHTML = `<strong>${d.features[0].name}:</strong> ${d.features[0].text}`;
+      prev1.style.display = 'block';
+    } else {
+      prev1.style.display = 'none';
+    }
+  }
+
+  if (prev2) {
+    const d = a2val && ANCESTRY_DATA[a2val];
+    if (d) {
+      const feat = d.features[1] || d.features[0];
+      prev2.innerHTML = `<strong>${feat.name}:</strong> ${feat.text}`;
+      prev2.style.display = 'block';
+    } else {
+      prev2.style.display = 'none';
+    }
+  }
+}
 function s0GoToDomainCards() {
   showSheetTab('cards');
   // Small delay to let the tab render, then inject the return button
@@ -953,15 +981,15 @@ function renderS0() {
           <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);margin-bottom:6px;">MIXED ANCESTRY — CHOOSE TWO</div>
           <p style="font-size:12px;line-height:1.7;margin-bottom:10px;">Take the <strong>first feature</strong> of one ancestry and the <strong>second feature</strong> of another.</p>
           <label style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">FIRST FEATURE FROM</label>
-          <select id="s0-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:4px;outline:none;margin-bottom:8px;" oninput="s0Data['s0-mixed-a1']=this.value;saveS0Data();wireAncestrySelect();">
+          <select id="s0-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:4px;outline:none;margin-bottom:8px;" oninput="s0Data['s0-mixed-a1']=this.value;saveS0Data();updateMixedAncestryPreview();">
             <option value="">— Choose ancestry —</option>${ancestryOptions}
           </select>
           <label style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">SECOND FEATURE FROM</label>
-          <select id="s0-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:4px;outline:none;margin-bottom:8px;" oninput="s0Data['s0-mixed-a2']=this.value;saveS0Data();wireAncestrySelect();">
+          <select id="s0-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:4px;outline:none;margin-bottom:8px;" oninput="s0Data['s0-mixed-a2']=this.value;saveS0Data();updateMixedAncestryPreview();">
             <option value="">— Choose ancestry —</option>${ancestryOptions}
           </select>
-          ${s0Data['s0-mixed-a1']&&ANCESTRY_DATA[s0Data['s0-mixed-a1']]?`<div style="font-size:12px;padding:8px 10px;background:var(--bg2);border-radius:3px;border-left:2px solid var(--teal);margin-bottom:4px;"><strong>${ANCESTRY_DATA[s0Data['s0-mixed-a1']].features[0]?.name}:</strong> ${ANCESTRY_DATA[s0Data['s0-mixed-a1']].features[0]?.text||''}</div>`:''}
-          ${s0Data['s0-mixed-a2']&&ANCESTRY_DATA[s0Data['s0-mixed-a2']]?`<div style="font-size:12px;padding:8px 10px;background:var(--bg2);border-radius:3px;border-left:2px solid var(--gold-dim);"><strong>${ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[1]?.name||ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[0]?.name}:</strong> ${ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[1]?.text||ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[0]?.text||''}</div>`:''}
+          <div id="mixed-prev-1" style="font-size:12px;padding:8px 10px;background:var(--bg2);border-radius:3px;border-left:2px solid var(--teal);margin-bottom:4px;display:${s0Data['s0-mixed-a1']&&ANCESTRY_DATA[s0Data['s0-mixed-a1']]?'block':'none'}">${s0Data['s0-mixed-a1']&&ANCESTRY_DATA[s0Data['s0-mixed-a1']]?`<strong>${ANCESTRY_DATA[s0Data['s0-mixed-a1']].features[0]?.name}:</strong> ${ANCESTRY_DATA[s0Data['s0-mixed-a1']].features[0]?.text||''}`:'&nbsp;'}</div>
+          <div id="mixed-prev-2" style="font-size:12px;padding:8px 10px;background:var(--bg2);border-radius:3px;border-left:2px solid var(--gold-dim);display:${s0Data['s0-mixed-a2']&&ANCESTRY_DATA[s0Data['s0-mixed-a2']]?'block':'none'}">${s0Data['s0-mixed-a2']&&ANCESTRY_DATA[s0Data['s0-mixed-a2']]?`<strong>${ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[1]?.name||ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[0]?.name}:</strong> ${ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[1]?.text||ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[0]?.text||''}`:'&nbsp;'}</div>
         </div>`;
       }
       det.innerHTML = `<div style="background:var(--bg3);border:1px solid var(--teal);border-radius:5px;padding:12px 14px;margin-top:10px;">
