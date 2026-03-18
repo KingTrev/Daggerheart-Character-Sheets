@@ -417,13 +417,13 @@ function buildPages(cls) {
                     <select id="f-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:3px 6px;border-radius:3px;outline:none;" onchange="onMixedAncestryChange();save()">
                       <option value="">1st feature from...</option>
                     </select>
-                    <div id="mixed-feat-1" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--teal);margin-top:3px;display:none;line-height:1.4;"></div>
+                    <div id="mixed-feat-1" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--teal);margin-top:3px;display:none;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
                   </div>
                   <div>
                     <select id="f-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:10px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:3px 6px;border-radius:3px;outline:none;" onchange="onMixedAncestryChange();save()">
                       <option value="">2nd feature from...</option>
                     </select>
-                    <div id="mixed-feat-2" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--gold-dim);margin-top:3px;display:none;line-height:1.4;"></div>
+                    <div id="mixed-feat-2" style="font-size:10px;color:var(--muted);padding:2px 5px;border-left:2px solid var(--gold-dim);margin-top:3px;display:none;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
                   </div>
                 </div>
               </div>
