@@ -433,7 +433,7 @@ function buildPages(cls) {
 
           <div>
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-              ${sh("Hope","Hope is your primary resource. Gain Hope when your Hope Die is higher on a roll. Spend it to use Experiences, activate class abilities, help allies, or recall domain cards. Max 6 by default.")}
+              ${sh("Hope","Hope is your primary resource. Gain Hope when your Hope Die is higher on a roll. Spend it to use Experiences, activate class abilities, and help allies. Max 6 by default.")}
               <button onclick="adjustHopeCount(-1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">−</button>
               <button onclick="adjustHopeCount(1)" style="font-family:'Cinzel',serif;font-size:9px;width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;line-height:1;padding:0;">+</button>
             </div>
@@ -491,24 +491,24 @@ function buildPages(cls) {
               <div class="prof-row" id="prof-dots"></div>
             </div>
 
-            <div class="weapon-section" style="margin-bottom:8px;">
-              <div class="weapon-label">Primary</div>
-              <div class="weapon-fields">
+            <div class="weapon-section" style="margin-bottom:6px;">
+              <div class="weapon-label">Primary Weapon</div>
+              <div class="weapon-fields" style="grid-template-columns:2fr 1.2fr 1.2fr;gap:4px;margin-bottom:4px;">
                 <div class="wfield"><span class="ey">Name</span><input type="text" id="w1-name" placeholder="${wPart(c.suggestedPrimary,0)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w1-trait" placeholder="${wPart(c.suggestedPrimary,1)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w1-damage" placeholder="${wPart(c.suggestedPrimary,2)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait / Range</span><input type="text" id="w1-trait" placeholder="${wPart(c.suggestedPrimary,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage</span><input type="text" id="w1-damage" placeholder="${wPart(c.suggestedPrimary,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield"><span class="ey">Feature</span><textarea id="w1-feature" rows="2" placeholder="${wFeature(c.suggestedPrimary)}" oninput="save()" style="resize:none;"></textarea></div>
+              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w1-feature" placeholder="${wFeature(c.suggestedPrimary)}" oninput="save()"></div>
             </div>
 
-            <div class="weapon-section" style="margin-bottom:8px;">
-              <div class="weapon-label">Secondary</div>
-              <div class="weapon-fields">
+            <div class="weapon-section" style="margin-bottom:6px;">
+              <div class="weapon-label">Secondary Weapon</div>
+              <div class="weapon-fields" style="grid-template-columns:2fr 1.2fr 1.2fr;gap:4px;margin-bottom:4px;">
                 <div class="wfield"><span class="ey">Name</span><input type="text" id="w2-name" placeholder="${wPart(c.suggestedSecondary,0)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Trait & Range</span><input type="text" id="w2-trait" placeholder="${wPart(c.suggestedSecondary,1)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Damage & Type</span><input type="text" id="w2-damage" placeholder="${wPart(c.suggestedSecondary,2)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait / Range</span><input type="text" id="w2-trait" placeholder="${wPart(c.suggestedSecondary,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage</span><input type="text" id="w2-damage" placeholder="${wPart(c.suggestedSecondary,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield"><span class="ey">Feature</span><textarea id="w2-feature" rows="2" placeholder="${wFeature(c.suggestedSecondary)}" oninput="save()" style="resize:none;"></textarea></div>
+              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w2-feature" placeholder="${wFeature(c.suggestedSecondary)}" oninput="save()"></div>
             </div>
 
             ${sh("Active Armor","Your currently equipped armor. Base Thresholds are the damage breakpoints before adding your level. Base Score is how many Armor Slots you have. Some armor has features like −1 Evasion.")}
@@ -518,7 +518,7 @@ function buildPages(cls) {
                 <div class="wfield"><span class="ey">Base Thresholds</span><input type="text" id="armor-thresh" placeholder="${wPart(c.suggestedArmor,1)}" oninput="save()"></div>
                 <div class="wfield"><span class="ey">Base Score</span><input type="text" id="armor-score" placeholder="${wPart(c.suggestedArmor,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield" style="margin-top:4px;"><span class="ey">Feature</span><textarea id="armor-feature" rows="2" placeholder="${wFeature(c.suggestedArmor)}" oninput="save()" style="resize:none;"></textarea></div>
+              <div class="wfield" style="margin-top:4px;"><span class="ey">Feature</span><input type="text" id="armor-feature" placeholder="${wFeature(c.suggestedArmor)}" oninput="save()"></div>
             </div>
 
             ${sh("Inventory","Items you're carrying. Track general gear, spare weapons, and spare armor here. Talk to your GM about what you can reasonably carry.")}
@@ -560,7 +560,7 @@ function buildPages(cls) {
 
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:6px;overflow:hidden;">
             <div style="display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0.75rem;background:var(--bg4);border-bottom:1px solid var(--border);">
-              ${sh("Domain Cards","Your active spells and abilities. You can hold up to 5 in your loadout. Using a card may place it in your vault — spend Hope equal to its Recall Cost to bring it back into your loadout.")}
+              ${sh("Domain Cards","Your active spells and abilities. You can hold up to 5 in your loadout. Using a card may place it in your vault — mark Stress equal to its Recall Cost (shown top-right of the card) to bring it back into your loadout.")}
               <button onclick="showSheetTab('cards')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:3px 10px;border-radius:3px;cursor:pointer;white-space:nowrap;">Manage →</button>
             </div>
             <div id="loadout-quick" style="padding:0.5rem 0.75rem;"></div>
@@ -913,11 +913,49 @@ function renderS0() {
       if (!det) return;
       if (!d) { det.style.display = 'none'; return; }
       det.style.display = '';
+      let extraHTML = '';
+      // Clank: prompt to choose which Experience gets +1
+      if (sel.value === 'Clank') {
+        extraHTML = `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-radius:5px;padding:12px 14px;margin-top:8px;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);margin-bottom:6px;">PURPOSEFUL DESIGN — +1 EXPERIENCE BONUS</div>
+          <p style="font-size:12px;line-height:1.7;margin-bottom:8px;">Decide who made you and for what purpose. Which of your Experiences best aligns with this? It gains a permanent +1 bonus.</p>
+          <label style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:4px;">EXPERIENCE NAME (e.g. "Former Guard")</label>
+          <input type="text" id="s0-clank-exp" placeholder="Which Experience gets +1?" value="${s0Data['s0-clank-exp']||''}"
+            style="width:100%;font-family:'Crimson Pro',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:4px;outline:none;"
+            oninput="s0Data['s0-clank-exp']=this.value;saveS0Data();">
+          <p style="font-size:11px;color:var(--muted);margin-top:6px;">Write this Experience on your sheet with +1 added to its value (e.g. if you plan +2, write +3).</p>
+        </div>`;
+      }
+      // Mixed Ancestry: show two ancestry pickers
+      if (sel.value === 'Mixed Ancestry') {
+        const ancestryOptions = Object.keys(ANCESTRY_DATA).filter(a=>a!=='Mixed Ancestry').map(a=>`<option value="${a}">${a}</option>`).join('');
+        extraHTML = `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-radius:5px;padding:12px 14px;margin-top:8px;">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);margin-bottom:6px;">MIXED ANCESTRY — CHOOSE TWO</div>
+          <p style="font-size:12px;line-height:1.7;margin-bottom:10px;">Take the <strong>first feature</strong> of one ancestry and the <strong>second feature</strong> of another.</p>
+          <label style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">FIRST FEATURE FROM</label>
+          <select id="s0-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:4px;outline:none;margin-bottom:8px;" oninput="s0Data['s0-mixed-a1']=this.value;saveS0Data();wireAncestrySelect();">
+            <option value="">— Choose ancestry —</option>${ancestryOptions}
+          </select>
+          <label style="font-family:'Cinzel',serif;font-size:9px;color:var(--muted);display:block;margin-bottom:4px;">SECOND FEATURE FROM</label>
+          <select id="s0-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:13px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:4px;outline:none;margin-bottom:8px;" oninput="s0Data['s0-mixed-a2']=this.value;saveS0Data();wireAncestrySelect();">
+            <option value="">— Choose ancestry —</option>${ancestryOptions}
+          </select>
+          ${s0Data['s0-mixed-a1']&&ANCESTRY_DATA[s0Data['s0-mixed-a1']]?`<div style="font-size:12px;padding:8px 10px;background:var(--bg2);border-radius:3px;border-left:2px solid var(--teal);margin-bottom:4px;"><strong>${ANCESTRY_DATA[s0Data['s0-mixed-a1']].features[0]?.name}:</strong> ${ANCESTRY_DATA[s0Data['s0-mixed-a1']].features[0]?.text||''}</div>`:''}
+          ${s0Data['s0-mixed-a2']&&ANCESTRY_DATA[s0Data['s0-mixed-a2']]?`<div style="font-size:12px;padding:8px 10px;background:var(--bg2);border-radius:3px;border-left:2px solid var(--gold-dim);"><strong>${ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[1]?.name||ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[0]?.name}:</strong> ${ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[1]?.text||ANCESTRY_DATA[s0Data['s0-mixed-a2']].features[0]?.text||''}</div>`:''}
+        </div>`;
+      }
       det.innerHTML = `<div style="background:var(--bg3);border:1px solid var(--teal);border-radius:5px;padding:12px 14px;margin-top:10px;">
         <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--teal);margin-bottom:6px;">${sel.value.toUpperCase()} FEATURES</div>
         <p style="font-size:12px;line-height:1.7;margin-bottom:8px;">${d.description}</p>
         ${d.features.map(f=>`<div style="font-size:12px;line-height:1.7;margin-bottom:4px;padding-left:10px;border-left:2px solid var(--teal);"><strong>${f.name}:</strong> ${f.text.replace(/<[^>]*>/g,'')}</div>`).join('')}
-      </div>`;
+      </div>${extraHTML}`;
+      // Restore mixed ancestry selects
+      if (sel.value === 'Mixed Ancestry') {
+        setTimeout(() => {
+          const a1 = document.getElementById('s0-mixed-a1'); if (a1 && s0Data['s0-mixed-a1']) a1.value = s0Data['s0-mixed-a1'];
+          const a2 = document.getElementById('s0-mixed-a2'); if (a2 && s0Data['s0-mixed-a2']) a2.value = s0Data['s0-mixed-a2'];
+        }, 0);
+      }
     }
     sel.addEventListener('change', () => { if (sel.id) s0Data[sel.id] = sel.value; saveS0Data(); update(); });
     if (sel.value) update();
@@ -958,6 +996,9 @@ function renderS0() {
         const el = document.getElementById('t-' + t);
         if (el && s0Val !== undefined && s0Val !== '') el.value = s0Val;
       });
+      // Ensure feature bar and heritage tip re-render with new values
+      renderFeatureBar();
+      onHeritageChange();
       // Full save so sidebar picks up class name
       save();
       renderSidebar();
@@ -1012,7 +1053,7 @@ function renderS0Step(id) {
     `);
 
     case 'how-dice': return s0Section('The Dice — Hope & Fear', `
-      <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Every action roll in Daggerheart uses two d12s — a <strong style="color:var(--gold);">Hope Die</strong> and a <strong style="color:var(--red);">Fear Die</strong>. You take the higher result, add a relevant trait score, and compare it to the Difficulty (usually 12).</p>
+      <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Every action roll in Daggerheart uses two d12s — a <strong style="color:var(--gold);">Hope Die</strong> and a <strong style="color:var(--red);">Fear Die</strong>. You take the higher result, add a relevant trait score, and compare it to the Difficulty — a number the GM sets based on the scenario.</p>
       <p style="font-size:14px;line-height:1.8;margin-bottom:1.25rem;color:var(--muted);">Which die is higher determines whether good or bad fortune ripples out from your action — even when you succeed.</p>
       ${s0Card('✦ SUCCESS WITH HOPE', '<p style="font-size:13px;line-height:1.7;">The Hope Die is higher. You succeed <em>and</em> gain a Hope token. Use Hope later to boost rolls, activate abilities, or help allies.</p>', 'var(--gold)')}
       ${s0Card('✦ SUCCESS WITH FEAR', '<p style="font-size:13px;line-height:1.7;">The Fear Die is higher. You succeed, but the GM gains a Fear token — expect a complication, a twist, or something to go sideways elsewhere.</p>', 'var(--red)')}
@@ -1023,7 +1064,7 @@ function renderS0Step(id) {
 
     case 'how-hope': return s0Section('Hope, Fear & The GM', `
       <p style="font-size:14px;line-height:1.8;margin-bottom:1.25rem;">Hope and Fear are a shared economy between players and GM. It's a constant tug-of-war that reflects how the battle is going.</p>
-      ${s0Card('PLAYERS SPEND HOPE TO:', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;"><li>Add an Experience bonus to a roll</li><li>Activate class Hope abilities</li><li>Help an ally (give them advantage)</li><li>Recall a spent domain card</li><li>Reduce incoming damage (Seraph)</li></ul>`, 'var(--gold)')}
+      ${s0Card('PLAYERS SPEND HOPE TO:', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;"><li>Add an Experience bonus to a roll</li><li>Activate class Hope abilities</li><li>Help an ally (give them advantage)</li><li>Recall a spent domain card (costs Stress = Recall Cost)</li><li>Reduce incoming damage (Seraph)</li></ul>`, 'var(--gold)')}
       ${s0Card('GM SPENDS FEAR TO:', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;"><li>Make enemies act between PC turns</li><li>Introduce complications and twists</li><li>Trigger environmental dangers</li><li>Clear enemy conditions</li><li>Escalate the stakes</li></ul>`, 'var(--red)')}
       ${s0Card('EXPERIENCES', `<p style="font-size:13px;line-height:1.7;">Experiences are specific things your character is exceptionally good at — like <em>"Navigating ancient ruins +2"</em> or <em>"Persuading merchants +3"</em>. When a roll is relevant to an Experience, spend a Hope to add its bonus.</p>`, 'var(--teal)')}
     `);
@@ -1080,20 +1121,7 @@ function renderS0Step(id) {
       return s0Section('Choose Your Subclass', `
         ${!cls ? `<p style="color:var(--muted);font-style:italic;">Go back and choose a class first.</p>` : `
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">Every <strong>${cls}</strong> chooses one of two subclasses. Your subclass sets your <strong>Spellcast trait</strong> and gives you a path of three features — Foundation (level 1), Specialization (level 5), and Mastery (level 8).</p>
-        ${subs.map(sub => `
-          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1rem;">
-            <div style="background:var(--bg3);padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-              <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--text);">${sub.name}</div>
-              ${sub.spellcast ? `<div style="font-family:'Cinzel',serif;font-size:9px;color:var(--gold);letter-spacing:0.1em;">SPELLCAST: ${sub.spellcast.toUpperCase()}</div>` : ''}
-            </div>
-            <div style="padding:12px 14px;">
-              ${s0Card('FOUNDATION (LV 1)', `<p style="font-size:12px;line-height:1.7;">${sub.foundation.replace(/<[^>]*>/g,'').substring(0,250)}${sub.foundation.length>250?'...':''}</p>`, 'var(--teal)')}
-              ${s0Card('SPECIALIZATION (LV 5)', `<p style="font-size:12px;line-height:1.7;">${sub.specialization.replace(/<[^>]*>/g,'').substring(0,200)}${sub.specialization.length>200?'...':''}</p>`, 'var(--gold)')}
-              ${s0Card('MASTERY (LV 8)', `<p style="font-size:12px;line-height:1.7;">${sub.mastery.replace(/<[^>]*>/g,'').substring(0,200)}${sub.mastery.length>200?'...':''}</p>`, 'var(--red)')}
-            </div>
-          </div>
-        `).join('')}
-        <div style="margin-top:0.5rem;">
+        <div style="margin-bottom:1.5rem;">
           <span style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);display:block;margin-bottom:6px;">YOUR CHOICE</span>
           <select id="s0-subclass" style="width:100%;font-family:'Cinzel',serif;font-size:14px;background:var(--bg3);border:1px solid var(--gold-dim);color:var(--text);padding:10px 12px;border-radius:4px;outline:none;">
             <option value="">— Choose a subclass —</option>
@@ -1213,7 +1241,7 @@ function renderS0Step(id) {
 
         ${s0Card('DOMAIN CARDS', `
           <p style="font-size:13px;line-height:1.75;margin-bottom:8px;">At level 1 you start with <strong>2 domain cards</strong>. Browse and add cards from your class's domains${cls && clsData ? ` — <strong>${clsData.domains}</strong>` : ''}.</p>
-          <button onclick="showSheetTab('cards')" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 16px;border-radius:4px;cursor:pointer;">Browse Domain Cards →</button>
+          <button onclick="showSheetTab('cards');setTimeout(()=>{const btn=document.getElementById('s0-return-btn');if(!btn){const b=document.createElement('button');b.id='s0-return-btn';b.textContent='← Return to Session 0';b.style.cssText='position:fixed;bottom:20px;right:20px;z-index:9999;font-family:Cinzel,serif;font-size:10px;letter-spacing:0.1em;background:#141008;border:1px solid #7a6530;color:#c9a84c;padding:10px 18px;border-radius:6px;cursor:pointer;';b.onclick=()=>{b.remove();showSheetTab('s0');};document.body.appendChild(b);}},100)" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:7px 16px;border-radius:4px;cursor:pointer;">Browse Domain Cards →</button>
         `, 'var(--gold)')}
       `);
     }
@@ -1369,7 +1397,7 @@ function renderS0Step(id) {
         ${s0Card('STILL TO DO', `<ul style="font-size:13px;line-height:1.9;padding-left:1.2rem;">
           <li>Fill in your character name, pronouns on the sheet</li>
           <li>Set your HP and Stress totals</li>
-          <li>Add your 2 starting domain cards</li>
+          <li>Add your 2 starting domain cards (use Domain Cards tab)</li>
           <li>Review your class feature and subclass Foundation</li>
           <li>Hit <strong>Save</strong></li>
         </ul>`, 'var(--gold)')}
