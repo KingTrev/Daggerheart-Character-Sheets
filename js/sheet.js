@@ -237,7 +237,82 @@ function renderFeatureBar() {
   } else if (tip) { tip.style.display = 'none'; }
 }
 
-function onHeritageChange() { renderFeatureBar(); }
+
+function onMixedAncestryChange() {
+  const a1 = document.getElementById('f-mixed-a1')?.value || '';
+  const a2 = document.getElementById('f-mixed-a2')?.value || '';
+  // Save selections
+  if (a1) localStorage.setItem('dh2-mixed-a1-' + (currentClass||''), a1);
+  if (a2) localStorage.setItem('dh2-mixed-a2-' + (currentClass||''), a2);
+  const feat1div = document.getElementById('mixed-feat-1');
+  const feat2div = document.getElementById('mixed-feat-2');
+
+  if (feat1div) {
+    const d = a1 && ANCESTRY_DATA[a1];
+    if (d && d.features[0]) {
+      feat1div.innerHTML = '<strong>' + d.features[0].name + ':</strong> ' + d.features[0].text;
+      feat1div.style.display = 'block';
+    } else {
+      feat1div.style.display = 'none';
+    }
+  }
+  if (feat2div) {
+    const d = a2 && ANCESTRY_DATA[a2];
+    if (d) {
+      const feat = d.features[1] || d.features[0];
+      feat2div.innerHTML = '<strong>' + feat.name + ':</strong> ' + feat.text;
+      feat2div.style.display = 'block';
+    } else {
+      feat2div.style.display = 'none';
+    }
+  }
+  // Update the feature bar to show the chosen features
+  renderMixedAncestryFeatures(a1, a2);
+}
+
+function renderMixedAncestryFeatures(a1, a2) {
+  // Temporarily patch ANCESTRY_DATA['Mixed Ancestry'] with the chosen features
+  // so renderFeatureBar picks them up correctly
+  if (a1 && a2 && ANCESTRY_DATA[a1] && ANCESTRY_DATA[a2]) {
+    const feat1 = ANCESTRY_DATA[a1].features[0];
+    const feat2 = ANCESTRY_DATA[a2].features[1] || ANCESTRY_DATA[a2].features[0];
+    ANCESTRY_DATA['Mixed Ancestry']._resolved = [feat1, feat2];
+    ANCESTRY_DATA['Mixed Ancestry'].features = [feat1, feat2];
+    ANCESTRY_DATA['Mixed Ancestry'].description = a1 + ' / ' + a2;
+    renderFeatureBar();
+  }
+}
+
+function onHeritageChange() {
+  renderFeatureBar();
+  const ancestryVal = document.getElementById('f-ancestry')?.value || '';
+  const mixedDiv = document.getElementById('mixed-ancestry-pickers');
+  if (mixedDiv) {
+    if (ancestryVal === 'Mixed Ancestry') {
+      mixedDiv.style.display = 'block';
+      // Populate selects if empty
+      ['f-mixed-a1','f-mixed-a2'].forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel && sel.options.length <= 1) {
+          Object.keys(ANCESTRY_DATA).filter(a=>a!=='Mixed Ancestry').forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a; opt.textContent = a;
+            sel.appendChild(opt);
+          });
+        }
+      });
+      // Restore saved values
+      const saved1 = localStorage.getItem('dh2-mixed-a1-' + (currentClass||''));
+      const saved2 = localStorage.getItem('dh2-mixed-a2-' + (currentClass||''));
+      const s1 = document.getElementById('f-mixed-a1');
+      const s2 = document.getElementById('f-mixed-a2');
+      if (s1 && saved1) { s1.value = saved1; onMixedAncestryChange(); }
+      if (s2 && saved2) { s2.value = saved2; onMixedAncestryChange(); }
+    } else {
+      mixedDiv.style.display = 'none';
+    }
+  }
+}
 function onSubclassChange() { renderFeatureBar(); }
 function onAncestryChange() { renderFeatureBar(); }
 function onCommunityChange() { renderFeatureBar(); }
@@ -334,6 +409,18 @@ function buildPages(cls) {
                 <option value="">Ancestry...</option>
                 ${Object.keys(ANCESTRY_DATA).map(a=>`<option value="${a}">${a}</option>`).join('')}
               </select>
+              <div id="mixed-ancestry-pickers" style="display:none;margin-top:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:8px 10px;">
+                <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--teal);margin-bottom:6px;">MIXED ANCESTRY — CHOOSE TWO</div>
+                <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">First feature from one ancestry, second feature from another.</div>
+                <select id="f-mixed-a1" style="width:100%;font-family:'Cinzel',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:5px 8px;border-radius:3px;outline:none;margin-bottom:5px;" onchange="onMixedAncestryChange();save()">
+                  <option value="">— First feature from... —</option>
+                </select>
+                <div id="mixed-feat-1" style="font-size:11px;color:var(--muted);padding:4px 6px;border-left:2px solid var(--teal);margin-bottom:6px;display:none;"></div>
+                <select id="f-mixed-a2" style="width:100%;font-family:'Cinzel',serif;font-size:11px;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:5px 8px;border-radius:3px;outline:none;margin-bottom:5px;" onchange="onMixedAncestryChange();save()">
+                  <option value="">— Second feature from... —</option>
+                </select>
+                <div id="mixed-feat-2" style="font-size:11px;color:var(--muted);padding:4px 6px;border-left:2px solid var(--gold-dim);display:none;"></div>
+              </div>
             </div>
           </div>
           <div>
