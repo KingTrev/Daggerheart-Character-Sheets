@@ -1,4 +1,6 @@
 // ── s0.js — Session 0 Character Creation ──
+// Expose key functions globally
+
 // Standalone S0 flow. Reads CLASSES, SUBCLASSES, ANCESTRY_DATA, COMMUNITY_DATA
 // from the data files. On completion writes character data to localStorage
 // so sheet.html can pick it up.
@@ -725,7 +727,7 @@ function renderS0Step(id) {
           <li>Review your class feature and subclass Foundation</li>
           <li>Hit <strong>Save</strong></li>
         </ul>`, 'var(--gold)')}
-        <button id="s0-apply-btn" style="width:100%;margin-top:1rem;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:13px;border-radius:4px;cursor:pointer;">Apply to Sheet & Go →</button>
+        <button id="s0-apply-btn" onclick="s0ApplyAndGo()" style="width:100%;margin-top:1rem;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:13px;border-radius:4px;cursor:pointer;">Apply to Sheet & Go →</button>
       `);
       // Wire the button after render via post-render hook marker
     }
@@ -936,3 +938,21 @@ function s0ApplyAndGo() {
   localStorage.setItem('dh2-s0-transfer', JSON.stringify(transfer));
   window.location.href = 'sheet.html';
 }
+
+// Ensure global exposure
+window.s0ApplyAndGo = s0ApplyAndGo;
+window.s0Go = s0Go;
+window.s0GoTo = s0GoTo;
+window.s0SyncTrait = s0SyncTrait;
+window.s0SaveExp = s0SaveExp;
+window.s0AddExpRow = s0AddExpRow;
+window.s0RemoveExp = s0RemoveExp;
+window.s0AddConnQuestion = s0AddConnQuestion;
+window.s0AddConnCustom = s0AddConnCustom;
+window.s0RemoveConnQuestion = s0RemoveConnQuestion;
+window.s0AddGrpQuestion = s0AddGrpQuestion;
+window.s0AddGrpCustom = s0AddGrpCustom;
+window.s0RemoveGrpQuestion = s0RemoveGrpQuestion;
+window.s0SendConnectionsToBackground = s0SendConnectionsToBackground;
+window.s0SendGroupToBackground = s0SendGroupToBackground;
+window.updateMixedAncestryPreview = updateMixedAncestryPreview;
