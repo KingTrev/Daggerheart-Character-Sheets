@@ -2293,6 +2293,14 @@ function restoreData(d) {
   }
   // render ancestry/community feature bar
   renderFeatureBar();
+  // Show mixed ancestry pickers if Mixed Ancestry was saved
+  onHeritageChange();
+  // Restore mixed ancestry sub-selections if saved
+  const savedA1 = localStorage.getItem('dh2-mixed-a1-' + (currentClass||''));
+  const savedA2 = localStorage.getItem('dh2-mixed-a2-' + (currentClass||''));
+  if (savedA1) { const el = document.getElementById('f-mixed-a1'); if (el) { el.value = savedA1; } }
+  if (savedA2) { const el = document.getElementById('f-mixed-a2'); if (el) { el.value = savedA2; } }
+  if (savedA1 || savedA2) onMixedAncestryChange();
   // class-specific
   restorePrayerDice(d.prayerDice);
   restoreCompanion(d.companion);
