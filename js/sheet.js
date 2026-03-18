@@ -139,6 +139,36 @@ function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&qu
 function stripTags(s){return String(s||'').replace(/<[^>]*>/g,'').replace(/&[a-z]+;/g,'').trim();}
 
 // Split "Name — Trait — Damage — Handed\nFeature text" cleanly
+
+function toggleHints() {
+  const hintsOn = !document.body.classList.contains('hints-off');
+  if (hintsOn) {
+    document.body.classList.add('hints-off');
+    // Clear all data-hint placeholders
+    document.querySelectorAll('input[data-hint]').forEach(el => el.placeholder = '');
+  } else {
+    document.body.classList.remove('hints-off');
+    // Restore data-hint placeholders
+    document.querySelectorAll('input[data-hint]').forEach(el => el.placeholder = el.dataset.hint);
+  }
+  const btn = document.getElementById('hints-btn');
+  if (btn) {
+    btn.textContent = hintsOn ? '✦ Hints' : '○ Hints';
+    btn.classList.toggle('off', hintsOn);
+  }
+  // Save preference
+  localStorage.setItem('dh2-hints', hintsOn ? 'off' : 'on');
+}
+
+function applyHintsPref() {
+  const pref = localStorage.getItem('dh2-hints');
+  if (pref === 'off') {
+    document.body.classList.add('hints-off');
+    const btn = document.getElementById('hints-btn');
+    if (btn) { btn.textContent = '○ Hints'; btn.classList.add('off'); }
+  }
+}
+
 function wPart(str, idx) {
   if (!str) return '';
   const main = str.split('\n')[0];
@@ -423,7 +453,7 @@ function buildPages(cls) {
       <!-- TRAITS ROW -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
         <span style="font-family:'Cinzel',serif;font-size:11px;color:var(--muted);letter-spacing:0.08em;">TRAITS</span>
-        <span style="font-family:'Crimson Pro',serif;font-size:12px;color:var(--muted);">Suggested: ${c.suggestedTraits.replace(/\n/g,' · ')}</span>
+        <span class="hint-text suggested-traits-line" style="font-family:'Crimson Pro',serif;font-size:12px;color:var(--muted);">Suggested: ${c.suggestedTraits.replace(/\n/g,' · ')}</span>
       </div>
       <div class="traits-row" style="margin-bottom:0;">
         ${['agility','strength','finesse','instinct','presence','knowledge'].map(t=>`
@@ -562,31 +592,31 @@ function buildPages(cls) {
             <div class="weapon-section" style="margin-bottom:6px;">
               <div class="weapon-label">Primary Weapon</div>
               <div class="weapon-fields" style="grid-template-columns:2fr 1.2fr 1.2fr;gap:4px;margin-bottom:4px;">
-                <div class="wfield"><span class="ey">Name</span><input type="text" id="w1-name" placeholder="${wPart(c.suggestedPrimary,0)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Trait / Range</span><input type="text" id="w1-trait" placeholder="${wPart(c.suggestedPrimary,1)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Damage</span><input type="text" id="w1-damage" placeholder="${wPart(c.suggestedPrimary,2)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="w1-name" data-hint="${wPart(c.suggestedPrimary,0)}" placeholder="${wPart(c.suggestedPrimary,0)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait / Range</span><input type="text" id="w1-trait" data-hint="${wPart(c.suggestedPrimary,1)}" placeholder="${wPart(c.suggestedPrimary,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage</span><input type="text" id="w1-damage" data-hint="${wPart(c.suggestedPrimary,2)}" placeholder="${wPart(c.suggestedPrimary,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w1-feature" placeholder="${wFeature(c.suggestedPrimary)}" oninput="save()"></div>
+              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w1-feature" data-hint="${wFeature(c.suggestedPrimary)}" placeholder="${wFeature(c.suggestedPrimary)}" oninput="save()"></div>
             </div>
 
             <div class="weapon-section" style="margin-bottom:6px;">
               <div class="weapon-label">Secondary Weapon</div>
               <div class="weapon-fields" style="grid-template-columns:2fr 1.2fr 1.2fr;gap:4px;margin-bottom:4px;">
-                <div class="wfield"><span class="ey">Name</span><input type="text" id="w2-name" placeholder="${wPart(c.suggestedSecondary,0)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Trait / Range</span><input type="text" id="w2-trait" placeholder="${wPart(c.suggestedSecondary,1)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Damage</span><input type="text" id="w2-damage" placeholder="${wPart(c.suggestedSecondary,2)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="w2-name" data-hint="${wPart(c.suggestedSecondary,0)}" placeholder="${wPart(c.suggestedSecondary,0)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Trait / Range</span><input type="text" id="w2-trait" data-hint="${wPart(c.suggestedSecondary,1)}" placeholder="${wPart(c.suggestedSecondary,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Damage</span><input type="text" id="w2-damage" data-hint="${wPart(c.suggestedSecondary,2)}" placeholder="${wPart(c.suggestedSecondary,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w2-feature" placeholder="${wFeature(c.suggestedSecondary)}" oninput="save()"></div>
+              <div class="wfield"><span class="ey">Feature</span><input type="text" id="w2-feature" data-hint="${wFeature(c.suggestedSecondary)}" placeholder="${wFeature(c.suggestedSecondary)}" oninput="save()"></div>
             </div>
 
             ${sh("Active Armor","Your currently equipped armor. Base Thresholds are the damage breakpoints before adding your level. Base Score is how many Armor Slots you have. Some armor has features like −1 Evasion.")}
             <div class="weapon-section">
               <div class="weapon-fields" style="grid-template-columns:2fr 1fr 1fr;">
-                <div class="wfield"><span class="ey">Name</span><input type="text" id="armor-name" placeholder="${wPart(c.suggestedArmor,0)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Base Thresholds</span><input type="text" id="armor-thresh" placeholder="${wPart(c.suggestedArmor,1)}" oninput="save()"></div>
-                <div class="wfield"><span class="ey">Base Score</span><input type="text" id="armor-score" placeholder="${wPart(c.suggestedArmor,2)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Name</span><input type="text" id="armor-name" data-hint="${wPart(c.suggestedArmor,0)}" placeholder="${wPart(c.suggestedArmor,0)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Base Thresholds</span><input type="text" id="armor-thresh" data-hint="${wPart(c.suggestedArmor,1)}" placeholder="${wPart(c.suggestedArmor,1)}" oninput="save()"></div>
+                <div class="wfield"><span class="ey">Base Score</span><input type="text" id="armor-score" data-hint="${wPart(c.suggestedArmor,2)}" placeholder="${wPart(c.suggestedArmor,2)}" oninput="save()"></div>
               </div>
-              <div class="wfield" style="margin-top:4px;"><span class="ey">Feature</span><input type="text" id="armor-feature" placeholder="${wFeature(c.suggestedArmor)}" oninput="save()"></div>
+              <div class="wfield" style="margin-top:4px;"><span class="ey">Feature</span><input type="text" id="armor-feature" data-hint="${wFeature(c.suggestedArmor)}" placeholder="${wFeature(c.suggestedArmor)}" oninput="save()"></div>
             </div>
 
             ${sh("Inventory","Items you're carrying. Track general gear, spare weapons, and spare armor here. Talk to your GM about what you can reasonably carry.")}
@@ -1306,7 +1336,7 @@ function renderS0Step(id) {
       return s0Section('Your Traits', `
         <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:10px 14px;margin-bottom:14px;"><div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--gold);margin-bottom:6px;">STAT ARRAY</div><div style="font-size:13px;color:var(--text);line-height:1.6;">Assign these six modifiers to your traits in any order: <strong style="color:var(--gold);">+2, +1, +1, +0, +0, −1</strong>. Your class suggests which traits to prioritize, but the choice is yours.</div></div>
         <p style="font-size:14px;line-height:1.8;margin-bottom:1rem;">These are your six core stats. ${cls && clsData ? `Your <strong>${cls}</strong> starts with the suggested spread — edit any value and it'll sync to your character sheet.` : 'Choose a class first to see suggested traits.'}</p>
-        ${cls && clsData ? `<div style="background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.7;">Suggested: <strong>${clsData.suggestedTraits.replace(/\n/g,' · ')}</strong></div>` : ''}
+        ${cls && clsData ? `<div class="hint-text" style="background:var(--bg3);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);border-radius:0 5px 5px 0;padding:10px 14px;margin-bottom:1rem;font-size:13px;line-height:1.7;">Suggested: <strong>${clsData.suggestedTraits.replace(/\n/g,' · ')}</strong></div>` : ''}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem;">
           ${liveTraits.map(({name,val})=>`
           <div style="background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:10px 12px;display:flex;align-items:center;gap:10px;">
@@ -2177,6 +2207,7 @@ function save() {
   localStorage.setItem(saveKey(currentClass), JSON.stringify(d));
   localStorage.setItem('dh2-last-class', currentClass);
   renderSidebar();
+  applyHintsPref();
 }
 
 function fillSuggestedTraits() {
@@ -2395,9 +2426,9 @@ function showChangeClassModal() {
     <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
       <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:0.16em;color:var(--gold);margin-bottom:6px;">CHANGE CLASS</div>
       <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Pick a new class. Your current sheet will be saved and you can switch back anytime from the character list.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;">
+      <div style="display:grid;grid-template-columns:1fr;gap:5px;margin-bottom:20px;max-height:60vh;overflow-y:auto;">
         ${classes.map(c => `
-          <button onclick="confirmChangeClass('${c}')" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:10px;border-radius:5px;cursor:pointer;text-align:left;transition:all 0.12s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold-dim)';" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)';">
+          <button onclick="confirmChangeClass('${c}')" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:10px 12px;border-radius:5px;cursor:pointer;text-align:left;transition:all 0.12s;" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--text)';" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)';">
             ${c}
           </button>`).join('')}
       </div>
@@ -2609,9 +2640,9 @@ function showPickClassModal() {
     <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:28px 32px;max-width:380px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
       <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:0.16em;color:var(--gold);margin-bottom:6px;">CHOOSE YOUR CLASS</div>
       <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Pick a class to start building your character.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px;">
+      <div style="display:grid;grid-template-columns:1fr;gap:5px;margin-bottom:20px;max-height:60vh;overflow-y:auto;">
         ${classes.map(c => `
-          <button onclick="pickClassAndStart('${c}')" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:10px;border-radius:5px;cursor:pointer;text-align:left;transition:all 0.12s;" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold-dim)';" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border2)';">
+          <button onclick="pickClassAndStart('${c}')" style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.08em;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:10px 12px;border-radius:5px;cursor:pointer;text-align:left;transition:all 0.12s;" onmouseover="this.style.borderColor='var(--gold-dim)';this.style.color='var(--text)';" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)';">
             ${c}
           </button>`).join('')}
       </div>
