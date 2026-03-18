@@ -349,6 +349,32 @@ html[data-theme="light"] {
   .main{grid-template-columns:1fr;}
   .right{display:none;}
 }
+@media(max-width:600px){
+  /* Stack fear/hope vertically */
+  .fh-row{grid-template-columns:1fr;}
+  .fh-row .fear-tracker{border-right:none;border-bottom:1px solid var(--border2);}
+
+  /* Bigger pips for fingers */
+  .pip{width:28px;height:28px;}
+  .pip.on::after{width:12px;height:12px;margin:7px auto;}
+  .at-token{width:26px;height:26px;}
+
+  /* Header */
+  .hdr{padding:0 10px;gap:8px;}
+  .hdr-brand{font-size:9px;}
+
+  /* PC cards full width */
+  .players-wrap{padding:8px;}
+  .mpip{width:16px;height:16px;}
+
+  /* Clocks */
+  .clock-segs .clock-seg{height:20px;}
+
+  /* Bigger inputs */
+  .notes-area{font-size:15px;}
+  .session-title-input{font-size:13px;}
+  select,input{font-size:15px;}
+}
 </style>
 </head>
 <body>
