@@ -2072,6 +2072,14 @@ initTheme();
 loadSheet();
 applyS0Transfer(); // must run after loadSheet
 renderSidebar();
+
+// Auto-save when navigating away so characters are never lost
+window.addEventListener('beforeunload', () => {
+  if (currentClass) save();
+});
+window.addEventListener('pagehide', () => {
+  if (currentClass) save();
+});
 // restore last active tab
 const savedTab = localStorage.getItem('dh2-active-tab');
 if (savedTab === 'notes') showSheetTab('notes');
@@ -2082,8 +2090,9 @@ else if (savedTab === 'ref') showSheetTab('ref');
 function newCharViaS0() {
   closeNewCharModal();
   if (currentClass) save();
-  // Go to standalone S0 page
-  window.location.href = 's0.html';
+  // Clear any previous S0 progress so new character starts fresh
+  localStorage.removeItem('dh2-s0-wizard');
+  window.location.href = 's0.html?fresh=1';
 }
 
 function s0FillSuggestedTraits() {
