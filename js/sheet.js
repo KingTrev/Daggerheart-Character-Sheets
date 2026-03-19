@@ -2401,7 +2401,23 @@ function applyRestResults() {
     const applyBtn = panel.querySelector('button');
     if (applyBtn) { applyBtn.textContent = '✓ Applied!'; applyBtn.disabled = true; }
   }
-  setTimeout(() => showSheetTab('sheet'), 1200);
+  // Reset so another rest can be taken
+  setTimeout(() => {
+    showSheetTab('sheet');
+    // Re-enable the rest panel for next use
+    currentRestType = null;
+    restMovesSelected = [];
+    restMoveResults = {};
+    const movesPanel = document.getElementById('rest-moves-panel');
+    if (movesPanel) movesPanel.style.display = 'none';
+    const resultsPanel = document.getElementById('rest-results');
+    if (resultsPanel) {
+      resultsPanel.style.display = 'none';
+      resultsPanel.style.borderColor = '';
+      const btn = resultsPanel.querySelector('button');
+      if (btn) { btn.textContent = '✓ Apply to Sheet'; btn.disabled = false; }
+    }
+  }, 1200);
 }
 
 // ═══════════════════════════════════════════════
