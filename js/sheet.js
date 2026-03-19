@@ -2190,8 +2190,7 @@ function rollHopeFear() {
 
   const isCrit = hopeRoll === fearRoll;
   const hopeHigher = hopeRoll >= fearRoll;
-  const higher = Math.max(hopeRoll, fearRoll);
-  const total = higher + traitMod + extraMod;
+  const total = hopeRoll + fearRoll + traitMod + extraMod;
 
   // Animate result
   if (hopeBox) { hopeBox.classList.remove('die-shaking'); }
@@ -2236,7 +2235,8 @@ function rollHopeFear() {
   if (label) { label.textContent = resultLabel; label.style.color = labelColor; }
   if (desc) desc.textContent = resultDesc;
   if (totalRow) totalRow.style.display = '';
-  if (totalEl) totalEl.textContent = total + (traitMod !== 0 || extraMod !== 0 ? ' (' + higher + (traitMod >= 0 ? '+' : '') + (traitMod + extraMod) + ')' : '');
+  const modSum = traitMod + extraMod;
+  if (totalEl) totalEl.textContent = total + ' (' + hopeRoll + '+' + fearRoll + (modSum !== 0 ? (modSum >= 0 ? '+' : '') + modSum : '') + ')';
 
   // Add to history
   addRollHistory(resultLabel, hopeRoll, fearRoll, total, isCrit);
