@@ -1834,7 +1834,7 @@ html[data-theme="light"] .app-header {
             </div>
 
             <!-- Modifiers row -->
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">
               <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;">
                 <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:5px;">TRAIT</label>
                 <input type="number" id="dice-trait-mod" value="0" min="-3" max="5" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;text-align:center;background:none;border:none;color:var(--gold);outline:none;">
@@ -1843,14 +1843,18 @@ html[data-theme="light"] .app-header {
                 <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:5px;">EXTRA</label>
                 <input type="number" id="dice-extra-mod" value="0" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;text-align:center;background:none;border:none;color:var(--text);outline:none;">
               </div>
+              <div style="background:var(--bg2);border:1px solid var(--teal-dim);border-radius:6px;padding:10px 12px;">
+                <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--teal);display:block;margin-bottom:5px;">DIFFICULTY</label>
+                <input type="number" id="dice-difficulty" value="12" min="5" max="30" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;text-align:center;background:none;border:none;color:var(--teal);outline:none;">
+              </div>
             </div>
 
             <!-- Advantage -->
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
               <span style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);">ADVANTAGE</span>
               <button id="adv-none" onclick="setAdvantage('none')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg4);border:1px solid var(--gold-dim);color:var(--gold);">NORMAL</button>
-              <button id="adv-hope" onclick="setAdvantage('hope')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">+ HOPE</button>
-              <button id="adv-fear" onclick="setAdvantage('fear')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">+ FEAR</button>
+              <button id="adv-hope" onclick="setAdvantage('hope')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">+d6 ADV</button>
+              <button id="adv-fear" onclick="setAdvantage('fear')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">−d6 DISADV</button>
             </div>
 
             <!-- Roll button -->
