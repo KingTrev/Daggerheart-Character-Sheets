@@ -2178,19 +2178,17 @@ function rollHopeFear() {
   fearRoll = d12();
 
   // Advantage/disadvantage
+  // Advantage/disadvantage: roll a d6, add or subtract from total
+  let advantageBonus = 0;
   if (diceAdvantage === 'hope') {
-    const extra = d12();
-    // Keep best two of three if we had extra hope, but we only have two dice
-    // Extra hope die: reroll hope and keep the higher
-    hopeRoll = Math.max(hopeRoll, extra);
+    advantageBonus = Math.floor(Math.random() * 6) + 1; // +d6
   } else if (diceAdvantage === 'fear') {
-    const extra = d12();
-    fearRoll = Math.max(fearRoll, extra);
+    advantageBonus = -(Math.floor(Math.random() * 6) + 1); // -d6
   }
 
   const isCrit = hopeRoll === fearRoll;
   const hopeHigher = hopeRoll >= fearRoll;
-  const total = hopeRoll + fearRoll + traitMod + extraMod;
+  const total = hopeRoll + fearRoll + traitMod + extraMod + advantageBonus;
 
   // Animate result
   if (hopeBox) { hopeBox.classList.remove('die-shaking'); }
@@ -2206,17 +2204,23 @@ function rollHopeFear() {
   let resultLabel, resultDesc, bannerBg, labelColor;
   if (isCrit) {
     resultLabel = '✦ CRITICAL SUCCESS';
-    resultDesc = 'Both dice match — automatic success regardless of Difficulty. Gain 1 Hope, clear 1 Stress. On attacks: max damage dice + roll.';
+    resultDesc = 'Both dice match — automatic success with a bonus. Gain 1 Hope and clear 1 Stress. On attack rolls, deal critical damage.';
     bannerBg = 'var(--teal-faint)';
     labelColor = 'var(--teal)';
+  const difficulty = parseInt(document.getElementById('dice-difficulty')?.value || 12);
+  const succeeded = total >= difficulty;
   } else if (hopeHigher) {
-    resultLabel = '✦ ROLL WITH HOPE';
-    resultDesc = 'Hope Die is higher. If you meet the Difficulty, you succeed and gain 1 Hope. If you fail, you still gain 1 Hope.';
+    resultLabel = succeeded ? '✦ SUCCESS WITH HOPE' : '✦ FAILURE WITH HOPE';
+    resultDesc = succeeded
+      ? 'Hope Die is higher and you meet the Difficulty — you succeed and gain 1 Hope.'
+      : 'Hope Die is higher but you missed the Difficulty — you fail with a minor consequence and gain 1 Hope.';
     bannerBg = 'var(--gold-faint)';
     labelColor = 'var(--gold)';
   } else {
-    resultLabel = '✦ ROLL WITH FEAR';
-    resultDesc = 'Fear Die is higher. If you meet the Difficulty, you succeed but the GM gains 1 Fear. If you fail, the GM gains 1 Fear.';
+    resultLabel = succeeded ? '✦ SUCCESS WITH FEAR' : '✦ FAILURE WITH FEAR';
+    resultDesc = succeeded
+      ? 'Fear Die is higher and you meet the Difficulty — you succeed, but with a cost or complication. The GM gains 1 Fear.'
+      : 'Fear Die is higher and you missed the Difficulty — you fail with a major consequence. The GM gains 1 Fear.';
     bannerBg = 'var(--red-faint)';
     labelColor = 'var(--red)';
   }
@@ -2235,8 +2239,10 @@ function rollHopeFear() {
   if (label) { label.textContent = resultLabel; label.style.color = labelColor; }
   if (desc) desc.textContent = resultDesc;
   if (totalRow) totalRow.style.display = '';
-  const modSum = traitMod + extraMod;
-  if (totalEl) totalEl.textContent = total + ' (' + hopeRoll + '+' + fearRoll + (modSum !== 0 ? (modSum >= 0 ? '+' : '') + modSum : '') + ')';
+  const modSum = traitMod + extraMod + advantageBonus;
+  const difficulty = parseInt(document.getElementById('dice-difficulty')?.value || 12);
+  const succeeded = total >= difficulty;
+  if (totalEl) totalEl.textContent = total + ' vs ' + difficulty + ' — ' + (succeeded ? '✓' : '✗') + (modSum !== 0 ? '  (' + hopeRoll + '+' + fearRoll + (modSum >= 0 ? '+' : '') + modSum + ')' : '  (' + hopeRoll + '+' + fearRoll + ')');
 
   // Add to history
   addRollHistory(resultLabel, hopeRoll, fearRoll, total, isCrit);
