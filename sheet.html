@@ -989,6 +989,32 @@ html[data-theme="light"] .custom-bgq-row { background: var(--bg4) !important; bo
 /* ═══════════════════════════════
    PRINT
 ═══════════════════════════════ */
+
+/* ── DICE ROLL ANIMATION ── */
+@keyframes diceShake {
+  0%   { transform: rotate(0deg)   scale(1); }
+  15%  { transform: rotate(-8deg)  scale(1.08); }
+  30%  { transform: rotate(6deg)   scale(1.12); }
+  45%  { transform: rotate(-5deg)  scale(1.1); }
+  60%  { transform: rotate(4deg)   scale(1.06); }
+  75%  { transform: rotate(-2deg)  scale(1.03); }
+  90%  { transform: rotate(1deg)   scale(1.01); }
+  100% { transform: rotate(0deg)   scale(1); }
+}
+@keyframes diceFlip {
+  0%   { opacity:0; transform:translateY(-12px) scale(0.7); }
+  60%  { opacity:1; transform:translateY(2px) scale(1.05); }
+  100% { opacity:1; transform:translateY(0) scale(1); }
+}
+@keyframes diceRoll {
+  0%   { opacity:0; transform:scale(0.5) rotate(-15deg); }
+  70%  { transform:scale(1.1) rotate(3deg); }
+  100% { opacity:1; transform:scale(1) rotate(0deg); }
+}
+.die-shaking { animation: diceShake 0.5s ease !important; }
+.die-result  { animation: diceFlip 0.35s ease forwards !important; }
+#damage-result.rolling { animation: diceRoll 0.3s ease forwards; }
+
 /* ── HINTS TOGGLE ── */
 body.hints-off .hint-text { display: none !important; }
 body.hints-off input[data-hint]::placeholder { color: transparent !important; }
@@ -1570,12 +1596,9 @@ html[data-theme="light"] .app-header {
     <div class="nav-section">
       <div class="nav-section-label">Navigate</div>
       <button class="nav-item" id="nav-dice" onclick="showSheetTab('dice')">
-        <span class="nav-icon">⚄</span> Dice
+        <span class="nav-icon">⚄</span> Dice & Rest
       </button>
-      <button class="nav-item" id="nav-rest" onclick="showSheetTab('rest')">
-        <span class="nav-icon">☽</span> Rest
-      </button>
-      <button class="nav-item" id="nav-ref" onclick="showSheetTab('ref')">
+<button class="nav-item" id="nav-ref" onclick="showSheetTab('ref')">
         <span class="nav-icon">⊞</span> Class Reference
       </button>
       <button class="nav-item active" id="nav-sheet" onclick="showSheetTab('sheet')">
@@ -1778,206 +1801,163 @@ html[data-theme="light"] .app-header {
 </div>
 
 
-    <!-- ── DICE ROLLER TAB ── -->
+
+    <!-- ── DICE + REST TAB ── -->
     <div id="tab-dice" style="display:none;">
       <div class="pages">
+
+        <!-- DICE ROLLER -->
         <div class="page">
           <div class="section-block-header">
             <div class="section-block-title">⚄ Dice Roller</div>
           </div>
-          <div class="page-inner" style="max-width:520px;margin:0 auto;">
+          <div class="page-inner" style="max-width:560px;margin:0 auto;">
 
-            <!-- Main roll area -->
-            <div id="dice-result-area" style="text-align:center;padding:2rem 0 1.5rem;">
-              <div id="dice-display" style="display:flex;gap:20px;justify-content:center;align-items:center;margin-bottom:1.5rem;">
-                <div id="hope-die-display" style="width:80px;height:80px;background:var(--gold-faint);border:2px solid var(--gold-dim);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all 0.3s;">
-                  <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--gold);">HOPE</div>
-                  <div id="hope-die-val" style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;color:var(--gold);line-height:1;">—</div>
+            <!-- Die faces -->
+            <div style="display:flex;gap:20px;justify-content:center;align-items:center;padding:1.5rem 0 1rem;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <div id="hope-die-display" style="width:90px;height:90px;background:var(--gold-faint);border:2px solid var(--gold-dim);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all 0.3s;position:relative;overflow:hidden;">
+                  <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.14em;color:var(--gold);position:absolute;top:8px;">HOPE</div>
+                  <div id="hope-die-val" style="font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--gold);line-height:1;margin-top:10px;">—</div>
                 </div>
-                <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--muted);">VS</div>
-                <div id="fear-die-display" style="width:80px;height:80px;background:var(--red-faint);border:2px solid var(--red-dim);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all 0.3s;">
-                  <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--red);">FEAR</div>
-                  <div id="fear-die-val" style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:700;color:var(--red);line-height:1;">—</div>
+                <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--gold-dim);">d12</div>
+              </div>
+              <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--dim);">VS</div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <div id="fear-die-display" style="width:90px;height:90px;background:var(--red-faint);border:2px solid var(--red-dim);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:all 0.3s;position:relative;overflow:hidden;">
+                  <div style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:0.14em;color:var(--red);position:absolute;top:8px;">FEAR</div>
+                  <div id="fear-die-val" style="font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--red);line-height:1;margin-top:10px;">—</div>
                 </div>
-              </div>
-
-              <!-- Result banner -->
-              <div id="dice-result-banner" style="display:none;padding:12px 20px;border-radius:8px;margin-bottom:1rem;transition:all 0.3s;">
-                <div id="dice-result-label" style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:0.12em;margin-bottom:4px;"></div>
-                <div id="dice-result-desc" style="font-size:13px;color:var(--muted);"></div>
-              </div>
-
-              <!-- Total -->
-              <div id="dice-total-row" style="display:none;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);margin-bottom:1.5rem;">
-                Total: <span id="dice-total" style="color:var(--text);font-weight:700;"></span>
+                <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--red-dim);">d12</div>
               </div>
             </div>
 
-            <!-- Modifiers -->
-            <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;margin-bottom:1rem;">
-              <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">MODIFIERS</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-                <div>
-                  <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:4px;">TRAIT BONUS</label>
-                  <input type="number" id="dice-trait-mod" value="0" min="-3" max="5"
-                    style="width:100%;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;text-align:center;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--gold);padding:6px;outline:none;">
-                </div>
-                <div>
-                  <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:4px;">EXTRA BONUS</label>
-                  <input type="number" id="dice-extra-mod" value="0"
-                    style="width:100%;font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;text-align:center;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--text);padding:6px;outline:none;">
-                </div>
+            <!-- Result banner -->
+            <div id="dice-result-banner" style="display:none;padding:12px 16px;border-radius:8px;margin-bottom:1rem;border:1px solid transparent;">
+              <div id="dice-result-label" style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:0.12em;margin-bottom:4px;"></div>
+              <div id="dice-result-desc" style="font-size:13px;color:var(--muted);line-height:1.6;"></div>
+              <div id="dice-total-row" style="display:none;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-top:6px;">Total: <span id="dice-total" style="color:var(--text);font-weight:700;"></span></div>
+            </div>
+
+            <!-- Modifiers row -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+              <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;">
+                <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:5px;">TRAIT</label>
+                <input type="number" id="dice-trait-mod" value="0" min="-3" max="5" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;text-align:center;background:none;border:none;color:var(--gold);outline:none;">
               </div>
-              <div style="margin-top:10px;display:flex;gap:8px;align-items:center;">
-                <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);">ADVANTAGE</label>
-                <div style="display:flex;gap:6px;">
-                  <button id="adv-none" onclick="setAdvantage('none')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--bg4);border:1px solid var(--gold-dim);color:var(--gold);">NORMAL</button>
-                  <button id="adv-hope" onclick="setAdvantage('hope')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">+ HOPE</button>
-                  <button id="adv-fear" onclick="setAdvantage('fear')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">+ FEAR</button>
-                </div>
+              <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:10px 12px;">
+                <label style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:5px;">EXTRA</label>
+                <input type="number" id="dice-extra-mod" value="0" style="width:100%;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;text-align:center;background:none;border:none;color:var(--text);outline:none;">
               </div>
+            </div>
+
+            <!-- Advantage -->
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <span style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);">ADVANTAGE</span>
+              <button id="adv-none" onclick="setAdvantage('none')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg4);border:1px solid var(--gold-dim);color:var(--gold);">NORMAL</button>
+              <button id="adv-hope" onclick="setAdvantage('hope')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">+ HOPE</button>
+              <button id="adv-fear" onclick="setAdvantage('fear')" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.08em;padding:5px 12px;border-radius:4px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);">+ FEAR</button>
             </div>
 
             <!-- Roll button -->
-            <button onclick="rollHopeFear()"
-              style="width:100%;font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.15em;font-weight:700;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:16px;border-radius:8px;cursor:pointer;transition:all 0.2s;margin-bottom:1rem;"
-              onmouseover="this.style.boxShadow='0 0 20px rgba(201,168,76,0.2)';this.style.borderColor='var(--gold)'"
-              onmouseout="this.style.boxShadow='';this.style.borderColor='var(--gold-dim)'">
+            <button onclick="rollHopeFear()" id="main-roll-btn"
+              style="width:100%;font-family:'Cinzel',serif;font-size:13px;letter-spacing:0.15em;font-weight:700;background:var(--gold-faint);border:2px solid var(--gold-dim);color:var(--gold);padding:16px;border-radius:8px;cursor:pointer;transition:all 0.2s;margin-bottom:1rem;position:relative;overflow:hidden;">
               ⚄ ROLL HOPE & FEAR
             </button>
 
             <!-- Damage dice -->
-            <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;">
-              <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">DAMAGE DICE</div>
-              <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                <button onclick="rollDamage(4)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d4</button>
-                <button onclick="rollDamage(6)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d6</button>
-                <button onclick="rollDamage(8)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d8</button>
-                <button onclick="rollDamage(10)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d10</button>
-                <button onclick="rollDamage(12)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d12</button>
-                <button onclick="rollDamage(20)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d20</button>
+            <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:12px 14px;margin-bottom:1rem;">
+              <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;">DAMAGE DICE</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <button onclick="rollDamage(4)" style="font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 12px;border-radius:5px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d4</button>
+                <button onclick="rollDamage(6)" style="font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 12px;border-radius:5px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d6</button>
+                <button onclick="rollDamage(8)" style="font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 12px;border-radius:5px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d8</button>
+                <button onclick="rollDamage(10)" style="font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 12px;border-radius:5px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d10</button>
+                <button onclick="rollDamage(12)" style="font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 12px;border-radius:5px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d12</button>
+                <button onclick="rollDamage(20)" style="font-family:'JetBrains Mono',monospace;font-size:12px;padding:7px 12px;border-radius:5px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d20</button>
               </div>
-              <div id="damage-result" style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--red);min-height:32px;text-align:center;"></div>
+              <div id="damage-result" style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;color:var(--red);min-height:30px;text-align:center;"></div>
             </div>
 
             <!-- Roll history -->
-            <div style="margin-top:1rem;">
-              <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);margin-bottom:6px;">RECENT ROLLS</div>
-              <div id="roll-history" style="display:flex;flex-direction:column;gap:4px;max-height:160px;overflow-y:auto;"></div>
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.12em;color:var(--muted);margin-bottom:6px;">RECENT ROLLS</div>
+              <div id="roll-history" style="display:flex;flex-direction:column;gap:4px;max-height:140px;overflow-y:auto;"></div>
             </div>
 
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- ── REST TAB ── -->
-    <div id="tab-rest" style="display:none;">
-      <div class="pages">
+        <!-- REST CALCULATOR -->
         <div class="page">
           <div class="section-block-header">
             <div class="section-block-title">☽ Rest</div>
           </div>
-          <div class="page-inner" style="max-width:520px;margin:0 auto;">
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem;">
-              <!-- Short Rest -->
+          <div class="page-inner" style="max-width:560px;margin:0 auto;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.25rem;">
               <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;overflow:hidden;">
-                <div style="background:var(--bg3);padding:12px 14px;border-bottom:1px solid var(--border);">
+                <div style="background:var(--bg3);padding:10px 14px;border-bottom:1px solid var(--border);">
                   <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--teal);">SHORT REST</div>
-                  <div style="font-size:11px;color:var(--muted);margin-top:3px;">~1 hour · 2 downtime moves</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:2px;">~1 hour · 2 downtime moves</div>
                 </div>
                 <div style="padding:12px 14px;">
-                  <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;">Swap domain cards freely. Then take <strong style="color:var(--text);">2 moves</strong> from the list.</div>
-                  <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;">GM GAINS</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px;">Swap domain cards freely. Take <strong style="color:var(--text);">2 moves</strong>.</div>
+                  <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px;">GM GAINS</div>
                   <div style="font-size:13px;color:var(--red);font-weight:600;margin-bottom:10px;">1d4 Fear</div>
-                  <button onclick="startRest('short')"
-                    style="width:100%;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--teal-faint);border:1px solid var(--teal-dim);color:var(--teal);padding:9px;border-radius:5px;cursor:pointer;transition:all 0.2s;"
-                    onmouseover="this.style.boxShadow='0 0 12px rgba(58,138,128,0.2)'"
-                    onmouseout="this.style.boxShadow=''">
-                    Take Short Rest →
-                  </button>
+                  <button onclick="startRest('short')" style="width:100%;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--teal-faint);border:1px solid var(--teal-dim);color:var(--teal);padding:9px;border-radius:5px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.boxShadow='0 0 12px rgba(58,138,128,0.2)'" onmouseout="this.style.boxShadow=''">Take Short Rest →</button>
                 </div>
               </div>
-
-              <!-- Long Rest -->
               <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;overflow:hidden;">
-                <div style="background:var(--bg3);padding:12px 14px;border-bottom:1px solid var(--border);">
+                <div style="background:var(--bg3);padding:10px 14px;border-bottom:1px solid var(--border);">
                   <div style="font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--gold);">LONG REST</div>
-                  <div style="font-size:11px;color:var(--muted);margin-top:3px;">Several hours · full recovery</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:2px;">Several hours · full recovery</div>
                 </div>
                 <div style="padding:12px 14px;">
-                  <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;">Same moves as short rest but <strong style="color:var(--text);">full</strong> versions — clear ALL HP, Stress, Armor.</div>
-                  <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);margin-bottom:6px;">GM GAINS</div>
+                  <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:8px;">Same moves but <strong style="color:var(--text);">full</strong> — clear ALL HP, Stress, Armor.</div>
+                  <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px;">GM GAINS</div>
                   <div style="font-size:13px;color:var(--red);font-weight:600;margin-bottom:10px;">1d4 + # of PCs Fear</div>
-                  <button onclick="startRest('long')"
-                    style="width:100%;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:9px;border-radius:5px;cursor:pointer;transition:all 0.2s;"
-                    onmouseover="this.style.boxShadow='0 0 12px rgba(201,168,76,0.15)'"
-                    onmouseout="this.style.boxShadow=''">
-                    Take Long Rest →
-                  </button>
+                  <button onclick="startRest('long')" style="width:100%;font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--gold-faint);border:1px solid var(--gold-dim);color:var(--gold);padding:9px;border-radius:5px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.boxShadow='0 0 12px rgba(201,168,76,0.15)'" onmouseout="this.style.boxShadow=''">Take Long Rest →</button>
                 </div>
               </div>
             </div>
 
-            <!-- Downtime moves panel -->
             <div id="rest-moves-panel" style="display:none;">
-              <div style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;" id="rest-moves-label">CHOOSE YOUR DOWNTIME MOVES</div>
-
+              <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);margin-bottom:8px;" id="rest-moves-label">CHOOSE YOUR DOWNTIME MOVES</div>
               <div id="rest-moves-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:1rem;"></div>
-
               <div id="rest-results" style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px;display:none;">
                 <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--teal);margin-bottom:8px;">REST RESULTS</div>
                 <div id="rest-results-list" style="font-size:13px;line-height:1.9;color:var(--text);"></div>
-                <button onclick="applyRestResults()"
-                  style="width:100%;margin-top:12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;background:var(--teal-faint);border:1px solid var(--teal-dim);color:var(--teal);padding:10px;border-radius:5px;cursor:pointer;">
-                  ✓ Apply to Sheet
-                </button>
+                <button onclick="applyRestResults()" style="width:100%;margin-top:12px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:0.1em;background:var(--teal-faint);border:1px solid var(--teal-dim);color:var(--teal);padding:10px;border-radius:5px;cursor:pointer;">✓ Apply to Sheet</button>
               </div>
             </div>
-
           </div>
         </div>
 
-        <!-- Damage Calculator -->
+        <!-- DAMAGE CALCULATOR -->
         <div class="page">
           <div class="section-block-header">
             <div class="section-block-title">⚔ Damage Calculator</div>
           </div>
-          <div class="page-inner" style="max-width:520px;margin:0 auto;">
-            <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1rem;">Enter incoming damage to see which threshold it hits. Your armor and level are loaded automatically.</p>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem;" id="thresh-display">
-              <!-- rendered by JS -->
-            </div>
-
+          <div class="page-inner" style="max-width:560px;margin:0 auto;">
+            <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1rem;">Enter incoming damage. Your thresholds and level load automatically.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:1rem;" id="thresh-display"></div>
             <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;margin-bottom:1rem;">
               <label style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);display:block;margin-bottom:8px;">INCOMING DAMAGE</label>
               <div style="display:flex;gap:10px;align-items:center;">
-                <input type="number" id="dmg-input" min="0" placeholder="0"
-                  oninput="calcDamage()"
-                  style="flex:1;font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;text-align:center;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text);padding:10px;outline:none;">
-                <div style="display:flex;flex-direction:column;gap:4px;">
-                  <label style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer;">
-                    <input type="checkbox" id="dmg-has-armor" onchange="calcDamage()" style="accent-color:var(--teal);"> Use Armor
-                  </label>
-                </div>
+                <input type="number" id="dmg-input" min="0" placeholder="0" oninput="calcDamage()" style="flex:1;font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;text-align:center;background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text);padding:10px;outline:none;">
+                <label style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;"><input type="checkbox" id="dmg-has-armor" onchange="calcDamage()" style="accent-color:var(--teal);"> Use Armor</label>
               </div>
             </div>
-
             <div id="dmg-result" style="text-align:center;padding:1rem;display:none;border-radius:8px;transition:all 0.3s;">
               <div id="dmg-result-label" style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:0.1em;margin-bottom:4px;"></div>
               <div id="dmg-result-hp" style="font-size:13px;color:var(--muted);margin-bottom:10px;"></div>
-              <button onclick="applyDamage()" id="dmg-apply-btn"
-                style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--red-faint);border:1px solid var(--red-dim);color:var(--red);padding:8px 20px;border-radius:4px;cursor:pointer;">
-                Mark HP on Sheet
-              </button>
+              <button onclick="applyDamage()" id="dmg-apply-btn" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.1em;background:var(--red-faint);border:1px solid var(--red-dim);color:var(--red);padding:8px 20px;border-radius:4px;cursor:pointer;">Mark HP on Sheet</button>
             </div>
-
           </div>
         </div>
 
       </div>
+    </div>
     </div>
 
     </div><!-- /.tab-content -->
