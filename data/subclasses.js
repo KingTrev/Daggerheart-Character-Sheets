@@ -18,6 +18,7 @@ const SUBCLASSES = {
         specialization: '<em>Eloquent:</em> Your moving words boost morale. Once per session, when you encourage an ally, you can do one of the following:\n• Allow them to find a mundane object or tool they need.\n• Help an Ally without spending Hope.\n• Give them an additional downtime move during their next rest.',
         mastery: '<em>Epic Poetry:</em> Your Rally Die increases to a <strong>d10</strong>. Additionally, when you Help an Ally, you can narrate the moment as if you were writing the tale of their heroism in a memoir. When you do, roll a <strong>d10</strong> as your advantage die.',
       },
+    
     ],
   },
   Druid: {
@@ -37,6 +38,7 @@ const SUBCLASSES = {
         specialization: '<em>Regenerative Reach:</em> You can target creatures within Very Close range with your "Regeneration" feature.\n\n<em>Warden\'s Protection:</em> Once per long rest, <strong>spend 2 Hope</strong> to clear 2 Hit Points on <strong>1d4</strong> allies within Close range.',
         mastery: '<em>Defender:</em> Your animal transformation embodies a healing guardian spirit. When you\'re in Beastform and an ally within Close range marks 2 or more Hit Points, you can <strong>mark a Stress</strong> to reduce the number of Hit Points they mark by 1.',
       },
+    
     ],
     beastforms: [
       // Tier 1
@@ -86,6 +88,7 @@ const SUBCLASSES = {
         specialization: '<em>Act of Reprisal:</em> When an adversary damages an ally within Melee range, you gain a +1 bonus to your Proficiency for the next successful attack you make against that adversary.',
         mastery: '<em>Nemesis:</em> <strong>Spend 2 Hope</strong> to <em>Prioritize</em> an adversary until your next rest. When you make an attack against your <em>Prioritized</em> adversary, you can swap the results of your Hope and Fear Dice. You can only <em>Prioritize</em> one adversary at a time.',
       },
+    
     ],
   },
   Ranger: {
@@ -105,6 +108,7 @@ const SUBCLASSES = {
         specialization: '<em>Elusive Predator:</em> When your Focus makes an attack against you, you gain a +2 bonus to your Evasion against the attack.',
         mastery: '<em>Apex Predator:</em> Before you make an attack roll against your Focus, you can <strong>spend a Hope</strong>. On a successful attack, you remove a Fear from the GM\'s Fear pool.',
       },
+    
     ],
   },
   Rogue: {
@@ -124,6 +128,7 @@ const SUBCLASSES = {
         specialization: '<em>Contacts Everywhere:</em> Once per session, you can briefly call on a shady contact. Choose one of the following benefits and describe what brought them here to help you in this moment:\n• They provide 1 handful of gold, a unique tool, or a mundane object that the situation requires.\n• On your next action roll, their help provides a +3 bonus to the result of your Hope or Fear Die.\n• The next time you deal damage, they snipe from the shadows, adding <strong>2d8</strong> to your damage roll.',
         mastery: '<em>Reliable Backup:</em> You can use your "Contacts Everywhere" feature three times per session. The following options are added to the list of benefits you can choose from when you use that feature:\n• When you mark 1 or more Hit Points, they can rush out to shield you, reducing the Hit Points marked by 1.\n• When you make a Presence Roll in conversation, they back you up. You can roll a <strong>d20</strong> as your Hope Die.',
       },
+    
     ],
   },
   Seraph: {
@@ -143,6 +148,7 @@ const SUBCLASSES = {
         specialization: '<em>Ethereal Visage:</em> Your supernatural visage strikes awe and fear. While flying, you have advantage on Presence Rolls. When you succeed with Hope on a Presence Roll, you can remove a Fear from the GM\'s Fear pool instead of gaining Hope.',
         mastery: '<em>Ascendant:</em> Gain a permanent +4 bonus to your Severe damage threshold.\n\n<em>Power of the Gods:</em> While flying, you deal an extra <strong>1d12</strong> damage instead of 1d8 from your "Wings of Light" feature.',
       },
+    
     ],
   },
   Sorcerer: {
@@ -162,6 +168,7 @@ const SUBCLASSES = {
         specialization: '<em>Enchanted Aid:</em> You can enhance the magic of others with your essence. When you Help an Ally with a Spellcast Roll, you can roll a <strong>d8</strong> as your advantage die. Once per long rest, after an ally has made a Spellcast Roll with your help, you can swap the results of their Duality Dice.',
         mastery: '<em>Arcane Charge:</em> You can gather magical energy to enhance your capabilities. When you take magic damage, you become <em>Charged</em>. Alternatively, you can <strong>spend 2 Hope</strong> to become <em>Charged</em>. When you successfully make an attack that deals magic damage while <em>Charged</em>, you can clear your <em>Charge</em> to either gain a +10 bonus to the damage roll or gain a +3 bonus to the Difficulty of a reaction roll the spell causes the target to make. You stop being <em>Charged</em> at your next long rest.',
       },
+    
     ],
   },
   Warrior: {
@@ -181,6 +188,7 @@ const SUBCLASSES = {
         specialization: '<em>Weapon Specialist:</em> You can wield multiple weapons with dangerous ease. When you succeed on an attack, you can <strong>spend a Hope</strong> to add one of the damage dice from your secondary weapon to the damage roll. Additionally, once per long rest when you roll your Slayer Dice, reroll any 1s.',
         mastery: '<em>Martial Preparation:</em> You\'re an inspirational warrior to all who travel with you. Your party gains access to the Martial Preparation downtime move. To use this move during a rest, describe how you instruct and train with your party. You and each one who chooses this downtime move gain a <strong>d6</strong> Slayer Die. A PC with a Slayer Die can spend it to roll the die and add the result to an attack or damage roll of their choice.',
       },
+    
     ],
   },
   Wizard: {
@@ -200,6 +208,7 @@ const SUBCLASSES = {
         specialization: '<em>Conjure Shield:</em> You can maintain a protective barrier of magic. While you have at least 2 Hope, you add your Proficiency to your Evasion.\n\n<em>Fueled by Fear:</em> The extra magic damage from your "Face Your Fear" feature increases to <strong>2d10</strong>.',
         mastery: '<em>Thrive in Chaos:</em> When you succeed on an attack, you can <strong>mark a Stress</strong> after rolling damage to force the target to mark an additional Hit Point.\n\n<em>Have No Fear:</em> The extra magic damage from your "Face Your Fear" feature increases to <strong>3d10</strong>.',
       },
+    
     ],
   },
 };
