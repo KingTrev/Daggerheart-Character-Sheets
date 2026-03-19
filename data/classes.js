@@ -29,7 +29,7 @@ const CLASSES = {
     traits:{agility:1,strength:0,finesse:1,instinct:2,presence:-1,knowledge:0},
     featureName:'Beastform',
     featureBody:'Mark a Stress to magically transform into a creature of your tier or lower from the Beastform list. You can drop out of this form at any time. While transformed, you can\'t use weapons or cast spells from domain cards, but you can still use other features and abilities. You can talk normally. You gain the Beastform\'s features, add their Evasion bonus to yours, and use their specified trait for attacks.\n\n<strong>Wildtouch:</strong> You can perform harmless, subtle effects that involve nature—such as causing a flower to grow, summoning a slight gust of wind, or starting a campfire—at will.',
-    featureHope:'<strong>Evolution:</strong> Spend 3 Hope to transform into Beastform without marking a Stress. Choose one trait to raise by +1 until you drop out of that Beastform.',
+    featureHope:'<strong>Evolution:</strong> Spend 3 Hope to transform into a Beastform without marking a Stress. When you do, choose one trait to raise by +1 until you drop out of that Beastform.',
     suggestedTraits:'+1 Agility, 0 Strength, +1 Finesse,\n+2 Instinct, −1 Presence, 0 Knowledge',
     suggestedPrimary:'Shortstaff — Instinct Close — d8+1 mag — One-Handed',
     suggestedSecondary:'Round Shield — Strength Melee — d4 phy — One-Handed\n<em>Protective:</em> +1 to Armor Score',
