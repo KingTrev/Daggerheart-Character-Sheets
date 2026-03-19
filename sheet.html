@@ -1777,6 +1777,7 @@ html[data-theme="light"] .app-header {
 
 </div>
 
+
     <!-- ── DICE ROLLER TAB ── -->
     <div id="tab-dice" style="display:none;">
       <div class="pages">
@@ -1849,10 +1850,12 @@ html[data-theme="light"] .app-header {
             <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:14px 16px;">
               <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:0.12em;color:var(--muted);margin-bottom:10px;">DAMAGE DICE</div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                ${['d4','d6','d8','d10','d12','d20'].map(d => `<button onclick="rollDamage(${d.slice(1)})"
-                  style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;"
-                  onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'"
-                  onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">${d}</button>`).join('')}
+                <button onclick="rollDamage(4)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d4</button>
+                <button onclick="rollDamage(6)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d6</button>
+                <button onclick="rollDamage(8)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d8</button>
+                <button onclick="rollDamage(10)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d10</button>
+                <button onclick="rollDamage(12)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d12</button>
+                <button onclick="rollDamage(20)" style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;padding:8px 14px;border-radius:6px;cursor:pointer;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);transition:all 0.15s;" onmouseover="this.style.borderColor='var(--red-dim)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">d20</button>
               </div>
               <div id="damage-result" style="margin-top:10px;font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--red);min-height:32px;text-align:center;"></div>
             </div>
@@ -1976,6 +1979,7 @@ html[data-theme="light"] .app-header {
 
       </div>
     </div>
+
     </div><!-- /.tab-content -->
   </main>
 </div><!-- /.app-shell -->
