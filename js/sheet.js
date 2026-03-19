@@ -1139,15 +1139,14 @@ function showSheetTab(tab) {
   document.getElementById('tab-cards').style.display = tab === 'cards' ? '' : 'none';
   document.getElementById('tab-ref').style.display = tab === 'ref' ? '' : 'none';
   document.getElementById('tab-dice').style.display = tab === 'dice' ? '' : 'none';
-  document.getElementById('tab-rest').style.display = tab === 'rest' ? '' : 'none';
   const s0El = document.getElementById('tab-s0'); if (s0El) s0El.style.display = 'none';
   // Tab bar buttons (removed from DOM, guard against null)
-  ['sheet','notes','cards','ref','dice','rest'].forEach(t => {
+  ['sheet','notes','cards','ref','dice'].forEach(t => {
     const btn = document.getElementById('tab-' + t + '-btn');
     if (btn) btn.classList.toggle('active', t === tab);
   });
   // Left nav items
-  ['sheet','notes','cards','ref','dice','rest'].forEach(t => {
+  ['sheet','notes','cards','ref','dice'].forEach(t => {
     const el = document.getElementById('nav-' + t);
     if (el) el.classList.toggle('active', t === tab);
   });
@@ -1157,7 +1156,7 @@ function showSheetTab(tab) {
   const classDivider = document.getElementById('nav-class-divider');
   if (classSection) classSection.style.display = tab === 'sheet' ? '' : 'none';
   if (classDivider) classDivider.style.display = tab === 'sheet' ? '' : 'none';
-  if (tab === 'rest') {
+  if (tab === 'dice') {
     renderThreshDisplay();
   }
   if (tab === 'cards') {
@@ -2151,8 +2150,32 @@ function rollHopeFear() {
   const traitMod = parseInt(document.getElementById('dice-trait-mod')?.value || 0);
   const extraMod = parseInt(document.getElementById('dice-extra-mod')?.value || 0);
 
-  let hopeRoll = d12();
-  let fearRoll = d12();
+  // Shake animation on die boxes
+  const hopeBox = document.getElementById('hope-die-display');
+  const fearBox = document.getElementById('fear-die-display');
+  const hopeDie = document.getElementById('hope-die-val');
+  const fearDie = document.getElementById('fear-die-val');
+
+  // Flash through random numbers during shake
+  if (hopeBox) { hopeBox.classList.add('die-shaking'); hopeBox.style.borderColor = 'var(--gold-dim)'; }
+  if (fearBox) { fearBox.classList.add('die-shaking'); fearBox.style.borderColor = 'var(--red-dim)'; }
+
+  let flashCount = 0;
+  const flashInterval = setInterval(() => {
+    if (hopeDie) hopeDie.textContent = Math.floor(Math.random() * 12) + 1;
+    if (fearDie) fearDie.textContent = Math.floor(Math.random() * 12) + 1;
+    flashCount++;
+    if (flashCount > 8) clearInterval(flashInterval);
+  }, 50);
+
+  // Hide banner during roll
+  const banner = document.getElementById('dice-result-banner');
+  if (banner) banner.style.display = 'none';
+
+  let hopeRoll, fearRoll;
+  setTimeout(() => {
+  hopeRoll = d12();
+  fearRoll = d12();
 
   // Advantage/disadvantage
   if (diceAdvantage === 'hope') {
@@ -2170,17 +2193,15 @@ function rollHopeFear() {
   const higher = Math.max(hopeRoll, fearRoll);
   const total = higher + traitMod + extraMod;
 
-  // Animate dice
-  const hopeDie = document.getElementById('hope-die-val');
-  const fearDie = document.getElementById('fear-die-val');
-  const hopeBox = document.getElementById('hope-die-display');
-  const fearBox = document.getElementById('fear-die-display');
-  if (hopeDie) hopeDie.textContent = hopeRoll;
-  if (fearDie) fearDie.textContent = fearRoll;
+  // Animate result
+  if (hopeBox) { hopeBox.classList.remove('die-shaking'); }
+  if (fearBox) { fearBox.classList.remove('die-shaking'); }
+  if (hopeDie) { hopeDie.textContent = hopeRoll; hopeDie.classList.add('die-result'); setTimeout(() => hopeDie.classList.remove('die-result'), 400); }
+  if (fearDie) { fearDie.textContent = fearRoll; fearDie.classList.add('die-result'); setTimeout(() => fearDie.classList.remove('die-result'), 400); }
 
   // Highlight winning die
-  if (hopeBox) hopeBox.style.borderColor = isCrit ? 'var(--teal)' : hopeHigher ? 'var(--gold)' : 'rgba(201,168,76,0.2)';
-  if (fearBox) fearBox.style.borderColor = isCrit ? 'var(--teal)' : !hopeHigher ? 'var(--red)' : 'rgba(192,64,64,0.2)';
+  if (hopeBox) hopeBox.style.borderColor = isCrit ? 'var(--teal)' : hopeHigher ? 'var(--gold)' : 'rgba(201,168,76,0.15)';
+  if (fearBox) fearBox.style.borderColor = isCrit ? 'var(--teal)' : !hopeHigher ? 'var(--red)' : 'rgba(192,64,64,0.15)';
 
   // Determine result type
   let resultLabel, resultDesc, bannerBg, labelColor;
@@ -2219,6 +2240,7 @@ function rollHopeFear() {
 
   // Add to history
   addRollHistory(resultLabel, hopeRoll, fearRoll, total, isCrit);
+  }, 520); // end setTimeout for animation
 }
 
 function addRollHistory(type, hope, fear, total, crit) {
@@ -2237,14 +2259,23 @@ function addRollHistory(type, hope, fear, total, crit) {
 }
 
 function rollDamage(sides) {
-  const roll = Math.floor(Math.random() * sides) + 1;
   const el = document.getElementById('damage-result');
-  if (el) {
-    el.textContent = roll + ' / ' + sides;
-    el.style.animation = 'none';
-    el.offsetHeight; // reflow
-    el.style.animation = 'diceRoll 0.3s ease';
-  }
+  if (!el) return;
+  // Flash then reveal
+  el.textContent = '...';
+  el.classList.remove('rolling');
+  let flashes = 0;
+  const fi = setInterval(() => {
+    el.textContent = Math.floor(Math.random() * sides) + 1;
+    flashes++;
+    if (flashes > 6) {
+      clearInterval(fi);
+      const roll = Math.floor(Math.random() * sides) + 1;
+      el.textContent = roll + ' / ' + sides;
+      void el.offsetWidth;
+      el.classList.add('rolling');
+    }
+  }, 45);
 }
 
 // ═══════════════════════════════════════════════
